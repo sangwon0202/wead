@@ -6,9 +6,6 @@ import org.springframework.stereotype.Service;
 import sangwon.wead.DTO.RegisterFormDto;
 import sangwon.wead.DTO.UserInfoDto;
 import sangwon.wead.entity.User;
-import sangwon.wead.exception.UserIdDuplicateException;
-import sangwon.wead.exception.UserNotExistException;
-import sangwon.wead.exception.WrongPasswordException;
 import sangwon.wead.repository.UserRepository;
 
 import java.util.Optional;
@@ -20,6 +17,10 @@ public class UserService {
     private final UserRepository userRepository;
 
 
+    public boolean userExist(String userId) {
+        return userRepository.findByUserId(userId).isPresent();
+    }
+
     public UserInfoDto getUserInfo(String userId) {
         User user = userRepository.findByUserId(userId).get();
         UserInfoDto userInfoDto = new UserInfoDto();
@@ -28,25 +29,21 @@ public class UserService {
         return userInfoDto;
     }
 
-    public void login(String userId, String password) throws Exception {
+    public boolean login(String userId, String password) {
 
         Optional<User> optionalUser = userRepository.findByUserId(userId);
 
         // 아이디가 존재하지 않음
-        if(!optionalUser.isPresent()) throw new UserNotExistException();
+        if(!optionalUser.isPresent()) return false;
 
         // 비밀번호가 틀림
         User user = optionalUser.get();
-        if(!user.getPassword().equals(password)) throw new WrongPasswordException();
+        if(!user.getPassword().equals(password)) return false;
 
+        return true;
     }
 
-    public void register(RegisterFormDto registerFormDto) throws Exception {
-
-        Optional<User> optionalUser = userRepository.findByUserId(registerFormDto.getUserId());
-
-        // 아이디 중복
-        if(!optionalUser.isPresent()) throw new UserIdDuplicateException();
+    public void register(RegisterFormDto registerFormDto) {
 
         // 회원가입
         User user = new User();

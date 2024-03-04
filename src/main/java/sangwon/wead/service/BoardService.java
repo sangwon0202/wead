@@ -7,16 +7,12 @@ import sangwon.wead.DTO.BoardDto;
 import sangwon.wead.DTO.BoardFormDto;
 import sangwon.wead.DTO.BoardMetaDataDto;
 import sangwon.wead.entity.Board;
-import sangwon.wead.exception.BoardNotExistException;
-import sangwon.wead.exception.NoPermissionException;
-import sangwon.wead.exception.UserNotExistException;
 import sangwon.wead.repository.BoardRepository;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.UserRepository;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -28,7 +24,7 @@ public class BoardService {
 
     public List<BoardMetaDataDto> getListAll() {
 
-        List<BoardMetaDataDto> list = boardRepository.findAll().stream().map((board) -> {
+        return boardRepository.findAll().stream().map((board) -> {
             BoardMetaDataDto metaDataDto = new BoardMetaDataDto();
 
             // 메타데이터 형성
@@ -41,17 +37,19 @@ public class BoardService {
 
             return metaDataDto;
         }).toList();
-
-        return list;
     }
 
-    public BoardDto read(int boardId) throws Exception {
+    public boolean boardExist(int boardId) {
+        return boardRepository.findByBoardId(boardId).isPresent();
+    }
 
-        // 게시글이 존재하는지 확인
-        Optional<Board> optionalBoard = boardRepository.findByBoardId(boardId);
-        if(optionalBoard.isEmpty()) throw new BoardNotExistException();
+    public boolean isWriter(String userId, int boardId) {
+        return boardRepository.findByBoardId(boardId).get().getUserId().equals(userId);
+    }
 
-        Board board = optionalBoard.get();
+    public BoardDto read(int boardId) {
+
+        Board board = boardRepository.findByBoardId(boardId).get();
         BoardDto boardDto = new BoardDto();
 
         boardDto.setBoardId(board.getBoardId());
@@ -64,10 +62,7 @@ public class BoardService {
         return boardDto;
     }
 
-    public void create(String userId, BoardFormDto boardFormDto) throws Exception {
-
-        // 사용자가 존재하는지 확인
-        if(userRepository.findByUserId(userId).isEmpty()) throw new UserNotExistException();
+    public void create(String userId, BoardFormDto boardFormDto) {
 
         Board board = new Board();
         board.setUserId(userId);
@@ -78,20 +73,9 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void update(String userId, int boardId, BoardFormDto boardFormDto) throws Exception {
+    public void update(int boardId, BoardFormDto boardFormDto) {
 
-        // 사용자가 존재하는지 확인
-        if(userRepository.findByUserId(userId).isEmpty()) throw new UserNotExistException();
-
-        // 게시글이 존재하는지 확인
-        Optional<Board> optionalBoard = boardRepository.findByBoardId(boardId);
-        if(optionalBoard.isEmpty()) throw new BoardNotExistException();
-
-        // 게시글 수정 권한 확인
-        Board board = optionalBoard.get();
-        if(!board.getUserId().equals(userId)) throw new NoPermissionException();
-
-
+        Board board = boardRepository.findByBoardId(boardId).get();
         board.setTitle(boardFormDto.getTitle());
         board.setContent(boardFormDto.getContent());
 
@@ -99,20 +83,7 @@ public class BoardService {
     }
 
     public void delete(String userId, int boardId) throws Exception {
-
-        // 사용자가 존재하는지 확인
-        if(userRepository.findByUserId(userId).isEmpty()) throw new UserNotExistException();
-
-        // 게시글이 존재하는지 확인
-        Optional<Board> optionalBoard = boardRepository.findByBoardId(boardId);
-        if(optionalBoard.isEmpty()) throw new BoardNotExistException();
-
-        // 게시글 수정 권한 확인
-        Board board = optionalBoard.get();
-        if(!board.getUserId().equals(userId)) throw new NoPermissionException();
-
         boardRepository.deleteByBoardId(boardId);
-
     }
 
 }
