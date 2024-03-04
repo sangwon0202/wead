@@ -3,8 +3,12 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sangwon.wead.DTO.LoginResultDto;
+import sangwon.wead.DTO.RegisterFormDto;
+import sangwon.wead.DTO.UserInfoDto;
 import sangwon.wead.entity.User;
+import sangwon.wead.exception.UserIdDuplicateException;
+import sangwon.wead.exception.UserNotExistException;
+import sangwon.wead.exception.WrongPasswordException;
 import sangwon.wead.repository.UserRepository;
 
 import java.util.Optional;
@@ -15,31 +19,42 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public LoginResultDto login(String userId, String password) {
 
-        LoginResultDto loginResultDto = new LoginResultDto();
+    public UserInfoDto getUserInfo(String userId) {
+        User user = userRepository.findByUserId(userId).get();
+        UserInfoDto userInfoDto = new UserInfoDto();
+        userInfoDto.setUserId(user.getUserId());
+        userInfoDto.setNickname(user.getNickname());
+        return userInfoDto;
+    }
+
+    public void login(String userId, String password) throws Exception {
+
         Optional<User> optionalUser = userRepository.findByUserId(userId);
 
-        if(!optionalUser.isPresent()) {
-            loginResultDto.setResult(false);
-            loginResultDto.setMessage("존재하지 않는 아이디입니다.");
-            return loginResultDto;
-        }
+        // 아이디가 존재하지 않음
+        if(!optionalUser.isPresent()) throw new UserNotExistException();
 
+        // 비밀번호가 틀림
         User user = optionalUser.get();
-        if(!user.getPassword().equals(password)) {
-            loginResultDto.setResult(false);
-            loginResultDto.setMessage("비밀번호를 확인해주세요.");
-            return loginResultDto;
-        }
+        if(!user.getPassword().equals(password)) throw new WrongPasswordException();
 
-        loginResultDto.setResult(true);
-        return loginResultDto;
     }
 
-    public String getNicknameByUserId(String userId) {
-        Optional<User> optionalUser = userRepository.findByUserId(userId);
-        if(optionalUser.isPresent()) return optionalUser.get().getNickname();
-        else return "NULL";
+    public void register(RegisterFormDto registerFormDto) throws Exception {
+
+        Optional<User> optionalUser = userRepository.findByUserId(registerFormDto.getUserId());
+
+        // 아이디 중복
+        if(!optionalUser.isPresent()) throw new UserIdDuplicateException();
+
+        // 회원가입
+        User user = new User();
+        user.setUserId(registerFormDto.getUserId());
+        user.setPassword(registerFormDto.getPassword());
+        user.setNickname(registerFormDto.getNickname());
+        userRepository.save(user);
+
     }
+
 }
