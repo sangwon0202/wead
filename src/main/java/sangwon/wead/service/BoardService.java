@@ -82,7 +82,7 @@ public class BoardService {
         boardRepository.save(board);
     }
 
-    public void delete(String userId, int boardId) throws Exception {
+    public void delete(int boardId) {
         boardRepository.deleteByBoardId(boardId);
     }
 

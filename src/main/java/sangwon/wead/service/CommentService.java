@@ -26,6 +26,10 @@ public class CommentService {
         return commentRepository.findByCommentId(commentId).get().getUserId().equals(userId);
     }
 
+    public int getBoardId(int commentId) {
+        return commentRepository.findByCommentId(commentId).get().getBoardId();
+    }
+
     public List<CommentDto> getCommentList(int boardId) {
         return commentRepository.findAllByBoardId(boardId).stream().map((comment) -> {
             CommentDto commentDto = new CommentDto();
