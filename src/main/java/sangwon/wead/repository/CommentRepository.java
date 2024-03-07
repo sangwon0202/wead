@@ -15,8 +15,8 @@ public class CommentRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Comment> findAllByBoardId(int BoardId) {
-        List<Comment> result = jdbcTemplate.query("select * from comment", commentRowMapper());
+    public List<Comment> findAllByBoardId(int boardId) {
+        List<Comment> result = jdbcTemplate.query("select * from comment where board_id = ?", commentRowMapper(),boardId);
         return result;
     }
 
@@ -53,6 +53,10 @@ public class CommentRepository {
 
     public void deleteByCommentId(int commentId) {
         jdbcTemplate.update("delete from comment where comment_id = ?", commentId);
+    }
+
+    public void deleteAllByBoardId(int boardId) {
+        jdbcTemplate.update("delete from comment where board_id = ?", boardId);
     }
 
 

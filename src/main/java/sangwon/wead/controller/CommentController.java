@@ -33,13 +33,13 @@ public class CommentController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 게시글 존재 확인
         if(!boardService.boardExist(boardId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "error";
+            return "alert";
         };
 
 
@@ -52,7 +52,7 @@ public class CommentController {
 
     @PostMapping("/comment/delete/{commentId}")
     public String delete(HttpServletRequest request,
-                         @PathVariable("boardId") int commentId,
+                         @PathVariable("commentId") int commentId,
                          RedirectAttributes redirectAttributes,
                          Model model) {
 
@@ -62,25 +62,25 @@ public class CommentController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 댓글 존재 확인
         if(!commentService.commentExist(commentId)) {
             model.addAttribute("message", "존재하지 않는 댓글입니다.");
-            return "error";
+            return "alert";
         };
 
         String userId = (String)session.getAttribute("userId");
         // 게시글 수정 권한 확인
         if(!commentService.isWriter(userId, commentId)) {
             model.addAttribute("message", "권한이 없습니다.");
-            return "error";
+            return "alert";
         };
 
+        int boardId = commentService.getBoardId(commentId);
         commentService.delete(commentId);
 
-        int boardId = commentService.getBoardId(commentId);
         redirectAttributes.addAttribute("boardId", boardId);
         return "redirect:/board/{boardId}";
     }

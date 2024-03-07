@@ -56,4 +56,6 @@ public class CommentService {
         commentRepository.deleteByCommentId(commentId);
     }
 
+    public void deleteAllByBoardId(int boardId) { commentRepository.deleteAllByBoardId(boardId);}
+
 }

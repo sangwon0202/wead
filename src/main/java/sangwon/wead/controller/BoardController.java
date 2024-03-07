@@ -1,6 +1,5 @@
 package sangwon.wead.controller;
 
-
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -49,7 +48,7 @@ public class BoardController {
         // 게시글 존재 확인
         if(!boardService.boardExist(boardId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "error";
+            return "alert";
         };
 
         model.addAttribute("board",boardService.read(boardId));
@@ -67,9 +66,10 @@ public class BoardController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
+        model.addAttribute("action", "/board/upload");
         return "upload";
     }
 
@@ -85,14 +85,14 @@ public class BoardController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 빈칸이 있을 경우
         if(title.equals("") || content.equals("")) {
             model.addAttribute("message", "제목 또는 내용을 입력해주세요.");
-            model.addAttribute("redirect", "/upload");
-            return "error";
+            model.addAttribute("redirect", "/board/upload");
+            return "alert";
         }
 
         String userId = (String)session.getAttribute("userId");
@@ -114,30 +114,32 @@ public class BoardController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 게시글 존재 확인
         if(!boardService.boardExist(boardId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "error";
+            return "alert";
         };
 
         String userId = (String)session.getAttribute("userId");
         // 게시글 수정 권한 확인
         if(!boardService.isWriter(userId, boardId)) {
             model.addAttribute("message", "권한이 없습니다.");
-            return "error";
+            model.addAttribute("redirect", "/board/" + boardId);
+            return "alert";
         };
 
-        return "update";
+        model.addAttribute("action", "/board/update/" + boardId);
+        return "upload";
     }
 
     @PostMapping("/board/update/{boardId}")
-    public String updateForm(HttpServletRequest request,
+    public String update(HttpServletRequest request,
                              @PathVariable("boardId") int boardId,
-                             @PathVariable("title") String title,
-                             @PathVariable("content") String content,
+                             @RequestParam("title") String title,
+                             @RequestParam("content") String content,
                              RedirectAttributes redirectAttributes,
                              Model model) {
 
@@ -147,27 +149,28 @@ public class BoardController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 게시글 존재 확인
         if(!boardService.boardExist(boardId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "error";
+            return "alert";
         };
 
         String userId = (String)session.getAttribute("userId");
         // 게시글 수정 권한 확인
         if(!boardService.isWriter(userId, boardId)) {
             model.addAttribute("message", "권한이 없습니다.");
-            return "error";
+            model.addAttribute("redirect", "/board/" + boardId);
+            return "alert";
         };
 
         // 빈칸이 있을 경우
         if(title.equals("") || content.equals("")) {
             model.addAttribute("message", "제목 또는 내용을 입력해주세요.");
-            model.addAttribute("redirect", "/upload");
-            return "error";
+            model.addAttribute("redirect", "/board/update/" + boardId);
+            return "alert";
         }
 
         BoardFormDto boardFormDto = new BoardFormDto();
@@ -190,22 +193,24 @@ public class BoardController {
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
             model.addAttribute("redirect", "/login");
-            return "error";
+            return "alert";
         }
 
         // 게시글 존재 확인
         if(!boardService.boardExist(boardId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "error";
+            return "alert";
         };
 
         String userId = (String)session.getAttribute("userId");
         // 게시글 수정 권한 확인
         if(!boardService.isWriter(userId, boardId)) {
             model.addAttribute("message", "권한이 없습니다.");
-            return "error";
+            model.addAttribute("redirect", "/board/" + boardId);
+            return "alert";
         };
 
+        commentService.deleteAllByBoardId(boardId);
         boardService.delete(boardId);
         return "redirect:/";
     }

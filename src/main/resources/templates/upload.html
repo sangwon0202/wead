@@ -5,6 +5,10 @@
     <title>Title</title>
 </head>
 <body>
-
+    <form th:action="${action}" method="POST">
+        <input type="text" name = "title" placeholder="제목" /><br>
+        <textarea name="content" rows="4" cols="50"></textarea>
+        <input type="submit" placeholder="업로드" />
+    </form>
 </body>
 </html>

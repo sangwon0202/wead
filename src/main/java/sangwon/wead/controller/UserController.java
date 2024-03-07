@@ -26,7 +26,7 @@ public class UserController {
         // 이미 로그인되어 있을 경우
         if(session.getAttribute("userId") != null) {
             model.addAttribute("message", "이미 로그인되어 있습니다.");
-            return "error";
+            return "alert";
         }
 
         // 로그인 폼 전송
@@ -44,13 +44,14 @@ public class UserController {
         // 이미 로그인되어 있을 경우
         if(session.getAttribute("userId") != null) {
             model.addAttribute("message", "이미 로그인되어 있습니다.");
-            return "error";
+            return "alert";
         }
 
         // 로그인 실패
         if(!userService.login(userId, password)) {
             model.addAttribute("message", "아이디와 비밀번호를 확인해주세요.");
             model.addAttribute("redirect", "/login");
+            return "alert";
         }
 
         //로그인 성공
@@ -67,7 +68,7 @@ public class UserController {
         // 이미 로그인되어 있을 경우
         if(session.getAttribute("userId") != null) {
             model.addAttribute("message", "이미 로그인되어 있습니다.");
-            return "error";
+            return "alert";
         }
 
         // 회원가입 폼 전송
@@ -86,21 +87,21 @@ public class UserController {
         // 이미 로그인되어 있을 경우
         if(session.getAttribute("userId") != null) {
             model.addAttribute("message", "이미 로그인되어 있습니다.");
-            return "error";
+            return "alert";
         }
 
         // 빈칸이 있을 경우
         if(userId.equals("") || password.equals("") || nickname.equals("")) {
             model.addAttribute("message", "모든 빈칸을 채워주세요.");
             model.addAttribute("redirect", "/register");
-            return "error";
+            return "alert";
         }
 
         // 아이디가 중복될 경우
         if(userService.userExist(userId)) {
             model.addAttribute("message", "이미 존재하는 아이디입니다.");
             model.addAttribute("redirect", "/register");
-            return "error";
+            return "alert";
         }
 
         // 회원가입 성공
@@ -110,7 +111,8 @@ public class UserController {
         registerFormDto.setNickname(nickname);
         userService.register(registerFormDto);
 
-        return "redirect:/";
+        model.addAttribute("message", "회원가입에 성공하였습니다!.");
+        return "alert";
     }
 
     @PostMapping("/logout")
@@ -121,7 +123,7 @@ public class UserController {
         // 로그인되어 있지 않는 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인되어 있지 않습니다.");
-            return "error";
+            return "alert";
         }
 
         // 로그아웃
