@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sangwon.wead.DTO.BoardDto;
 import sangwon.wead.DTO.BoardFormDto;
 import sangwon.wead.service.BoardService;
 import sangwon.wead.service.CommentService;
@@ -23,7 +24,7 @@ public class BoardController {
     private final UserService userService;
     private final CommentService commentService;
 
-    @GetMapping("/board")
+    @GetMapping("/")
     public String main(HttpServletRequest request, Model model) {
 
         // 로그인 정보
@@ -54,7 +55,7 @@ public class BoardController {
         model.addAttribute("board",boardService.read(boardId));
         model.addAttribute("comments", commentService.getCommentList(boardId));
         model.addAttribute("list", boardService.getListAll());
-        return "main";
+        return "board";
     }
 
     @GetMapping("/board/upload")
@@ -65,7 +66,6 @@ public class BoardController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
@@ -84,7 +84,6 @@ public class BoardController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
@@ -113,7 +112,6 @@ public class BoardController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
@@ -131,7 +129,9 @@ public class BoardController {
             return "alert";
         };
 
+        BoardDto boardDto = boardService.read(boardId);
         model.addAttribute("action", "/board/update/" + boardId);
+        model.addAttribute("board", boardDto);
         return "upload";
     }
 
@@ -148,7 +148,6 @@ public class BoardController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
@@ -192,7 +191,6 @@ public class BoardController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 

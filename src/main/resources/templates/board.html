@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> wead - 독서 커뮤니티 </title>
+    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/board.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+    <header>
+        <h1> Wead - 독서 커뮤니티 </h1>
+        <div class="box"></div>
+    </header>
+
+    <div class="board">
+
+        <div class = "header">
+            <span class="title" th:text="${board.title}">게시글 제목</span><br>
+            <span th:text="${board.nickname}">상원</span> | <span th:text="${board.uploadDate}">2024-02-02</span>
+            <div class="buttons" th:if="${session.userId == board.userId}">
+                <form th:action="@{/board/update/{boardId}(boardId = ${board.boardId})}" method="get">
+                    <input type="submit" value="수정">
+                </form>
+                <form th:action="@{/board/delete/{boardId}(boardId = ${board.boardId})}" method="post">
+                    <input type="submit" style="color: red" value="삭제">
+                </form>
+            </div>
+        </div>
+
+        <div class = "content" th:text="${board.content}">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita nisi, temporibus sed doloribus laboriosam nesciunt non dolores hic corrupti eaque at laborum ea asperiores consectetur, dolorum, accusantium deserunt omnis velit.
+        </div>
+
+        <div class = "comment">
+
+
+            <div class = "header">
+                전체 댓글 <span style="color:red" th:text="${#lists.size(comments)}">4</span>개
+            </div>
+
+            <div class = "list">
+
+                <div class="element" th:each="element : ${comments}">
+                    <div class ="header">
+                        <span class="user" th:text="${element.nickname}">상원</span>
+                        <sapn>|</sapn>
+                        <span class="date" th:text="${element.uploadDate}">2024-02-02</span>
+                        <form th:action="@{/comment/delete/{commentId}(commentId=${element.commentId})}" method="post"
+                              th:if="${session.userId == element.userId}">
+                            <input type="submit" style="color: red" value="삭제">
+                        </form>
+
+                    </div>
+                    <div class="content" th:text="${element.content}">댓글 내용</div>
+                </div>
+            </div>
+
+            <div class="input">
+                <form th:action="@{/comment/upload/{boardId}(boardId = ${board.boardId})}" method="post">
+                    <textarea name="content" cols="100" rows="3"></textarea>
+                    <input type="submit" value="등록">
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div th:replace="~{/main.html::main}"></div>
+
+    <footer>
+            made by 상원
+    </footer>
+    
+</body>
+</html>

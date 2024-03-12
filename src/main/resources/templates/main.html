@@ -2,96 +2,75 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> wead - 독서 커뮤니티 </title>
+    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
-    <!-- 로그인 안되어 있을 때 -->
-    <div th:if = "${user == null}">
-        <a href="/login">로그인</a>
-        <a href="/register">회원가입</a>
-    </div>
-    <!-- 로그인 되어 있을 때 -->
-    <div th:if = "${user != null}">
-        <span th:text ="${user.nickname}"></span>, 환영합니다!
+    <header>
+        <h1> Wead - 독서 커뮤니티 </h1>
+        <div class="box"></div>
+    </header>
 
-        <form action="/logout" method="POST">
-            <input type="submit" value="logout" />
-        </form>
+    <main th:fragment="main">
 
-        <a href="/board/upload">글쓰기</a>
+        <div class="list">
 
-    </div>
+            <div class="buttons">
+                <a href="/board/upload">글쓰기</a>
+            </div>
 
-    <!-- 게시글 및 댓글 -->
-    <div th:if = "${board != null}">
-        <!-- 게시글 -->
-        <div>
-            <h1 th:text="${board.title}"></h1>
-            작성자: <span th:text="${board.nickname}"></span><br>
-            날짜: <span th:text="${board.uploadDate}"></span><br>
-            <p th:text="${board.content}"></p>
+            <table>
+                <tr>
+                    <th class="title">제목</td>
+                    <th class="user">작성자</td>
+                    <th class="date">날짜</td>
+                </tr>
+                <tr th:each="element : ${list}">
+                    <td class="title">
+                        <a th:href="@{/board/{boardId}(boardId=${element.boardId})}">
+                            <span th:text="${element.title}">게시글 제목</span>
+                        </a>
+                        <span style="color:red" th:text="|[${element.commentNumber}]|">[3]</span>
+                    </td>
+                    <td class="user" th:text="${element.nickname}">김우직</td>
+                    <td class="date" th:text="${element.uploadDate}">2024-02-02</td>
+                </tr>
+            </table>
+
         </div>
 
-        <!-- 수정 및 삭제 -->
-        <div th:if ="${session.userId != null and session.userId == board.userId}">
-            <a th:href="@{/board/update/{boardId}(boardId = ${board.boardId})}">수정하기</a>
-            <form th:action="@{/board/delete/{boardId}(boardId = ${board.boardId})}" method="POST">
-                <input type="submit" value="삭제하기" />
-            </form>
-        </div>
 
-        <!-- 댓글 입력 -->
-        <form th:action="@{/comment/upload/{boardId}(boardId = ${board.boardId})}" method="POST">
-            <textarea name="content" rows="4" cols="50"></textarea>
-            <input type="submit" placeholder="댓글 달기" />
-        </form>
+        <div class = "side">
 
-        <!-- 댓글 -->
-        <div th:each="comment : ${comments}">
-            작성자: <span th:text="${comment.nickname}"></span><br>
-            날짜: <span th:text="${comment.uploadDate}"></span><br>
-            <!-- 댓글 삭제 버튼 -->
-            <div th:if ="${session.userId != null and session.userId == comment.userId}">
-                <form th:action="@{/comment/delete/{commentId}(commentId = ${comment.commentId})}" method="POST">
-                    <input type="submit" value="삭제하기" />
+            <div class ="login" th:if="${user == null}">
+                <form action="/login" method="post">
+                    <input type="text" name = "userId" placeholder="아이디">
+                    <input type="text" name = "password" placeholder="비밀번호">
+                    <input type="submit" value="로그인">
+                </form>
+                <a href = "/register">회원가입</a>
+            </div>
+
+            <div class ="login" th:if="${user != null}">
+                <div class="status">
+                    <span th:text="${user.nickname}">상원</span>님, 환영합니다.
+                </div>
+                <form action="/logout" method="post">
+                    <input type="submit" value="로그아웃">
                 </form>
             </div>
-            <!-- 댓글 내용 -->
-            <p th:text="${comment.content}"></p><br>
+
+            <div class = "box"></div>
         </div>
-    </div>
+        </div>
 
-    <!-- 게시글 리스트 -->
-    <table>
-        <!-- 헤더 -->
-        <thead>
-        <tr>
-            <th> 번호 </th>
-            <th> 작성자 </th>
-            <th> 제목 </th>
-            <th> 등록날짜 </th>
-        </tr>
-        </thead>
-        <!-- 바디 -->
-        <tbody>
-        <tr th:each="metaData : ${list}">
+    </main>
 
-            <td><span th:text="${metaData.boardId}"></span></td>
-            <td><span th:text="${metaData.nickname}"></span></td>
-            <td>
-                <a th:href = "@{/board/{boardId}(boardId = ${metaData.boardId})}">
-                    <span th:text="${metaData.title}"></span>
-                </a>
-                <span style="color:red">
-                    (<span th:text="${metaData.commentNumber}"></span>)
-                </span>
-            </td>
-            <td><span th:text="${metaData.uploadDate}"></span></td>
-
-        </tr>
-        </tbody>
-    </table>
-
+    <footer>
+            made by 상원
+    </footer>
+    
 </body>
 </html>

@@ -17,21 +17,6 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/login")
-    public String loginForm(HttpServletRequest request,
-                            Model model) {
-
-        HttpSession session = request.getSession();
-
-        // 이미 로그인되어 있을 경우
-        if(session.getAttribute("userId") != null) {
-            model.addAttribute("message", "이미 로그인되어 있습니다.");
-            return "alert";
-        }
-
-        // 로그인 폼 전송
-        return "login";
-    }
 
     @PostMapping("/login")
     public String login(HttpServletRequest request,
@@ -50,7 +35,6 @@ public class UserController {
         // 로그인 실패
         if(!userService.login(userId, password)) {
             model.addAttribute("message", "아이디와 비밀번호를 확인해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 

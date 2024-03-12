@@ -32,7 +32,6 @@ public class CommentController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
@@ -61,7 +60,6 @@ public class CommentController {
         // 로그인이 안되어 있을 경우
         if(session.getAttribute("userId") == null) {
             model.addAttribute("message", "로그인을 먼저 해주세요.");
-            model.addAttribute("redirect", "/login");
             return "alert";
         }
 
