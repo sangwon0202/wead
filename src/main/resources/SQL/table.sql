@@ -4,10 +4,10 @@
 -- 테이블 생성 SQL - user
 CREATE TABLE user
 (
-    `user_id`   VARCHAR(320)    NOT NULL    COMMENT '사용자 아이디', 
-    `password`  VARCHAR(20)     NOT NULL    COMMENT '비밀번호', 
-    `nickname`  VARCHAR(10)     NOT NULL    COMMENT '별명', 
-     PRIMARY KEY (user_id)
+    `user_id`   VARCHAR(320)    NOT NULL    COMMENT '사용자 아이디',
+    `password`  VARCHAR(20)     NOT NULL    COMMENT '비밀번호',
+    `nickname`  VARCHAR(10)     NOT NULL    COMMENT '별명',
+    PRIMARY KEY (user_id)
 );
 
 -- 테이블 Comment 설정 SQL - user
@@ -18,12 +18,13 @@ ALTER TABLE user COMMENT '사용자 관련 테이블';
 -- 테이블 생성 SQL - board
 CREATE TABLE board
 (
-    `board_id`     INT             NOT NULL    AUTO_INCREMENT COMMENT '게시판 아이디', 
-    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디', 
-    `title`        VARCHAR(50)     NOT NULL    COMMENT '제목', 
-    `content`      TEXT            NOT NULL    COMMENT '내용', 
-    `upload_date`  DATE            NOT NULL    COMMENT '작성날짜', 
-     PRIMARY KEY (board_id)
+    `board_id`     INT             NOT NULL    AUTO_INCREMENT COMMENT '게시판 아이디',
+    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
+    `title`        VARCHAR(50)     NOT NULL    COMMENT '제목',
+    `content`      TEXT            NOT NULL    COMMENT '내용',
+    `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
+    `views`        INT             NULL        COMMENT '조회수',
+    PRIMARY KEY (board_id)
 );
 
 -- 테이블 Comment 설정 SQL - board
@@ -43,12 +44,12 @@ ALTER TABLE board
 -- 테이블 생성 SQL - comment
 CREATE TABLE comment
 (
-    `comment_id`   INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 아이디', 
-    `board_id`     INT             NOT NULL    COMMENT '게시판 아이디', 
-    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디', 
-    `content`      VARCHAR(400)    NOT NULL    COMMENT '내용', 
-    `upload_date`  DATE            NOT NULL    COMMENT '작성날짜', 
-     PRIMARY KEY (comment_id)
+    `comment_id`   INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 아이디',
+    `board_id`     INT             NOT NULL    COMMENT '게시판 아이디',
+    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
+    `content`      VARCHAR(400)    NOT NULL    COMMENT '내용',
+    `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
+    PRIMARY KEY (comment_id)
 );
 
 -- 테이블 Comment 설정 SQL - comment
@@ -71,4 +72,6 @@ ALTER TABLE comment
 -- Foreign Key 삭제 SQL - comment(user_id)
 -- ALTER TABLE comment
 -- DROP FOREIGN KEY FK_comment_user_id_user_user_id;
+
+
 

@@ -91,43 +91,6 @@ main > .list {
 
 }
 
-main > .list > table {
-    width: 100%;
-    border-collapse : collapse;
-
-}
-
-main > .list > table > tbody > tr > td.title {
-    width: 70%;
-    text-align: left;
-}
-
-main > .list > table > tbody > tr > td.user {
-    width: 15%;
-    text-align: center;
-}
-
-main > .list > table > tbody > tr > td.date {
-    width: 15%;
-    text-align: center;
-}
-
-main > .list > table > tbody > tr > th {
-    height: 50px;
-    border-bottom: 1px solid green;
-    border-top: 3px solid green;
-}
-
-main > .list > table > tbody > tr > td {
-    height: 30px;
-    border-bottom: 1px solid grey;
-
-}
-
-main > .list > table > tbody td {
-    padding: 10px;
-}
-
 main > .list > .buttons {
     display: flex;
     flex-direction: row;
@@ -147,6 +110,48 @@ footer {
     width:  100%;
     text-align: center;
     
+}
+
+/* style table */
+table.style {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+table.style > tbody > tr > td.title {
+    width: 60%;
+    text-align: left;
+}
+
+table.style > tbody > tr > td.user {
+    width: 15%;
+    text-align: center;
+}
+
+table.style > tbody > tr > td.date {
+    width: 15%;
+    text-align: center;
+}
+
+table.style > tbody > tr > td.views {
+    width: 5%;
+    text-align: center;
+}
+
+table.style > tbody > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+table.style > tbody > tr > td {
+    height: 30px;
+    border-bottom: 1px solid grey;
+
+}
+
+table.style > tbody td {
+    padding: 10px;
 }
 
 

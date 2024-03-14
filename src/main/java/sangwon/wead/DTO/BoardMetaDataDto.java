@@ -12,7 +12,7 @@ public class BoardMetaDataDto {
     private String nickname;
     private String title;
     private Date uploadDate;
-
     private int commentNumber;
+    private int views;
 
 }

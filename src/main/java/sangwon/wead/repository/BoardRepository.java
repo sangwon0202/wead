@@ -20,6 +20,7 @@ public class BoardRepository {
         List<Board> result = jdbcTemplate.query("select * from board", boardRowMapper());
         return result;
     }
+
     public Optional<Board> findByBoardId(int boardId) {
         List<Board> result = jdbcTemplate.query("select * from board where board_id = ?", boardRowMapper(), boardId);
         return result.stream().findAny();
@@ -30,22 +31,24 @@ public class BoardRepository {
 
         // update
         if(optionalBoard.isPresent()) {
-            jdbcTemplate.update("update board set user_id = ?, title = ?, content = ?, upload_date = ? " +
+            jdbcTemplate.update("update board set user_id = ?, title = ?, content = ?, upload_date = ?, views = ? " +
                     "where board_id = ?",
                     board.getUserId(),
                     board.getTitle(),
                     board.getContent(),
                     board.getUploadDate(),
+                    board.getView(),
                     board.getBoardId()
                     );
         }
         // insert
         else {
-            jdbcTemplate.update("insert board(user_id, title, content, upload_date) values(?, ?, ?, ?)",
+            jdbcTemplate.update("insert board(user_id, title, content, upload_date, views) values(?, ?, ?, ?, ?)",
                     board.getUserId(),
                     board.getTitle(),
                     board.getContent(),
-                    board.getUploadDate()
+                    board.getUploadDate(),
+                    board.getView()
             );
         }
     }
@@ -62,10 +65,9 @@ public class BoardRepository {
             board.setTitle(rs.getString("title"));
             board.setContent(rs.getString("content"));
             board.setUploadDate(rs.getDate("upload_date"));
+            board.setView(rs.getInt("views"));
             return board;
         };
     }
-
-
 
 }

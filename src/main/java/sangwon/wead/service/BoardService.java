@@ -34,6 +34,7 @@ public class BoardService {
             metaDataDto.setUploadDate(board.getUploadDate());
             metaDataDto.setNickname(userRepository.findByUserId(board.getUserId()).get().getNickname());
             metaDataDto.setCommentNumber(commentRepository.findAllByBoardId(board.getBoardId()).size());
+            metaDataDto.setViews(board.getView());
 
             return metaDataDto;
         }).toList();
@@ -58,23 +59,23 @@ public class BoardService {
         boardDto.setUserId(board.getUserId());
         boardDto.setUploadDate(board.getUploadDate());
         boardDto.setNickname(userRepository.findByUserId(board.getUserId()).get().getNickname());
+        boardDto.setViews(board.getView());
 
         return boardDto;
     }
 
     public void create(String userId, BoardFormDto boardFormDto) {
-
         Board board = new Board();
         board.setUserId(userId);
         board.setTitle(boardFormDto.getTitle());
         board.setContent(boardFormDto.getContent());
         board.setUploadDate(new Date());
+        board.setView(0);
 
         boardRepository.save(board);
     }
 
     public void update(int boardId, BoardFormDto boardFormDto) {
-
         Board board = boardRepository.findByBoardId(boardId).get();
         board.setTitle(boardFormDto.getTitle());
         board.setContent(boardFormDto.getContent());
@@ -86,4 +87,9 @@ public class BoardService {
         boardRepository.deleteByBoardId(boardId);
     }
 
+    public void increaseViews(int boardId) {
+        Board board = boardRepository.findByBoardId(boardId).get();
+        board.setView(board.getView()+1);
+        boardRepository.save(board);
+    }
 }

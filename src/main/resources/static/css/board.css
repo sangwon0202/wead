@@ -4,6 +4,8 @@
 }
 
 .board > .header {
+    display: flex;
+    flex-direction: column;
     padding: 10px;
 }
 
@@ -11,10 +13,24 @@
     font-size: 30px;
 }
 
-.board > .header > .buttons {
+.board > .header > .left {
+    display: flex;
+    flex-direction: row;
+    justify-content: start;
+}
+
+.board > .header > .left > * {
+    margin: 5px;
+}
+
+.board > .header > .right {
     display: flex;
     flex-direction: row;
     justify-content: end;
+}
+
+.board > .header > .right > * {
+    margin: 5px;
 }
 
 .board > .header > .buttons > * {

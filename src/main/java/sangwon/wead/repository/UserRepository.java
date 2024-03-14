@@ -14,6 +14,7 @@ import java.util.Optional;
 public class UserRepository {
 
     private final JdbcTemplate jdbcTemplate;
+
     public Optional<User> findByUserId(String userId) {
         List<User> result = jdbcTemplate.query("select * from user where user_id = ?", userRowMapper(), userId);
         return result.stream().findAny();

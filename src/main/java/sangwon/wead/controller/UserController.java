@@ -17,7 +17,6 @@ public class UserController {
 
     private final UserService userService;
 
-
     @PostMapping("/login")
     public String login(HttpServletRequest request,
                         @RequestParam String userId,
@@ -113,7 +112,6 @@ public class UserController {
         // 로그아웃
         session.removeAttribute("userId");
         return "redirect:/";
-
     }
 
 }

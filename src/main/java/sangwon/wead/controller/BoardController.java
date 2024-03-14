@@ -52,6 +52,10 @@ public class BoardController {
             return "alert";
         };
 
+        // 조회수 증가
+        boardService.increaseViews(boardId);
+
+        // 모델 전달
         model.addAttribute("board",boardService.read(boardId));
         model.addAttribute("comments", commentService.getCommentList(boardId));
         model.addAttribute("list", boardService.getListAll());

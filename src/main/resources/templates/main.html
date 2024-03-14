@@ -21,11 +21,12 @@
                 <a href="/board/upload">글쓰기</a>
             </div>
 
-            <table>
+            <table class="style">
                 <tr>
                     <th class="title">제목</td>
                     <th class="user">작성자</td>
                     <th class="date">날짜</td>
+                    <th class="date">조회수</td>
                 </tr>
                 <tr th:each="element : ${list}">
                     <td class="title">
@@ -36,6 +37,7 @@
                     </td>
                     <td class="user" th:text="${element.nickname}">김우직</td>
                     <td class="date" th:text="${element.uploadDate}">2024-02-02</td>
+                    <td class="views" th:text="${element.views}">0</td>
                 </tr>
             </table>
 

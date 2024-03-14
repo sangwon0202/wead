@@ -12,4 +12,6 @@ public class Board {
     private String title;
     private String content;
     private Date uploadDate;
+
+    private int view;
 }

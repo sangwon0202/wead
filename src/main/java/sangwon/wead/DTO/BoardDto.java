@@ -13,5 +13,6 @@ public class BoardDto {
     private String title;
     private String content;
     private Date uploadDate;
+    private int views;
 
 }
