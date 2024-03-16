@@ -14,30 +14,30 @@ CREATE TABLE user
 ALTER TABLE user COMMENT '사용자 관련 테이블';
 
 
--- board Table Create SQL
--- 테이블 생성 SQL - board
-CREATE TABLE board
+-- post Table Create SQL
+-- 테이블 생성 SQL - post
+CREATE TABLE post
 (
-    `board_id`     INT             NOT NULL    AUTO_INCREMENT COMMENT '게시판 아이디',
+    `post_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 아이디',
     `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
     `title`        VARCHAR(50)     NOT NULL    COMMENT '제목',
     `content`      TEXT            NOT NULL    COMMENT '내용',
     `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
     `views`        INT             NULL        COMMENT '조회수',
-    PRIMARY KEY (board_id)
+    PRIMARY KEY (post_id)
 );
 
--- 테이블 Comment 설정 SQL - board
-ALTER TABLE board COMMENT '게시판 관련 테이블';
+-- 테이블 Comment 설정 SQL - post
+ALTER TABLE post COMMENT '게시글 관련 테이블';
 
--- Foreign Key 설정 SQL - board(user_id) -> user(user_id)
-ALTER TABLE board
-    ADD CONSTRAINT FK_board_user_id_user_user_id FOREIGN KEY (user_id)
+-- Foreign Key 설정 SQL - post(user_id) -> user(user_id)
+ALTER TABLE post
+    ADD CONSTRAINT FK_post_user_id_user_user_id FOREIGN KEY (user_id)
         REFERENCES user (user_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
--- Foreign Key 삭제 SQL - board(user_id)
--- ALTER TABLE board
--- DROP FOREIGN KEY FK_board_user_id_user_user_id;
+-- Foreign Key 삭제 SQL - post(user_id)
+-- ALTER TABLE post
+-- DROP FOREIGN KEY FK_post_user_id_user_user_id;
 
 
 -- comment Table Create SQL
@@ -45,7 +45,7 @@ ALTER TABLE board
 CREATE TABLE comment
 (
     `comment_id`   INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 아이디',
-    `board_id`     INT             NOT NULL    COMMENT '게시판 아이디',
+    `post_id`      INT             NOT NULL    COMMENT '게시글 아이디',
     `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
     `content`      VARCHAR(400)    NOT NULL    COMMENT '내용',
     `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
@@ -55,14 +55,14 @@ CREATE TABLE comment
 -- 테이블 Comment 설정 SQL - comment
 ALTER TABLE comment COMMENT '댓글 관련 테이블';
 
--- Foreign Key 설정 SQL - comment(board_id) -> board(board_id)
+-- Foreign Key 설정 SQL - comment(post_id) -> post(post_id)
 ALTER TABLE comment
-    ADD CONSTRAINT FK_comment_board_id_board_board_id FOREIGN KEY (board_id)
-        REFERENCES board (board_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
+    ADD CONSTRAINT FK_comment_post_id_post_post_id FOREIGN KEY (post_id)
+        REFERENCES post (post_id) ON DELETE RESTRICT ON UPDATE RESTRICT;
 
--- Foreign Key 삭제 SQL - comment(board_id)
+-- Foreign Key 삭제 SQL - comment(post_id)
 -- ALTER TABLE comment
--- DROP FOREIGN KEY FK_comment_board_id_board_board_id;
+-- DROP FOREIGN KEY FK_comment_post_id_post_post_id;
 
 -- Foreign Key 설정 SQL - comment(user_id) -> user(user_id)
 ALTER TABLE comment
@@ -72,6 +72,5 @@ ALTER TABLE comment
 -- Foreign Key 삭제 SQL - comment(user_id)
 -- ALTER TABLE comment
 -- DROP FOREIGN KEY FK_comment_user_id_user_user_id;
-
 
 

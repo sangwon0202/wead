@@ -26,12 +26,12 @@ public class CommentService {
         return commentRepository.findByCommentId(commentId).get().getUserId().equals(userId);
     }
 
-    public int getBoardId(int commentId) {
-        return commentRepository.findByCommentId(commentId).get().getBoardId();
+    public int getPostId(int commentId) {
+        return commentRepository.findByCommentId(commentId).get().getPostId();
     }
 
-    public List<CommentDto> getCommentList(int boardId) {
-        return commentRepository.findAllByBoardId(boardId).stream().map((comment) -> {
+    public List<CommentDto> getCommentList(int postId) {
+        return commentRepository.findAllByPostId(postId).stream().map((comment) -> {
             CommentDto commentDto = new CommentDto();
             commentDto.setCommentId(comment.getCommentId());
             commentDto.setUserId(comment.getUserId());
@@ -42,10 +42,10 @@ public class CommentService {
         }).toList();
     }
 
-    public void create(String userId, int boardId, String content) {
+    public void create(String userId, int postId, String content) {
         Comment comment = new Comment();
         comment.setUserId(userId);
-        comment.setBoardId(boardId);
+        comment.setPostId(postId);
         comment.setContent(content);
         comment.setUploadDate(new Date());
 
@@ -56,6 +56,6 @@ public class CommentService {
         commentRepository.deleteByCommentId(commentId);
     }
 
-    public void deleteAllByBoardId(int boardId) { commentRepository.deleteAllByBoardId(boardId);}
+    public void deleteAllByPostId(int postId) { commentRepository.deleteAllByPostId(postId);}
 
 }

@@ -10,19 +10,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.service.BoardService;
+import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
 
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
 
-    private final BoardService boardService;
+    private final PostService postService;
     private final CommentService commentService;
 
-    @PostMapping("/comment/upload/{boardId}")
+    @PostMapping("/comment/upload/{postId}")
     public String upload(HttpServletRequest request,
-                         @PathVariable("boardId") int boardId,
+                         @PathVariable("postId") int postId,
                          @RequestParam String content,
                          RedirectAttributes redirectAttributes,
                          Model model) {
@@ -36,17 +36,17 @@ public class CommentController {
         }
 
         // 게시글 존재 확인
-        if(!boardService.boardExist(boardId)) {
+        if(!postService.postExist(postId)) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
             return "alert";
         };
 
 
         String userId = (String)session.getAttribute("userId");
-        commentService.create(userId, boardId, content);
+        commentService.create(userId, postId, content);
 
-        redirectAttributes.addAttribute("boardId", boardId);
-        return "redirect:/board/{boardId}";
+        redirectAttributes.addAttribute("postId", postId);
+        return "redirect:/post/{postId}";
     }
 
     @PostMapping("/comment/delete/{commentId}")
@@ -76,11 +76,11 @@ public class CommentController {
             return "alert";
         };
 
-        int boardId = commentService.getBoardId(commentId);
+        int postId = commentService.getPostId(commentId);
         commentService.delete(commentId);
 
-        redirectAttributes.addAttribute("boardId", boardId);
-        return "redirect:/board/{boardId}";
+        redirectAttributes.addAttribute("postId", postId);
+        return "redirect:/post/{postId}";
     }
 
 

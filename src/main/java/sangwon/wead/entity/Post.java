@@ -1,18 +1,17 @@
-package sangwon.wead.DTO;
+package sangwon.wead.entity;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class BoardDto {
+public class Post {
 
-    private int boardId;
+    private int postId;
     private String userId;
-    private String nickname;
     private String title;
     private String content;
     private Date uploadDate;
-    private int views;
 
+    private int view;
 }

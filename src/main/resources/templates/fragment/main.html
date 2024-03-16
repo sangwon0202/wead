@@ -6,7 +6,7 @@
 
         <!-- 글쓰기 버튼 -->
         <div class="buttons">
-            <a href="/board/upload">글쓰기</a>
+            <a href="/post/upload">글쓰기</a>
         </div>
 
         <table>
@@ -25,7 +25,7 @@
                 <td class="title">
 
                     <!-- 게시글 제목 -->
-                    <a th:href="@{/board/{boardId}(boardId=${element.boardId})}">
+                    <a th:href="@{/post/{postId}(postId=${element.postId})}">
                         <span th:text="${element.title}">게시글 제목</span>
                     </a>
 

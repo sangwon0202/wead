@@ -15,8 +15,8 @@ public class CommentRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Comment> findAllByBoardId(int boardId) {
-        List<Comment> result = jdbcTemplate.query("select * from comment where board_id = ?", commentRowMapper(),boardId);
+    public List<Comment> findAllByPostId(int postId) {
+        List<Comment> result = jdbcTemplate.query("select * from comment where post_id = ?", commentRowMapper(),postId);
         return result;
     }
 
@@ -30,9 +30,9 @@ public class CommentRepository {
 
         // update
         if(optionalComment.isPresent()) {
-            jdbcTemplate.update("update comment set board_id = ?, user_id = ?, content = ?, upload_date = ? " +
+            jdbcTemplate.update("update comment set post_id = ?, user_id = ?, content = ?, upload_date = ? " +
                             "where comment_id = ?",
-                    comment.getBoardId(),
+                    comment.getPostId(),
                     comment.getUserId(),
                     comment.getContent(),
                     comment.getUploadDate(),
@@ -41,9 +41,9 @@ public class CommentRepository {
         }
         // insert
         else {
-            jdbcTemplate.update("insert comment(board_id, user_id, content, upload_date) " +
+            jdbcTemplate.update("insert comment(post_id, user_id, content, upload_date) " +
                             "values(?, ?, ?, ?)",
-                    comment.getBoardId(),
+                    comment.getPostId(),
                     comment.getUserId(),
                     comment.getContent(),
                     comment.getUploadDate()
@@ -55,8 +55,8 @@ public class CommentRepository {
         jdbcTemplate.update("delete from comment where comment_id = ?", commentId);
     }
 
-    public void deleteAllByBoardId(int boardId) {
-        jdbcTemplate.update("delete from comment where board_id = ?", boardId);
+    public void deleteAllByPostId(int postId) {
+        jdbcTemplate.update("delete from comment where post_id = ?", postId);
     }
 
 
@@ -65,7 +65,7 @@ public class CommentRepository {
         return (rs, rowNum) -> {
             Comment comment = new Comment();
             comment.setCommentId(rs.getInt("comment_id"));
-            comment.setBoardId(rs.getInt("board_id"));
+            comment.setPostId(rs.getInt("post_id"));
             comment.setUserId(rs.getString("user_id"));
             comment.setContent(rs.getString("content"));
             comment.setUploadDate(rs.getDate("upload_date"));

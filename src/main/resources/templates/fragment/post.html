@@ -1,26 +1,26 @@
 
 
-<div class="board" th:fragment="board">
+<div class="post" th:fragment="post">
 
     <!-- 헤더 -->
     <div class = "header">
         <!-- 게시글 제목 -->
-        <span class="title" th:text="${board.title}">게시글 제목</span>
+        <span class="title" th:text="${post.title}">게시글 제목</span>
 
         <!-- 사용자 이름 및 업로드 날짜 -->
         <div class="info1">
-            <span th:text="${board.nickname}">사용자 이름</span>
+            <span th:text="${post.nickname}">사용자 이름</span>
             <span>|</span>
-            <span th:text="${board.uploadDate}">YYYY-MM-DD</span>
+            <span th:text="${post.uploadDate}">YYYY-MM-DD</span>
         </div>
 
         <!-- 조회수 및 수정 삭제 버튼 -->
         <div class="info2">
-            <div> 조회 <span th:text="${board.views}">0</span> </div>
-            <form th:if="${session.userId == board.userId}" th:action="@{/board/update/{boardId}(boardId = ${board.boardId})}" method="get">
+            <div> 조회 <span th:text="${post.views}">0</span> </div>
+            <form th:if="${session.userId == post.userId}" th:action="@{/post/update/{postId}(postId = ${post.postId})}" method="get">
                 <input type="submit" value="수정">
             </form>
-            <form th:if="${session.userId == board.userId}" th:action="@{/board/delete/{boardId}(boardId = ${board.boardId})}" method="post">
+            <form th:if="${session.userId == post.userId}" th:action="@{/post/delete/{postId}(postId = ${post.postId})}" method="post">
                 <input type="submit" style="color: red" value="삭제">
             </form>
         </div>
@@ -28,7 +28,7 @@
 
 
     <!-- 게시글 내용 -->
-    <div class = "content" th:text="${board.content}">
+    <div class = "content" th:text="${post.content}">
         게시글 내용
     </div>
 
@@ -64,7 +64,7 @@
 
         <!-- 댓글 작성 창 -->
         <div class="input">
-            <form th:action="@{/comment/upload/{boardId}(boardId = ${board.boardId})}" method="post">
+            <form th:action="@{/comment/upload/{postId}(postId = ${post.postId})}" method="post">
                 <textarea name="content" cols="100" rows="3"></textarea>
                 <input type="submit" value="등록">
             </form>

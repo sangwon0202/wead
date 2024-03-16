@@ -5,9 +5,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public class BoardMetaDataDto {
+public class PostMetaDataDto {
 
-    private int boardId;
+    private int postId;
     private String userId;
     private String nickname;
     private String title;

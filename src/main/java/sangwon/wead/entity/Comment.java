@@ -8,7 +8,7 @@ import java.util.Date;
 public class Comment {
 
     private int commentId;
-    private int boardId;
+    private int postId;
     private String userId;
     private String content;
     private Date uploadDate;

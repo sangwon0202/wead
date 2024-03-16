@@ -7,7 +7,7 @@
 
   <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
   <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
-  <link th:href="@{/css/board.css}" rel="stylesheet" type="text/css" />
+  <link th:href="@{/css/post.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -17,8 +17,8 @@
 <article>
 
   <!-- 게시글 모델 존재 시 게시글 표시 -->
-  <th:block th:if="${board != null}">
-    <div th:replace="~{fragment/board.html::board}"></div>
+  <th:block th:if="${post != null}">
+    <div th:replace="~{fragment/post.html::post}"></div>
   </th:block>
 
   <!-- 메인 -->

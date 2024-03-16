@@ -7,16 +7,16 @@
     </div>
 
     <!-- 새로 업로드 -->
-    <form th:action="@{/board/upload}" method="post" th:if="${board == null}">
+    <form th:action="@{/post/upload}" method="post" th:if="${post == null}">
         <input type="text" name="title" placeholder="제목">
         <textarea name="content" cols="100" rows="30"></textarea>
         <input type="submit" value="등록">
     </form>
 
     <!-- 업데이트 -->
-    <form th:action="@{/board/update/{boardId}(boardId=${board.boardId})}" method="post" th:if="${board != null}">
-        <input type="text" name="title" placeholder="제목" th:value="${board.title}">
-        <textarea name="content" cols="100" rows="30" th:text="${board.content}"></textarea>
+    <form th:action="@{/post/update/{postId}(postId=${post.postId})}" method="post" th:if="${post != null}">
+        <input type="text" name="title" placeholder="제목" th:value="${post.title}">
+        <textarea name="content" cols="100" rows="30" th:text="${post.content}"></textarea>
         <input type="submit" value="등록">
     </form>
 
