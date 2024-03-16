@@ -1,0 +1,83 @@
+
+<div class="main" th:fragment="main">
+
+    <!-- 게시글 리스트 -->
+    <div class="list">
+
+        <!-- 글쓰기 버튼 -->
+        <div class="buttons">
+            <a href="/board/upload">글쓰기</a>
+        </div>
+
+        <table>
+            <!-- 리스트 헤더 -->
+            <tr>
+                <th class="title">제목</td>
+                <th class="user">작성자</td>
+                <th class="date">날짜</td>
+                <th class="date">조회수</td>
+            </tr>
+
+            <!-- 리스트 목록 -->
+            <tr th:each="element : ${list}">
+
+
+                <td class="title">
+
+                    <!-- 게시글 제목 -->
+                    <a th:href="@{/board/{boardId}(boardId=${element.boardId})}">
+                        <span th:text="${element.title}">게시글 제목</span>
+                    </a>
+
+                    <!-- 댓글 갯수 -->
+                    <span style="color:red" th:text="|[${element.commentNumber}]|">[0]</span>
+                </td>
+
+                <td class="user" th:text="${element.nickname}">사용자 이름</td>
+                <td class="date" th:text="${element.uploadDate}">YYYY-MM-DD</td>
+                <td class="views" th:text="${element.views}">0</td>
+            </tr>
+        </table>
+
+        <!-- 페이지 바 -->
+        <div class = "pageBar">
+            <div class="prev"> < </div>
+            <div class="number" th:each="number : ${#numbers.sequence(pageBar.start,pageBar.end)}" th:text="${number}">
+            </div>
+            <div class="next"> > </div>
+        </div>
+
+    </div>
+
+    <!-- 사이드 -->
+    <div class = "side">
+
+        <!-- 로그인이 안되어 있을 때 -->
+        <div class ="login" th:if="${user == null}">
+            <form action="/login" method="post">
+                <input type="text" name = "userId" placeholder="아이디">
+                <input type="text" name = "password" placeholder="비밀번호">
+                <input type="submit" value="로그인">
+            </form>
+            <a href = "/register">회원가입</a>
+        </div>
+
+        <!-- 로그인이 되어 있을 때 -->
+        <div class ="login" th:if="${user != null}">
+
+            <!-- 사용자 이름 -->
+            <div class="status">
+                <span th:text="${user.nickname}">상원</span>님, 환영합니다.
+            </div>
+
+            <!-- 로그아웃 버튼 -->
+            <form action="/logout" method="post">
+                <input type="submit" value="로그아웃">
+            </form>
+        </div>
+
+        <!-- 임시 박스 -->
+        <div class = "box"></div>
+    </div>
+
+</div>

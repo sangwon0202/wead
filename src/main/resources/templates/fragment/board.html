@@ -1,0 +1,74 @@
+
+
+<div class="board" th:fragment="board">
+
+    <!-- 헤더 -->
+    <div class = "header">
+        <!-- 게시글 제목 -->
+        <span class="title" th:text="${board.title}">게시글 제목</span>
+
+        <!-- 사용자 이름 및 업로드 날짜 -->
+        <div class="info1">
+            <span th:text="${board.nickname}">사용자 이름</span>
+            <span>|</span>
+            <span th:text="${board.uploadDate}">YYYY-MM-DD</span>
+        </div>
+
+        <!-- 조회수 및 수정 삭제 버튼 -->
+        <div class="info2">
+            <div> 조회 <span th:text="${board.views}">0</span> </div>
+            <form th:if="${session.userId == board.userId}" th:action="@{/board/update/{boardId}(boardId = ${board.boardId})}" method="get">
+                <input type="submit" value="수정">
+            </form>
+            <form th:if="${session.userId == board.userId}" th:action="@{/board/delete/{boardId}(boardId = ${board.boardId})}" method="post">
+                <input type="submit" style="color: red" value="삭제">
+            </form>
+        </div>
+    </div>
+
+
+    <!-- 게시글 내용 -->
+    <div class = "content" th:text="${board.content}">
+        게시글 내용
+    </div>
+
+
+    <!-- 댓글 목록 -->
+    <div class = "comment">
+
+        <!-- 댓글 개수 표시 -->
+        <div class = "header">
+            전체 댓글 <span style="color:red" th:text="${#lists.size(comment)}">4</span>개
+        </div>
+
+        <!-- 댓글 목록 -->
+        <div class = "list">
+
+            <!-- 댓글 -->
+            <div class="element" th:each="element : ${comment}">
+
+                <!-- 사용자 이름, 업로드 날짜, 삭제 버튼 -->
+                <div class ="header">
+                    <span class="user" th:text="${element.nickname}">상원</span>
+                    <sapn>|</sapn>
+                    <span class="date" th:text="${element.uploadDate}">2024-02-02</span>
+                    <form th:if="${session.userId == element.userId}"th:action="@{/comment/delete/{commentId}(commentId=${element.commentId})}" method="post">
+                        <input type="submit" style="color: red" value="삭제">
+                    </form>
+                </div>
+
+                <!-- 댓글 내용 -->
+                <div class="content" th:text="${element.content}">댓글 내용</div>
+            </div>
+        </div>
+
+        <!-- 댓글 작성 창 -->
+        <div class="input">
+            <form th:action="@{/comment/upload/{boardId}(boardId = ${board.boardId})}" method="post">
+                <textarea name="content" cols="100" rows="3"></textarea>
+                <input type="submit" value="등록">
+            </form>
+        </div>
+
+    </div>
+</div>

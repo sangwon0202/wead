@@ -12,9 +12,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.DTO.BoardDto;
 import sangwon.wead.DTO.BoardFormDto;
+import sangwon.wead.DTO.PageBarDto;
 import sangwon.wead.service.BoardService;
 import sangwon.wead.service.CommentService;
 import sangwon.wead.service.UserService;
+
+import java.util.Optional;
 
 @Controller
 @RequiredArgsConstructor
@@ -24,20 +27,13 @@ public class BoardController {
     private final UserService userService;
     private final CommentService commentService;
 
-    @GetMapping("/")
-    public String main(HttpServletRequest request, Model model) {
+    private final int boardCountPerPage = 10;
+    private final int pageCountPerPageBar = 10;
 
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-        if(userId != null) model.addAttribute("user", userService.getUserInfo(userId));
 
-        model.addAttribute("list", boardService.getListAll());
-        return "main";
-    }
-
-    @GetMapping("/board/{boardId}")
-    public String board(@PathVariable("boardId") int boardId,
+    @GetMapping(value = {"/", "/board/{boardId}"})
+    public String board(@PathVariable(value = "boardId" ,required = false) Optional<Integer> optionalBoardId,
+                        @RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
                         HttpServletRequest request,
                         Model model) {
 
@@ -46,20 +42,38 @@ public class BoardController {
         String userId = (String)session.getAttribute("userId");
         if(userId != null) model.addAttribute("user", userService.getUserInfo(userId));
 
-        // 게시글 존재 확인
-        if(!boardService.boardExist(boardId)) {
-            model.addAttribute("message", "존재하지 않는 게시물입니다.");
-            return "alert";
-        };
 
-        // 조회수 증가
-        boardService.increaseViews(boardId);
+        // 게시글 조회 시
+        if(optionalBoardId.isPresent()) {
+            int boardId = optionalBoardId.get();
 
-        // 모델 전달
-        model.addAttribute("board",boardService.read(boardId));
-        model.addAttribute("comments", commentService.getCommentList(boardId));
-        model.addAttribute("list", boardService.getListAll());
-        return "board";
+            // 게시글 존재 확인
+            if(!boardService.boardExist(boardId)) {
+                model.addAttribute("message", "존재하지 않는 게시물입니다.");
+                return "alert";
+            };
+
+            // 조회수 증가
+            boardService.increaseViews(boardId);
+
+            // 게시글 및 댓글 모델 전달
+            model.addAttribute("board",boardService.read(boardId));
+            model.addAttribute("comment", commentService.getCommentList(boardId));
+        }
+
+        // 리스트 모델 전달
+        model.addAttribute("list", boardService.getListWithPaging(pageNumber,boardCountPerPage));
+
+        // 페이지바 더미 데이터 전달
+        PageBarDto pageBarDto = new PageBarDto();
+        pageBarDto.setPrev(true);
+        pageBarDto.setNext(false);
+        pageBarDto.setStart(1);
+        pageBarDto.setEnd(10);
+        pageBarDto.setCurrent(5);
+        model.addAttribute("pageBar", pageBarDto);
+
+        return "page/main";
     }
 
     @GetMapping("/board/upload")
@@ -74,7 +88,7 @@ public class BoardController {
         }
 
         model.addAttribute("action", "/board/upload");
-        return "upload";
+        return "page/upload";
     }
 
     @PostMapping("/board/upload")
@@ -136,7 +150,7 @@ public class BoardController {
         BoardDto boardDto = boardService.read(boardId);
         model.addAttribute("action", "/board/update/" + boardId);
         model.addAttribute("board", boardDto);
-        return "upload";
+        return "page/upload";
     }
 
     @PostMapping("/board/update/{boardId}")
@@ -216,7 +230,5 @@ public class BoardController {
         boardService.delete(boardId);
         return "redirect:/";
     }
-
-
 
 }

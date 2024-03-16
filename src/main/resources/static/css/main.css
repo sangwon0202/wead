@@ -1,0 +1,135 @@
+.main {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+/* side */
+
+.main > .side {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    padding: 20px;
+}
+
+.main > .side > * {
+    margin: 5px;
+    padding: 15px;
+    border: 2px solid gray;
+}
+
+.main > .side > .login {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid green;
+}
+
+.main > .side > .login > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.main > .side > .login > form > input {
+    margin: 2px;
+}
+
+.main > .side > .login > form > input[type=text] {
+    height: 40px;
+}
+
+.main > .side > .login > form > input[type=submit] {
+    height: 30px;
+    background-color: green;
+    color: white;
+}
+
+.main > .side > .login > a {
+    text-align: center;
+}
+
+.main > .side > .login > .status {
+    padding: 10px;
+}
+
+.main > .side > .box {
+    height: 400px;
+}
+
+
+/* list */
+
+.main > .list {
+    width: 75%;
+    padding: 20px;
+}
+
+.main > .list > .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.main > .list > .buttons > a {
+    color: green;
+    border: 2px solid green;
+    padding: 2px 7px 2px 7px;
+    margin: 5px;
+}
+
+/* list - table */
+
+.main > .list > table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+.main > .list > table > tbody > tr > td.title {
+    width: 60%;
+    text-align: left;
+}
+
+.main > .list > table > tbody > tr > td.user {
+    width: 15%;
+    text-align: center;
+}
+
+.main > .list > table > tbody > tr > td.date {
+    width: 15%;
+    text-align: center;
+}
+
+.main > .list > table > tbody > tr > td.views {
+    width: 5%;
+    text-align: center;
+}
+
+.main > .list > table > tbody > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+.main > .list > table > tbody > tr > td {
+    height: 30px;
+    border-bottom: 1px solid grey;
+
+}
+
+.main > .list > table > tbody td {
+    padding: 10px;
+}
+
+/* list - pageBar */
+
+.main > .list > .pageBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.main > .list > .pageBar > * {
+    margin: 5px;
+}
+
+

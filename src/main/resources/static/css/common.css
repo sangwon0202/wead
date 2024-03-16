@@ -20,138 +20,18 @@ header > .box {
     width:  100%;
     background-color: green;
     margin-bottom: 20px;
-    
 }
 
-main {
+article {
     display: flex;
-    flex-direction: row;
-    align-items: start;
+    flex-direction: column;
     width: 1250px;
 }
-
-/* side */
-
-.side {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 0;
-}
-
-.side > * {
-    margin: 5px;
-    border: 2px solid gray;
-    padding: 15px;
-}
-
-.login {
-    border: 2px solid green;
-    display: flex;
-    flex-direction: column;
-    
-}
-
-.login > a {
-    text-align: center;
-}
-
-.login > form {
-    display: flex;
-    flex-direction: column;
-}
-
-.login > form > input {
-    margin: 2px;
-}
-
-.login > form > input[type=text] {
-    height: 40px;
-}
-
-.login > form > input[type=submit] {
-    height: 30px;
-    background-color: green;
-    color: white;
-}
-
-.login > .status {
-    padding: 10px;
-}
-
-.side > .box {
-    height: 400px;
-}
-
-
-/* list */
-
-main > .list {
-    flex: 3 1 0;
-    margin: 20px;
-
-}
-
-main > .list > .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-}
-
-main > .list > .buttons > a {
-    color: green;
-    border: 2px solid green;
-    padding: 2px 7px 2px 7px;
-    margin: 5px;
-}
-
-/* footer */
 
 footer {
     width:  100%;
     text-align: center;
-    
-}
 
-/* style table */
-table.style {
-    width: 100%;
-    border-collapse : collapse;
-}
-
-table.style > tbody > tr > td.title {
-    width: 60%;
-    text-align: left;
-}
-
-table.style > tbody > tr > td.user {
-    width: 15%;
-    text-align: center;
-}
-
-table.style > tbody > tr > td.date {
-    width: 15%;
-    text-align: center;
-}
-
-table.style > tbody > tr > td.views {
-    width: 5%;
-    text-align: center;
-}
-
-table.style > tbody > tr > th {
-    height: 50px;
-    border-bottom: 1px solid green;
-    border-top: 3px solid green;
-}
-
-table.style > tbody > tr > td {
-    height: 30px;
-    border-bottom: 1px solid grey;
-
-}
-
-table.style > tbody td {
-    padding: 10px;
 }
 
 

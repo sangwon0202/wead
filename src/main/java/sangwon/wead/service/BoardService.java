@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sangwon.wead.DTO.BoardDto;
 import sangwon.wead.DTO.BoardFormDto;
 import sangwon.wead.DTO.BoardMetaDataDto;
+import sangwon.wead.DTO.PageBarDto;
 import sangwon.wead.entity.Board;
 import sangwon.wead.repository.BoardRepository;
 import sangwon.wead.repository.CommentRepository;
@@ -38,6 +39,51 @@ public class BoardService {
 
             return metaDataDto;
         }).toList();
+    }
+
+    public List<BoardMetaDataDto> getListWithPaging(int pageNumber, int boardCountPerPage) {
+
+        return boardRepository.findWithPaging(pageNumber,boardCountPerPage).stream().map((board) -> {
+            BoardMetaDataDto metaDataDto = new BoardMetaDataDto();
+
+            // 메타데이터 형성
+            metaDataDto.setUserId(board.getUserId());
+            metaDataDto.setBoardId(board.getBoardId());
+            metaDataDto.setTitle(board.getTitle());
+            metaDataDto.setUploadDate(board.getUploadDate());
+            metaDataDto.setNickname(userRepository.findByUserId(board.getUserId()).get().getNickname());
+            metaDataDto.setCommentNumber(commentRepository.findAllByBoardId(board.getBoardId()).size());
+            metaDataDto.setViews(board.getView());
+
+            return metaDataDto;
+        }).toList();
+    }
+
+    public boolean isPageNumberValid(int pageNumber, int boardCountPerPage) {
+        if(pageNumber <= 0) return false;
+
+        int boardCount = boardRepository.getCount();
+        if(boardCount == 0) return pageNumber == 1;
+
+        int pageCount = (boardCount-1)/boardCountPerPage + 1;
+        return pageNumber <= pageCount;
+    }
+
+    public PageBarDto getPageBar(int pageNumber, int boardCountPerPage, int pageCountPerPageBar) {
+        int boardCount = boardRepository.getCount();
+        int pageCount = (boardCount-1)/boardCountPerPage + 1;
+        int pageBarNumber = (pageNumber-1)/pageCountPerPageBar + 1;
+        int pageBarCount = (pageCount-1)/pageCountPerPageBar + 1;
+
+        PageBarDto pageBarDto = new PageBarDto();
+        pageBarDto.setCurrent(pageNumber);
+        pageBarDto.setPrev(pageBarNumber > 1);
+        pageBarDto.setNext(pageBarNumber != pageBarCount);
+        pageBarDto.setStart((pageBarNumber-1)*pageCountPerPageBar + 1);
+        if(pageBarDto.isNext()) pageBarDto.setEnd(pageBarDto.getStart() + pageCountPerPageBar - 1);
+        else pageBarDto.setEnd(pageCount);
+
+        return pageBarDto;
     }
 
     public boolean boardExist(int boardId) {

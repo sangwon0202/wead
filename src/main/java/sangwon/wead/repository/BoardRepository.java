@@ -21,6 +21,17 @@ public class BoardRepository {
         return result;
     }
 
+    public List<Board> findWithPaging(int pageNumber, int count) {
+        int offset = (pageNumber-1)*count;
+        List<Board> result = jdbcTemplate.query("select * from board ORDERS LIMIT ? OFFSET ?", boardRowMapper(), count,offset);
+        return result;
+    }
+
+    public int getCount() {
+        int result = jdbcTemplate.queryForObject("select count(*) from board", Integer.class);
+        return result;
+    }
+
     public Optional<Board> findByBoardId(int boardId) {
         List<Board> result = jdbcTemplate.query("select * from board where board_id = ?", boardRowMapper(), boardId);
         return result.stream().findAny();
