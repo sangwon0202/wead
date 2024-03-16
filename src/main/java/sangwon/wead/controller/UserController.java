@@ -55,7 +55,7 @@ public class UserController {
         }
 
         // 회원가입 폼 전송
-        return "register";
+        return "page/register";
     }
 
     @PostMapping("/register")
