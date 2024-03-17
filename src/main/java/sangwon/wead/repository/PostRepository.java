@@ -16,19 +16,14 @@ public class PostRepository {
 
     private final JdbcTemplate jdbcTemplate;
 
-    public List<Post> findAll() {
-        List<Post> result = jdbcTemplate.query("select * from post", postRowMapper());
-        return result;
-    }
-
-    public List<Post> findPaging(int pageNumber, int count) {
-        int offset = (pageNumber-1)*count;
-        List<Post> result = jdbcTemplate.query("select * from post ORDERS LIMIT ? OFFSET ?", postRowMapper(), count,offset);
-        return result;
-    }
-
     public int getCount() {
         int result = jdbcTemplate.queryForObject("select count(*) from post", Integer.class);
+        return result;
+    }
+
+    public List<Post> findAll(int pageNumber, int count) {
+        int offset = (pageNumber-1)*count;
+        List<Post> result = jdbcTemplate.query("select * from post ORDERS LIMIT ? OFFSET ?", postRowMapper(), count,offset);
         return result;
     }
 

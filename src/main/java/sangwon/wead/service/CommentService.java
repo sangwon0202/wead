@@ -5,7 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sangwon.wead.DTO.CommentDto;
 import sangwon.wead.entity.Comment;
+import sangwon.wead.exception.NonexistentCommentException;
+import sangwon.wead.exception.NonexistentPostException;
+import sangwon.wead.exception.PermissionException;
 import sangwon.wead.repository.CommentRepository;
+import sangwon.wead.repository.PostRepository;
 import sangwon.wead.repository.UserRepository;
 
 import java.util.Date;
@@ -17,18 +21,8 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
-
-    public boolean commentExist(int commentId) {
-        return commentRepository.findByCommentId(commentId).isPresent();
-    }
-    public boolean isWriter(String userId, int commentId) {
-        return commentRepository.findByCommentId(commentId).get().getUserId().equals(userId);
-    }
-
-    public int getPostId(int commentId) {
-        return commentRepository.findByCommentId(commentId).get().getPostId();
-    }
 
     public List<CommentDto> getCommentList(int postId) {
         return commentRepository.findAllByPostId(postId).stream().map((comment) -> {
@@ -42,18 +36,28 @@ public class CommentService {
         }).toList();
     }
 
-    public void create(String userId, int postId, String content) {
+    public void create(String userId, int postId, String content) throws NonexistentPostException
+    {
+        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
         Comment comment = new Comment();
         comment.setUserId(userId);
         comment.setPostId(postId);
         comment.setContent(content);
         comment.setUploadDate(new Date());
-
         commentRepository.save(comment);
     }
 
-    public void delete(int commentId) {
+    public void delete(String userId, int commentId) throws
+            NonexistentCommentException,
+            PermissionException {
+        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
+        if(!comment.getUserId().equals(userId)) throw new PermissionException();
         commentRepository.deleteByCommentId(commentId);
+    }
+
+    public int getPostId(int commentId) throws NonexistentCommentException {
+        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
+        return comment.getPostId();
     }
 
     public void deleteAllByPostId(int postId) { commentRepository.deleteAllByPostId(postId);}

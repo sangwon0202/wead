@@ -60,7 +60,6 @@ public class CommentRepository {
     }
 
 
-
     private RowMapper<Comment> commentRowMapper() {
         return (rs, rowNum) -> {
             Comment comment = new Comment();

@@ -23,27 +23,9 @@ public class PostService {
     private final CommentRepository commentRepository;
     private final UserRepository userRepository;
 
-    public List<PostMetaDataDto> getListAll() {
+    public List<PostMetaDataDto> getList(int pageNumber, int postCountPerPage) {
 
-        return postRepository.findAll().stream().map((post) -> {
-            PostMetaDataDto metaDataDto = new PostMetaDataDto();
-
-            // 메타데이터 형성
-            metaDataDto.setUserId(post.getUserId());
-            metaDataDto.setPostId(post.getPostId());
-            metaDataDto.setTitle(post.getTitle());
-            metaDataDto.setUploadDate(post.getUploadDate());
-            metaDataDto.setNickname(userRepository.findByUserId(post.getUserId()).get().getNickname());
-            metaDataDto.setCommentNumber(commentRepository.findAllByPostId(post.getPostId()).size());
-            metaDataDto.setViews(post.getView());
-
-            return metaDataDto;
-        }).toList();
-    }
-
-    public List<PostMetaDataDto> getListPaging(int pageNumber, int postCountPerPage) {
-
-        return postRepository.findPaging(pageNumber,postCountPerPage).stream().map((post) -> {
+        return postRepository.findAll(pageNumber,postCountPerPage).stream().map((post) -> {
             PostMetaDataDto metaDataDto = new PostMetaDataDto();
 
             // 메타데이터 형성
