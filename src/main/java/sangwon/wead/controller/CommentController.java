@@ -46,7 +46,6 @@ public class CommentController {
             model.addAttribute("message", "존재하지 않는 게시글입니다.");
             return "alert";
         }
-
     }
 
     @PostMapping("/comment/delete/{commentId}")
@@ -66,7 +65,9 @@ public class CommentController {
 
         try {
             int postId = commentService.getPostId(commentId);
-            commentService.delete(userId,commentId);
+            commentService.permissionCheck(userId, commentId);
+            commentService.delete(commentId);
+
             redirectAttributes.addAttribute("postId", postId);
             return "redirect:/post/{postId}";
         }

@@ -133,4 +133,8 @@
     margin: 5px;
 }
 
+.main > .list > .pageBar > .number.current {
+    font-weight: bold;
+}
+
 

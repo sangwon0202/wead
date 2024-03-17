@@ -2,10 +2,6 @@
 
 <div class = "upload" th:fragment="upload">
 
-    <div class = "buttons">
-        <a href="/">메인화면으로</a>
-    </div>
-
     <!-- 새로 업로드 -->
     <form th:action="@{/post/upload}" method="post" th:if="${post == null}">
         <input type="text" name="title" placeholder="제목">

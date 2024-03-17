@@ -14,11 +14,6 @@
     flex-direction: column;
 }
 
-.register > .buttons {
-    display: flex;
-    justify-content: end;
-}
-
 .register > form > * {
     margin: 10px;
 }

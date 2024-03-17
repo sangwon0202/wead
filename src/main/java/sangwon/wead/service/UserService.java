@@ -10,18 +10,11 @@ import sangwon.wead.exception.DuplicateUserIdException;
 import sangwon.wead.exception.LoginFailedException;
 import sangwon.wead.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-
-
-    public boolean userExist(String userId) {
-        return userRepository.findByUserId(userId).isPresent();
-    }
 
     public UserInfoDto getUserInfo(String userId) {
         User user = userRepository.findByUserId(userId).get();
@@ -40,7 +33,6 @@ public class UserService {
 
         if(userRepository.findByUserId(registerFormDto.getUserId()).isPresent()) throw new DuplicateUserIdException();
 
-        // 회원가입
         User user = new User();
         user.setUserId(registerFormDto.getUserId());
         user.setPassword(registerFormDto.getPassword());

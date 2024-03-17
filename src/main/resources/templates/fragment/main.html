@@ -41,12 +41,13 @@
 
         <!-- 페이지 바 -->
         <div class = "pageBar">
-            <div class="prev"> < </div>
-            <div class="number" th:each="number : ${#numbers.sequence(pageBar.start,pageBar.end)}" th:text="${number}">
-            </div>
-            <div class="next"> > </div>
+            <a class="prev" th:if="${pageBar.prev}" th:href="@{/(page=${pageBar.start} - 1 )}"> < </a>
+            <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
+                <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/(page=${number})}"></a>
+            </th:block>
+            <a class="next" th:if="${pageBar.next}" th:href="@{/(page=${pageBar.end} + 1)}"> > </a>
         </div>
-
+        
     </div>
 
     <!-- 사이드 -->

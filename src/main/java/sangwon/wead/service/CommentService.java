@@ -24,7 +24,8 @@ public class CommentService {
     private final PostRepository postRepository;
 
 
-    public List<CommentDto> getCommentList(int postId) {
+    public List<CommentDto> getCommentList(int postId) throws NonexistentPostException {
+        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
         return commentRepository.findAllByPostId(postId).stream().map((comment) -> {
             CommentDto commentDto = new CommentDto();
             commentDto.setCommentId(comment.getCommentId());
@@ -47,11 +48,13 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public void delete(String userId, int commentId) throws
-            NonexistentCommentException,
-            PermissionException {
+    public void permissionCheck(String userId, int commentId) throws NonexistentCommentException, PermissionException {
         Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
         if(!comment.getUserId().equals(userId)) throw new PermissionException();
+    }
+
+    public void delete(int commentId) throws NonexistentCommentException {
+        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
         commentRepository.deleteByCommentId(commentId);
     }
 
@@ -60,6 +63,9 @@ public class CommentService {
         return comment.getPostId();
     }
 
-    public void deleteAllByPostId(int postId) { commentRepository.deleteAllByPostId(postId);}
+    public void deleteAllByPostId(int postId) throws NonexistentPostException {
+        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
+        commentRepository.deleteAllByPostId(postId);
+    }
 
 }
