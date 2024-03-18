@@ -2,15 +2,19 @@ package sangwon.wead.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.DTO.RegisterFormDto;
+import sangwon.wead.DTO.RegisterDto;
 import sangwon.wead.exception.DuplicateUserIdException;
 import sangwon.wead.exception.LoginFailedException;
+import sangwon.wead.requestParam.RegisterRequestParam;
 import sangwon.wead.service.UserService;
 
 @Controller
@@ -30,6 +34,18 @@ public class UserController {
         // 이미 로그인되어 있을 경우
         if(session.getAttribute("userId") != null) {
             model.addAttribute("message", "이미 로그인되어 있습니다.");
+            return "alert";
+        }
+
+        // 아이디를 입력하지 않은 경우
+        if(userId.isEmpty()) {
+            model.addAttribute("message", "아이디를 입력해주세요.");
+            return "alert";
+        }
+
+        // 비밀번호를 입력하지 않은 경우
+        if(password.isEmpty()) {
+            model.addAttribute("message", "비밀번호를 입력해주세요.");
             return "alert";
         }
 
@@ -77,10 +93,9 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(HttpServletRequest request,
-                           @RequestParam String userId,
-                           @RequestParam String password,
-                           @RequestParam String nickname,
-                        Model model) {
+                           @Valid @ModelAttribute RegisterRequestParam registerRequestParam,
+                           BindingResult bindingResult,
+                           Model model) {
 
         HttpSession session = request.getSession();
 
@@ -90,19 +105,16 @@ public class UserController {
             return "alert";
         }
 
-        // 빈칸이 있을 경우 <- @valid 도입하면 삭제할 예정
-        if(userId.equals("") || password.equals("") || nickname.equals("")) {
-            model.addAttribute("message", "모든 빈칸을 채워주세요.");
+        // registerRequestParam 유효성 검사
+        if(bindingResult.hasErrors()) {
+            model.addAttribute("message", bindingResult.getFieldError().getDefaultMessage());
             model.addAttribute("redirect", "/register");
             return "alert";
         }
 
         try {
-            RegisterFormDto registerFormDto = new RegisterFormDto();
-            registerFormDto.setUserId(userId);
-            registerFormDto.setPassword(password);
-            registerFormDto.setNickname(nickname);
-            userService.register(registerFormDto);
+            RegisterDto registerDto = toRegisterDto(registerRequestParam);
+            userService.register(registerDto);
             model.addAttribute("message", "회원가입에 성공하였습니다!");
             return "alert";
         }
@@ -113,6 +125,14 @@ public class UserController {
             return "alert";
         }
 
+    }
+
+    private static RegisterDto toRegisterDto(RegisterRequestParam registerRequestParam) {
+        RegisterDto registerDto = new RegisterDto();
+        registerDto.setUserId(registerRequestParam.getUserId());
+        registerDto.setPassword(registerRequestParam.getPassword());
+        registerDto.setNickname(registerRequestParam.getNickname());
+        return registerDto;
     }
 
 }

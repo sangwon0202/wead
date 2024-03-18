@@ -67,8 +67,8 @@ public class PostService {
     public PostDto read(int postId) throws NonexistentPostException {
 
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
-        PostDto postDto = new PostDto();
 
+        PostDto postDto = new PostDto();
         postDto.setPostId(post.getPostId());
         postDto.setTitle(post.getTitle());
         postDto.setContent(post.getContent());
@@ -80,12 +80,12 @@ public class PostService {
         return postDto;
     }
 
-    public void create(String userId, PostFormDto postFormDto) {
+    public void create(String userId, String title, String content) {
 
         Post post = new Post();
         post.setUserId(userId);
-        post.setTitle(postFormDto.getTitle());
-        post.setContent(postFormDto.getContent());
+        post.setTitle(title);
+        post.setContent(content);
         post.setUploadDate(new Date());
         post.setView(0);
 
@@ -97,10 +97,10 @@ public class PostService {
         if(!post.getUserId().equals(userId)) throw new PermissionException();
     }
 
-    public void update(int postId, PostFormDto postFormDto) throws NonexistentPostException {
+    public void update(int postId, String title, String content) throws NonexistentPostException {
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
-        post.setTitle(postFormDto.getTitle());
-        post.setContent(postFormDto.getContent());
+        post.setTitle(title);
+        post.setContent(content);
 
         postRepository.save(post);
     }

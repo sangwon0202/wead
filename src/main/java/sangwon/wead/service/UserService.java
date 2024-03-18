@@ -3,7 +3,7 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sangwon.wead.DTO.RegisterFormDto;
+import sangwon.wead.DTO.RegisterDto;
 import sangwon.wead.DTO.UserInfoDto;
 import sangwon.wead.entity.User;
 import sangwon.wead.exception.DuplicateUserIdException;
@@ -29,14 +29,14 @@ public class UserService {
         if(!user.getPassword().equals(password)) throw new LoginFailedException();
     }
 
-    public void register(RegisterFormDto registerFormDto) throws DuplicateUserIdException {
+    public void register(RegisterDto registerDto) throws DuplicateUserIdException {
 
-        if(userRepository.findByUserId(registerFormDto.getUserId()).isPresent()) throw new DuplicateUserIdException();
+        if(userRepository.findByUserId(registerDto.getUserId()).isPresent()) throw new DuplicateUserIdException();
 
         User user = new User();
-        user.setUserId(registerFormDto.getUserId());
-        user.setPassword(registerFormDto.getPassword());
-        user.setNickname(registerFormDto.getNickname());
+        user.setUserId(registerDto.getUserId());
+        user.setPassword(registerDto.getPassword());
+        user.setNickname(registerDto.getNickname());
         userRepository.save(user);
 
     }

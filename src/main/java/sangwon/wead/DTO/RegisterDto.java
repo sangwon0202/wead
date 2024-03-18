@@ -3,7 +3,7 @@ package sangwon.wead.DTO;
 import lombok.Data;
 
 @Data
-public class RegisterFormDto {
+public class RegisterDto {
 
     private String userId;
     private String password;

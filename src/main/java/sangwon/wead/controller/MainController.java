@@ -34,13 +34,14 @@ public class MainController {
         String userId = (String)session.getAttribute("userId");
         if(userId != null) model.addAttribute("user", userService.getUserInfo(userId));
 
-        // 게시글 리스트
+        // 게시글 리스트 및 페이지바
         try {
             PostListDto postListDto = postService.getList(pageNumber,postCountPerPage, pageCountPerPageBar);
             model.addAttribute("list", postListDto.getPostMetaDataDtoList());
             model.addAttribute("pageBar", postListDto.getPageBarDto());
             return "page/main";
         }
+        // 해당 페이지가 존재하지 않을 경우
         catch (NonexistentPageException e) {
             model.addAttribute("message", "존재하지 않는 페이지입니다.");
             return "alert";

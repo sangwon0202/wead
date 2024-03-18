@@ -5,17 +5,13 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.DTO.PostDto;
-import sangwon.wead.DTO.PostFormDto;
 import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.exception.PermissionException;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
+
 
 
 @Controller
@@ -27,8 +23,9 @@ public class PostController {
 
 
     @GetMapping("/post/{postId}")
-    public String post(@PathVariable("postId") int postId,
+    public String read(@PathVariable("postId") int postId,
                        Model model) {
+
         try {
             model.addAttribute("post", postService.read(postId));
             model.addAttribute("comment", commentService.getCommentList(postId));
@@ -39,7 +36,6 @@ public class PostController {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
             return "alert";
         }
-
     }
 
     @GetMapping("/post/upload")
@@ -60,8 +56,8 @@ public class PostController {
 
     @PostMapping("/post/upload")
     public String upload(HttpServletRequest request,
-                         @RequestParam String title,
-                         @RequestParam String content,
+                         @RequestParam("title") String title,
+                         @RequestParam("content") String content,
                          Model model) {
 
         HttpSession session = request.getSession();
@@ -73,17 +69,19 @@ public class PostController {
             return "alert";
         }
 
-        // 빈칸이 있을 경우
-        if(title.equals("") || content.equals("")) {
-            model.addAttribute("message", "제목 또는 내용을 입력해주세요.");
-            model.addAttribute("redirect", "/post/upload");
+        // 제목을 입력하지 않은 경우
+        if(title.isEmpty()) {
+            model.addAttribute("message", "제목을 입력해주세요.");
             return "alert";
         }
 
-        PostFormDto postFormDto = new PostFormDto();
-        postFormDto.setTitle(title);
-        postFormDto.setContent(content);
-        postService.create(userId, postFormDto);
+        // 내용을 입력하지 않은 경우
+        if(content.isEmpty()) {
+            model.addAttribute("message", "내용을 입력해주세요.");
+            return "alert";
+        }
+
+        postService.create(userId, title, content);
         return "redirect:/";
     }
 
@@ -103,10 +101,8 @@ public class PostController {
 
         try {
             postService.permissionCheck(userId, postId);
-
-            PostDto postDto = postService.read(postId);
+            model.addAttribute("post", postService.read(postId));
             model.addAttribute("action", "/post/update/" + postId);
-            model.addAttribute("post", postDto);
             return "page/upload";
         }
         // 게시글이 존재하지 않는 경우
@@ -125,11 +121,11 @@ public class PostController {
 
     @PostMapping("/post/update/{postId}")
     public String update(HttpServletRequest request,
-                             @PathVariable("postId") int postId,
-                             @RequestParam("title") String title,
-                             @RequestParam("content") String content,
-                             RedirectAttributes redirectAttributes,
-                             Model model) {
+                         @PathVariable("postId") int postId,
+                         @RequestParam("title") String title,
+                         @RequestParam("content") String content,
+                         RedirectAttributes redirectAttributes,
+                         Model model) {
 
         HttpSession session = request.getSession();
         String userId = (String)session.getAttribute("userId");
@@ -141,22 +137,25 @@ public class PostController {
         }
 
         try {
+
             postService.permissionCheck(userId, postId);
 
-            // 빈칸이 있을 경우
-            if(title.equals("") || content.equals("")) {
-                model.addAttribute("message", "제목 또는 내용을 입력해주세요.");
-                model.addAttribute("redirect", "/post/update/" + postId);
+            // 제목을 입력하지 않은 경우
+            if(title.isEmpty()) {
+                model.addAttribute("message", "제목을 입력해주세요.");
                 return "alert";
             }
 
-            PostFormDto postFormDto = new PostFormDto();
-            postFormDto.setTitle(title);
-            postFormDto.setContent(content);
-            postService.update(postId, postFormDto);
+            // 내용을 입력하지 않은 경우
+            if(content.isEmpty()) {
+                model.addAttribute("message", "내용을 입력해주세요.");
+                return "alert";
+            }
 
+            postService.update(postId, title, content);
             redirectAttributes.addAttribute("postId", postId);
             return "redirect:/post/{postId}";
+
         }
         // 게시글이 존재하지 않는 경우
         catch (NonexistentPostException e) {

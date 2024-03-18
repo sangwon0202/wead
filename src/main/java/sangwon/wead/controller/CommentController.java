@@ -36,6 +36,13 @@ public class CommentController {
             return "alert";
         }
 
+        // 댓글 내용이 비어있을 경우
+        if(content.isEmpty()) {
+            model.addAttribute("message", "댓글 내용을 입력해주세요.");
+            model.addAttribute("redirect", "/post/" + postId);
+            return "alert";
+        }
+
         try {
             commentService.create(userId, postId, content);
             redirectAttributes.addAttribute("postId", postId);
@@ -64,8 +71,8 @@ public class CommentController {
         }
 
         try {
-            int postId = commentService.getPostId(commentId);
             commentService.permissionCheck(userId, commentId);
+            int postId = commentService.getPostId(commentId);
             commentService.delete(commentId);
 
             redirectAttributes.addAttribute("postId", postId);
