@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import sangwon.wead.entity.User;
+import sangwon.wead.repository.entity.Post;
+import sangwon.wead.repository.entity.User;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,13 +44,12 @@ public class UserRepository {
     }
 
     private RowMapper<User> userRowMapper() {
-        return (rs, rowNum) -> {
-            User user = new User();
-            user.setUserId(rs.getString("user_id"));
-            user.setPassword(rs.getString("password"));
-            user.setNickname(rs.getString("nickname"));
-            return user;
-        };
+        return (rs, rowNum) ->
+                User.builder()
+                        .userId(rs.getString("user_id"))
+                        .password(rs.getString("password"))
+                        .nickname(rs.getString("nickname"))
+                        .build();
     }
 
 }

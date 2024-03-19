@@ -3,16 +3,16 @@
 <div class = "upload" th:fragment="upload">
 
     <!-- 새로 업로드 -->
-    <form th:action="@{/post/upload}" method="post" th:if="${post == null}">
+    <form th:if="${type == 'upload'}" th:action="@{/post/upload}" method="post">
         <input type="text" name="title" placeholder="제목">
         <textarea name="content" cols="100" rows="30"></textarea>
         <input type="submit" value="등록">
     </form>
 
     <!-- 업데이트 -->
-    <form th:action="@{/post/update/{postId}(postId=${post.postId})}" method="post" th:if="${post != null}">
-        <input type="text" name="title" placeholder="제목" th:value="${post.title}">
-        <textarea name="content" cols="100" rows="30" th:text="${post.content}"></textarea>
+    <form th:if="${type == 'update'}" th:action="@{/post/update/{postId}(postId=${postId})}" method="post">
+        <input type="text" name="title" placeholder="제목" th:value="${title}">
+        <textarea name="content" cols="100" rows="30" th:text="${content}"></textarea>
         <input type="submit" value="등록">
     </form>
 

@@ -1,10 +1,12 @@
-package sangwon.wead.DTO;
+package sangwon.wead.repository.entity;
 
+
+import lombok.Builder;
 import lombok.Data;
 
 @Data
-public class RegisterDto {
-
+@Builder
+public class User {
     private String userId;
     private String password;
     private String nickname;

@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import sangwon.wead.entity.Comment;
+import sangwon.wead.repository.entity.Comment;
 
 import java.util.List;
 import java.util.Optional;
@@ -61,16 +61,14 @@ public class CommentRepository {
 
 
     private RowMapper<Comment> commentRowMapper() {
-        return (rs, rowNum) -> {
-            Comment comment = new Comment();
-            comment.setCommentId(rs.getInt("comment_id"));
-            comment.setPostId(rs.getInt("post_id"));
-            comment.setUserId(rs.getString("user_id"));
-            comment.setContent(rs.getString("content"));
-            comment.setUploadDate(rs.getDate("upload_date"));
-            return comment;
-        };
+        return (rs, rowNum) ->
+                Comment.builder()
+                    .commentId(rs.getInt("comment_id"))
+                    .postId(rs.getInt("post_id"))
+                    .userId(rs.getString("user_id"))
+                    .content(rs.getString("content"))
+                    .uploadDate(rs.getDate("upload_date"))
+                    .build();
     }
-
 }
 

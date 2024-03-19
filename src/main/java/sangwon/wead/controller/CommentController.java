@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.exception.NonexistentCommentException;
 import sangwon.wead.exception.NonexistentPostException;
-import sangwon.wead.exception.PermissionException;
 import sangwon.wead.service.CommentService;
 
 @Controller
@@ -71,8 +70,13 @@ public class CommentController {
         }
 
         try {
-            commentService.permissionCheck(userId, commentId);
-            int postId = commentService.getPostId(commentId);
+            // 삭제 권한이 없을 경우
+            if(!commentService.verifyPermission(userId, commentId)) {
+                model.addAttribute("message", "권한이 없습니다.");
+                return "alert";
+            }
+
+            int postId = commentService.getComment(commentId).getPostId();
             commentService.delete(commentId);
 
             redirectAttributes.addAttribute("postId", postId);
@@ -81,11 +85,6 @@ public class CommentController {
         // 댓글이 존재하지 않을 경우
         catch (NonexistentCommentException e) {
             model.addAttribute("message", "존재하지 않는 댓글입니다.");
-            return "alert";
-        }
-        // 권한이 없을 경우
-        catch (PermissionException e) {
-            model.addAttribute("message", "권한이 없습니다.");
             return "alert";
         }
     }

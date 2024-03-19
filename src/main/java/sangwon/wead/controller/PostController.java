@@ -7,11 +7,18 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import sangwon.wead.controller.model.CommentModel;
+import sangwon.wead.controller.model.PostModel;
+import sangwon.wead.exception.NonexistentUserException;
+import sangwon.wead.service.DTO.CommentDto;
+import sangwon.wead.service.DTO.PostDto;
 import sangwon.wead.exception.NonexistentPostException;
-import sangwon.wead.exception.PermissionException;
+import sangwon.wead.service.DTO.UserDto;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
+import sangwon.wead.service.UserService;
 
+import java.util.List;
 
 
 @Controller
@@ -20,15 +27,20 @@ public class PostController {
 
     private final PostService postService;
     private final CommentService commentService;
+    private final UserService userService;
 
 
     @GetMapping("/post/{postId}")
-    public String read(@PathVariable("postId") int postId,
+    public String read(HttpServletRequest request,
+                       @PathVariable("postId") int postId,
                        Model model) {
 
+        HttpSession session = request.getSession();
+        String userId = (String)session.getAttribute("userId");
+
         try {
-            model.addAttribute("post", postService.read(postId));
-            model.addAttribute("comment", commentService.getCommentList(postId));
+            model.addAttribute("post", buildPost(userId, postService.read(postId)));
+            model.addAttribute("comment", buildComment(userId, commentService.getCommentList(postId)));
             postService.increaseViews(postId);
             return "page/board";
         }
@@ -50,7 +62,7 @@ public class PostController {
             return "alert";
         }
 
-        model.addAttribute("action", "/post/upload");
+        model.addAttribute("type", "upload");
         return "page/upload";
     }
 
@@ -100,9 +112,17 @@ public class PostController {
         }
 
         try {
-            postService.permissionCheck(userId, postId);
-            model.addAttribute("post", postService.read(postId));
-            model.addAttribute("action", "/post/update/" + postId);
+            // 수정 권한이 없는 경우
+            if(!postService.verifyPermission(userId, postId)) {
+                model.addAttribute("message", "권한이 없습니다.");
+                model.addAttribute("redirect", "/post/" + postId);
+                return "alert";
+            }
+            postService.verifyPermission(userId, postId);
+            PostDto postDto = postService.read(postId);
+            model.addAttribute("type", "update");
+            model.addAttribute("title", postDto.getTitle());
+            model.addAttribute("content", postDto.getContent());
             return "page/upload";
         }
         // 게시글이 존재하지 않는 경우
@@ -110,13 +130,6 @@ public class PostController {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
             return "alert";
         }
-        // 게시글 접근 권한이 없을 경우
-        catch (PermissionException e) {
-            model.addAttribute("message", "권한이 없습니다.");
-            model.addAttribute("redirect", "/post/" + postId);
-            return "alert";
-        }
-
     }
 
     @PostMapping("/post/update/{postId}")
@@ -138,7 +151,12 @@ public class PostController {
 
         try {
 
-            postService.permissionCheck(userId, postId);
+            // 수정 권한이 없는 경우
+            if(!postService.verifyPermission(userId, postId)) {
+                model.addAttribute("message", "권한이 없습니다.");
+                model.addAttribute("redirect", "/post/" + postId);
+                return "alert";
+            }
 
             // 제목을 입력하지 않은 경우
             if(title.isEmpty()) {
@@ -162,13 +180,6 @@ public class PostController {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
             return "alert";
         }
-        // 게시글 접근 권한이 없을 경우
-        catch (PermissionException e) {
-            model.addAttribute("message", "권한이 없습니다.");
-            model.addAttribute("redirect", "/post/" + postId);
-            return "alert";
-        }
-
     }
 
     @PostMapping("/post/delete/{postId}")
@@ -186,8 +197,12 @@ public class PostController {
         }
 
         try {
-            postService.permissionCheck(userId, postId);
-            commentService.deleteAllByPostId(postId);
+            // 삭제 권한이 없는 경우
+            if(!postService.verifyPermission(userId, postId)) {
+                model.addAttribute("message", "권한이 없습니다.");
+                model.addAttribute("redirect", "/post/" + postId);
+                return "alert";
+            }
             postService.delete(postId);
             return "redirect:/";
         }
@@ -196,12 +211,41 @@ public class PostController {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
             return "alert";
         }
-        // 게시글 접근 권한이 없을 경우
-        catch (PermissionException e) {
-            model.addAttribute("message", "권한이 없습니다.");
-            model.addAttribute("redirect", "/post/" + postId);
-            return "alert";
-        }
     }
 
+    private PostModel buildPost(String userId, PostDto postDto) {
+        String nickname;
+        try {UserDto userDto = userService.getUser(postDto.getUserId());
+            nickname = userDto.getNickname();
+        }
+        catch (NonexistentUserException e) { nickname = "알 수 없음"; }
+
+        return PostModel.builder()
+                .postId(postDto.getPostId())
+                .title(postDto.getTitle())
+                .nickname(nickname)
+                .uploadDate(postDto.getUploadDate())
+                .views(postDto.getViews())
+                .permission(userId != null && postDto.getUserId().equals(userId))
+                .content(postDto.getContent())
+                .build();
+    }
+
+    private List<CommentModel> buildComment(String userId, List<CommentDto> commentDtoList) {
+        return commentDtoList.stream().map((commentDto -> {
+            String nickname;
+            try {UserDto userDto = userService.getUser(commentDto.getUserId());
+                nickname = userDto.getNickname();
+            }
+            catch (NonexistentUserException e) { nickname = "알 수 없음"; }
+
+            return CommentModel.builder()
+                    .commentId(commentDto.getCommentId())
+                    .nickname(nickname)
+                    .content(commentDto.getContent())
+                    .uploadDate(commentDto.getUploadDate())
+                    .permission(userId != null && commentDto.getUserId().equals(userId))
+                    .build();
+        })).toList();
+    }
 }

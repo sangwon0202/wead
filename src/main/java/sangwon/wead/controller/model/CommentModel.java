@@ -1,15 +1,17 @@
-package sangwon.wead.DTO;
+package sangwon.wead.controller.model;
 
+
+import lombok.Builder;
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public class CommentDto {
-
+@Builder
+public class CommentModel {
     private int commentId;
-    private String userId;
     private String nickname;
     private String content;
     private Date uploadDate;
+    private boolean permission;
 }

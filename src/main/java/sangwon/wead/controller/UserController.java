@@ -11,10 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.DTO.RegisterDto;
 import sangwon.wead.exception.DuplicateUserIdException;
-import sangwon.wead.exception.LoginFailedException;
-import sangwon.wead.requestParam.RegisterRequestParam;
+import sangwon.wead.controller.requestParam.RegisterRequestParam;
 import sangwon.wead.service.UserService;
 
 @Controller
@@ -49,16 +47,15 @@ public class UserController {
             return "alert";
         }
 
-        try {
-            userService.login(userId, password);
-            session.setAttribute("userId", userId);
-            return "redirect:/";
-        }
-        // 로그인 실패
-        catch (LoginFailedException e) {
+        // 로그인을 실패한 경우
+        if(!userService.login(userId, password)) {
             model.addAttribute("message", "아이디와 비밀번호를 확인해주세요.");
             return "alert";
         }
+
+        session.setAttribute("userId", userId);
+        return "redirect:/";
+
 
     }
 
@@ -107,14 +104,13 @@ public class UserController {
 
         // registerRequestParam 유효성 검사
         if(bindingResult.hasErrors()) {
-            model.addAttribute("message", bindingResult.getFieldError().getDefaultMessage());
+            model.addAttribute("message", "모든 빈칸을 채워주세요.");
             model.addAttribute("redirect", "/register");
             return "alert";
         }
 
         try {
-            RegisterDto registerDto = toRegisterDto(registerRequestParam);
-            userService.register(registerDto);
+            userService.register(registerRequestParam.toRegisterDto());
             model.addAttribute("message", "회원가입에 성공하였습니다!");
             return "alert";
         }
@@ -127,12 +123,5 @@ public class UserController {
 
     }
 
-    private static RegisterDto toRegisterDto(RegisterRequestParam registerRequestParam) {
-        RegisterDto registerDto = new RegisterDto();
-        registerDto.setUserId(registerRequestParam.getUserId());
-        registerDto.setPassword(registerRequestParam.getPassword());
-        registerDto.setNickname(registerRequestParam.getNickname());
-        return registerDto;
-    }
 
 }

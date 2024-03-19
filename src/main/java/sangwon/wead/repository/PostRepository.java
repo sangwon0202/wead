@@ -4,7 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import sangwon.wead.entity.Post;
+import sangwon.wead.repository.entity.Comment;
+import sangwon.wead.repository.entity.Post;
 
 import java.util.List;
 import java.util.Optional;
@@ -43,7 +44,7 @@ public class PostRepository {
                     post.getTitle(),
                     post.getContent(),
                     post.getUploadDate(),
-                    post.getView(),
+                    post.getViews(),
                     post.getPostId()
                     );
         }
@@ -54,7 +55,7 @@ public class PostRepository {
                     post.getTitle(),
                     post.getContent(),
                     post.getUploadDate(),
-                    post.getView()
+                    post.getViews()
             );
         }
     }
@@ -64,16 +65,14 @@ public class PostRepository {
     }
 
     private RowMapper<Post> postRowMapper() {
-        return (rs, rowNum) -> {
-            Post post = new Post();
-            post.setPostId(rs.getInt("post_id"));
-            post.setUserId(rs.getString("user_id"));
-            post.setTitle(rs.getString("title"));
-            post.setContent(rs.getString("content"));
-            post.setUploadDate(rs.getDate("upload_date"));
-            post.setView(rs.getInt("views"));
-            return post;
-        };
+        return (rs, rowNum) ->
+                Post.builder()
+                        .postId(rs.getInt("post_id"))
+                        .userId(rs.getString("user_id"))
+                        .title(rs.getString("title"))
+                        .content(rs.getString("content"))
+                        .uploadDate(rs.getDate("upload_date"))
+                        .build();
     }
 
 }

@@ -3,12 +3,14 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sangwon.wead.DTO.RegisterDto;
-import sangwon.wead.DTO.UserInfoDto;
-import sangwon.wead.entity.User;
+import sangwon.wead.exception.NonexistentUserException;
+import sangwon.wead.service.DTO.RegisterDto;
+import sangwon.wead.service.DTO.UserDto;
+import sangwon.wead.repository.entity.User;
 import sangwon.wead.exception.DuplicateUserIdException;
-import sangwon.wead.exception.LoginFailedException;
 import sangwon.wead.repository.UserRepository;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,29 +18,23 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserInfoDto getUserInfo(String userId) {
-        User user = userRepository.findByUserId(userId).get();
-        UserInfoDto userInfoDto = new UserInfoDto();
-        userInfoDto.setUserId(user.getUserId());
-        userInfoDto.setNickname(user.getNickname());
-        return userInfoDto;
+    public UserDto getUser(String userId) throws NonexistentUserException {
+        User user = userRepository.findByUserId(userId).orElseThrow(() -> new NonexistentUserException());
+        return new UserDto(user);
     }
 
-    public void login(String userId, String password) throws LoginFailedException {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new LoginFailedException());
-        if(!user.getPassword().equals(password)) throw new LoginFailedException();
+    public boolean login(String userId, String password) {
+        Optional<User> optionalUser = userRepository.findByUserId(userId);
+        if(optionalUser.isEmpty()) return false;
+        else {
+            User user = optionalUser.get();
+            return user.getPassword().equals(password);
+        }
     }
 
     public void register(RegisterDto registerDto) throws DuplicateUserIdException {
-
         if(userRepository.findByUserId(registerDto.getUserId()).isPresent()) throw new DuplicateUserIdException();
-
-        User user = new User();
-        user.setUserId(registerDto.getUserId());
-        user.setPassword(registerDto.getPassword());
-        user.setNickname(registerDto.getNickname());
-        userRepository.save(user);
-
+        userRepository.save(registerDto.toUser());
     }
 
 }
