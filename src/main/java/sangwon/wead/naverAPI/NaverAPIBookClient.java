@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import sangwon.wead.exception.APICallFailException;
 
 @Component
 public class NaverAPIBookClient {
@@ -16,7 +17,7 @@ public class NaverAPIBookClient {
     public NaverAPIBookResponse search(String query,
                                        int display,
                                        int start,
-                                       String sort) {
+                                       String sort) throws APICallFailException {
 
         RestClient restClient = RestClient.create();
         String uri = ServletUriComponentsBuilder.newInstance()
@@ -29,15 +30,18 @@ public class NaverAPIBookClient {
                 .queryParam("sort", sort)
                 .build().toUriString();
 
-        return restClient.get()
-                .uri(uri)
-                .headers((httpHeaders -> {
-                    httpHeaders.add("X-Naver-Client-Id", clientId);
-                    httpHeaders.add("X-Naver-Client-Secret", clientSecret);
-                }))
-                .retrieve()
-                .body(NaverAPIBookResponse.class);
+        try {
+            return restClient.get()
+                    .uri(uri)
+                    .headers((httpHeaders -> {
+                        httpHeaders.add("X-Naver-Client-Id", clientId);
+                        httpHeaders.add("X-Naver-Client-Secret", clientSecret);
+                    }))
+                    .retrieve()
+                    .body(NaverAPIBookResponse.class);
+        } catch (Exception e) {
+            throw new APICallFailException();
+        }
+
     }
-
-
 }

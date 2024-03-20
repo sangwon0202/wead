@@ -28,8 +28,7 @@ public class MainController {
     private final PostService postService;
     private final UserService userService;
     private final CommentService commentService;
-
-    private final int postCountPerPage = 10;
+    private final int countPerPage = 10;
     private final int pageCountPerPageBar = 10;
 
     @GetMapping("/")
@@ -50,8 +49,8 @@ public class MainController {
 
         // 게시글 리스트 및 페이지바
         try {
-            model.addAttribute("list", buildList(postService.getPostList(pageNumber, postCountPerPage)));
-            model.addAttribute("pageBar",new PageBarModel(postService.getPageBar(pageNumber, postCountPerPage, pageCountPerPageBar)));
+            model.addAttribute("list", buildList(postService.getPostList(pageNumber, countPerPage)));
+            model.addAttribute("pageBar",new PageBarModel(postService.getPageBar(pageNumber, countPerPage, pageCountPerPageBar)));
             return "page/main";
         }
         // 해당 페이지가 존재하지 않을 경우

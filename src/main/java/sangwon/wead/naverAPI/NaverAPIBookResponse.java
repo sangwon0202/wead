@@ -23,8 +23,7 @@ public class NaverAPIBookResponse {
         private String author;
         private int discount;
         private String publisher;
-        @JsonFormat(pattern = "yyyyMMdd")
-        private LocalDate pubdate;
+        private String pubdate;
         private String isbn;
         private String description;
     }

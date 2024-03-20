@@ -67,7 +67,7 @@ public class CommentRepository {
                     .postId(rs.getInt("post_id"))
                     .userId(rs.getString("user_id"))
                     .content(rs.getString("content"))
-                    .uploadDate(rs.getDate("upload_date"))
+                    .uploadDate(rs.getDate("upload_date").toLocalDate())
                     .build();
     }
 }

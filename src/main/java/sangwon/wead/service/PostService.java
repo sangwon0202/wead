@@ -12,8 +12,9 @@ import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.service.DTO.PageBarDto;
 import sangwon.wead.service.DTO.PostDto;
 import sangwon.wead.service.DTO.PostUpdateFormDto;
+import sangwon.wead.service.util.PageUtil;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -23,41 +24,19 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public PostDto getPost(int postId) throws NonexistentPostException {
-        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
-        return new PostDto(post);
-    }
 
     public List<PostDto> getPostList(int pageNumber, int postCountPerPage) throws NonexistentPageException {
-        if(!checkPageExistence(pageNumber, postCountPerPage)) throw new NonexistentPageException();
+        int count = postRepository.getCount();
+        if(!PageUtil.checkPageExistence(count, pageNumber, postCountPerPage)) throw new NonexistentPageException();
         return postRepository.findAll(pageNumber,postCountPerPage).stream().map((post) -> new PostDto(post)).toList();
     }
 
-    public PageBarDto getPageBar(int pageNumber, int postCountPerPage, int pageCountPerPageBar) throws NonexistentPageException {
-        if(!checkPageExistence(pageNumber, postCountPerPage)) throw new NonexistentPageException();
-
-        int postCount = postRepository.getCount();
-        int pageCount = (postCount-1) / postCountPerPage + 1;
-        int pageBarNumber = (pageNumber-1)/pageCountPerPageBar + 1;
-        int pageBarCount = (pageCount-1)/pageCountPerPageBar + 1;
-
-        PageBarDto pageBarDto = new PageBarDto();
-        pageBarDto.setCurrent(pageNumber);
-        pageBarDto.setPrev(pageBarNumber > 1);
-        pageBarDto.setNext(pageBarNumber != pageBarCount);
-        pageBarDto.setStart((pageBarNumber-1)*pageCountPerPageBar + 1);
-        if(pageBarDto.isNext()) pageBarDto.setEnd(pageBarDto.getStart() + pageCountPerPageBar - 1);
-        else pageBarDto.setEnd(pageCount);
-
-        return pageBarDto;
+    public PageBarDto getPageBar(int pageNumber, int countPerPage, int pageCountPerPageBar) throws NonexistentPageException {
+        int count = postRepository.getCount();
+        if(!PageUtil.checkPageExistence(count, pageNumber, countPerPage)) throw new NonexistentPageException();
+        return PageUtil.buildPageBar(count, pageNumber, countPerPage, pageCountPerPageBar);
     }
 
-    private boolean checkPageExistence(int pageNumber, int postCountPerPage) {
-        int postCount = postRepository.getCount();
-        if(postCount == 0 && pageNumber != 1) return false;
-        int pageCount = (postCount-1)/postCountPerPage + 1;
-        return pageNumber <= pageCount;
-    }
 
     public PostDto read(int postId) throws NonexistentPostException {
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
@@ -71,7 +50,7 @@ public class PostService {
                 .userId(userId)
                 .title(title)
                 .content(content)
-                .uploadDate(new Date())
+                .uploadDate(LocalDate.now())
                 .views(0)
                 .build();
         postRepository.save(post);

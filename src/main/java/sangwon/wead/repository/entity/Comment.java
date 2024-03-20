@@ -3,6 +3,7 @@ package sangwon.wead.repository.entity;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -13,5 +14,5 @@ public class Comment {
     private int postId;
     private String userId;
     private String content;
-    private Date uploadDate;
+    private LocalDate uploadDate;
 }

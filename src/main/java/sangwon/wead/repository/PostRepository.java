@@ -70,7 +70,7 @@ public class PostRepository {
                         .userId(rs.getString("user_id"))
                         .title(rs.getString("title"))
                         .content(rs.getString("content"))
-                        .uploadDate(rs.getDate("upload_date"))
+                        .uploadDate(rs.getDate("upload_date").toLocalDate())
                         .views(rs.getInt("views"))
                         .build();
     }

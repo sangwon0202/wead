@@ -3,7 +3,7 @@ package sangwon.wead.controller.model;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -12,7 +12,7 @@ public class PostLineModel {
     private String title;
     private int commentCount;
     private String nickname;
-    private Date uploadDate;
+    private LocalDate uploadDate;
     private int views;
 
 }

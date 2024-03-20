@@ -1,10 +1,10 @@
 package sangwon.wead.service.DTO;
 
-import lombok.Builder;
+
 import lombok.Data;
 import sangwon.wead.repository.entity.Comment;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 
 @Data
@@ -13,7 +13,7 @@ public class CommentDto {
     private String userId;
     private int postId;
     private String content;
-    private Date uploadDate;
+    private LocalDate uploadDate;
 
     public CommentDto(Comment comment) {
         this.commentId = comment.getCommentId();

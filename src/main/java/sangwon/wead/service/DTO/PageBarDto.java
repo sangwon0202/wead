@@ -1,8 +1,10 @@
 package sangwon.wead.service.DTO;
 
 
+import lombok.Builder;
 import lombok.Data;
 
+@Builder
 @Data
 public class PageBarDto {
     private boolean prev;

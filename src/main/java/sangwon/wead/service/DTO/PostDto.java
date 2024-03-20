@@ -3,7 +3,7 @@ package sangwon.wead.service.DTO;
 import lombok.Data;
 import sangwon.wead.repository.entity.Post;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 public class PostDto {
@@ -11,7 +11,7 @@ public class PostDto {
     private String userId;
     private String title;
     private String content;
-    private Date uploadDate;
+    private LocalDate uploadDate;
     private int views;
 
     public PostDto(Post post) {

@@ -3,7 +3,7 @@ package sangwon.wead.repository.entity;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -13,6 +13,6 @@ public class Post {
     private String userId;
     private String title;
     private String content;
-    private Date uploadDate;
+    private LocalDate uploadDate;
     private int views;
 }

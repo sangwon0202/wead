@@ -11,7 +11,7 @@ import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.PostRepository;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -38,7 +38,7 @@ public class CommentService {
                 .userId(userId)
                 .postId(postId)
                 .content(content)
-                .uploadDate(new Date())
+                .uploadDate(LocalDate.now())
                 .build();
 
         commentRepository.save(comment);
