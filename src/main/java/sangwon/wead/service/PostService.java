@@ -23,14 +23,14 @@ public class PostService {
     private final PostRepository postRepository;
     private final CommentRepository commentRepository;
 
-    public List<PostDto> getPostList(int pageNumber, int postCountPerPage) throws NonexistentPageException {
-        if(!checkPageExistence(pageNumber, postCountPerPage)) throw new NonexistentPageException();
-        return postRepository.findAll(pageNumber,postCountPerPage).stream().map((post) -> new PostDto(post)).toList();
-    }
-
     public PostDto getPost(int postId) throws NonexistentPostException {
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
         return new PostDto(post);
+    }
+
+    public List<PostDto> getPostList(int pageNumber, int postCountPerPage) throws NonexistentPageException {
+        if(!checkPageExistence(pageNumber, postCountPerPage)) throw new NonexistentPageException();
+        return postRepository.findAll(pageNumber,postCountPerPage).stream().map((post) -> new PostDto(post)).toList();
     }
 
     public PageBarDto getPageBar(int pageNumber, int postCountPerPage, int pageCountPerPageBar) throws NonexistentPageException {
