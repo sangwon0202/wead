@@ -6,7 +6,7 @@ import sangwon.wead.repository.entity.User;
 
 @Data
 @Builder
-public class RegisterDto {
+public class UserRegisterDto {
     private String userId;
     private String password;
     private String nickname;

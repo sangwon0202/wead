@@ -10,9 +10,11 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.controller.model.CommentModel;
 import sangwon.wead.controller.model.PostModel;
 import sangwon.wead.exception.NonexistentUserException;
+import sangwon.wead.exception.PermissionException;
 import sangwon.wead.service.DTO.CommentDto;
 import sangwon.wead.service.DTO.PostDto;
 import sangwon.wead.exception.NonexistentPostException;
+import sangwon.wead.service.DTO.PostUpdateFormDto;
 import sangwon.wead.service.DTO.UserDto;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
@@ -41,7 +43,6 @@ public class PostController {
         try {
             model.addAttribute("post", buildPost(userId, postService.read(postId)));
             model.addAttribute("comment", buildComment(userId, commentService.getCommentList(postId)));
-            postService.increaseViews(postId);
             return "page/board";
         }
         catch (NonexistentPostException e) {
@@ -112,22 +113,21 @@ public class PostController {
         }
 
         try {
-            // 수정 권한이 없는 경우
-            if(!postService.verifyPermission(userId, postId)) {
-                model.addAttribute("message", "권한이 없습니다.");
-                model.addAttribute("redirect", "/post/" + postId);
-                return "alert";
-            }
-            postService.verifyPermission(userId, postId);
-            PostDto postDto = postService.read(postId);
+            PostUpdateFormDto postUpdateFormDto = postService.updateForm(userId, postId);
             model.addAttribute("type", "update");
-            model.addAttribute("title", postDto.getTitle());
-            model.addAttribute("content", postDto.getContent());
+            model.addAttribute("title", postUpdateFormDto.getTitle());
+            model.addAttribute("content", postUpdateFormDto.getContent());
             return "page/upload";
         }
         // 게시글이 존재하지 않는 경우
         catch (NonexistentPostException e) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
+            return "alert";
+        }
+        // 수정 권한이 없는 경우
+        catch (PermissionException e) {
+            model.addAttribute("message", "권한이 없습니다.");
+            model.addAttribute("redirect", "/post/" + postId);
             return "alert";
         }
     }
@@ -149,35 +149,32 @@ public class PostController {
             return "alert";
         }
 
+        // 제목을 입력하지 않은 경우
+        if(title.isEmpty()) {
+            model.addAttribute("message", "제목을 입력해주세요.");
+            return "alert";
+        }
+
+        // 내용을 입력하지 않은 경우
+        if(content.isEmpty()) {
+            model.addAttribute("message", "내용을 입력해주세요.");
+            return "alert";
+        }
+
         try {
-
-            // 수정 권한이 없는 경우
-            if(!postService.verifyPermission(userId, postId)) {
-                model.addAttribute("message", "권한이 없습니다.");
-                model.addAttribute("redirect", "/post/" + postId);
-                return "alert";
-            }
-
-            // 제목을 입력하지 않은 경우
-            if(title.isEmpty()) {
-                model.addAttribute("message", "제목을 입력해주세요.");
-                return "alert";
-            }
-
-            // 내용을 입력하지 않은 경우
-            if(content.isEmpty()) {
-                model.addAttribute("message", "내용을 입력해주세요.");
-                return "alert";
-            }
-
-            postService.update(postId, title, content);
+            postService.update(userId, postId, title, content);
             redirectAttributes.addAttribute("postId", postId);
             return "redirect:/post/{postId}";
-
         }
         // 게시글이 존재하지 않는 경우
         catch (NonexistentPostException e) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
+            return "alert";
+        }
+        // 수정 권한이 없는 경우
+        catch (PermissionException e) {
+            model.addAttribute("message", "권한이 없습니다.");
+            model.addAttribute("redirect", "/post/" + postId);
             return "alert";
         }
     }
@@ -197,18 +194,18 @@ public class PostController {
         }
 
         try {
-            // 삭제 권한이 없는 경우
-            if(!postService.verifyPermission(userId, postId)) {
-                model.addAttribute("message", "권한이 없습니다.");
-                model.addAttribute("redirect", "/post/" + postId);
-                return "alert";
-            }
-            postService.delete(postId);
+            postService.delete(userId, postId);
             return "redirect:/";
         }
         // 게시글이 존재하지 않는 경우
         catch (NonexistentPostException e) {
             model.addAttribute("message", "존재하지 않는 게시물입니다.");
+            return "alert";
+        }
+        // 삭제 권한이 없는 경우
+        catch (PermissionException e) {
+            model.addAttribute("message", "권한이 없습니다.");
+            model.addAttribute("redirect", "/post/" + postId);
             return "alert";
         }
     }

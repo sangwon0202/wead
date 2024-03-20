@@ -5,11 +5,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import sangwon.wead.exception.NonexistentPageException;
 import sangwon.wead.exception.NonexistentPostException;
+import sangwon.wead.exception.PermissionException;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.PostRepository;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.service.DTO.PageBarDto;
 import sangwon.wead.service.DTO.PostDto;
+import sangwon.wead.service.DTO.PostUpdateFormDto;
 
 import java.util.Date;
 import java.util.List;
@@ -24,6 +26,11 @@ public class PostService {
     public List<PostDto> getPostList(int pageNumber, int postCountPerPage) throws NonexistentPageException {
         if(!checkPageExistence(pageNumber, postCountPerPage)) throw new NonexistentPageException();
         return postRepository.findAll(pageNumber,postCountPerPage).stream().map((post) -> new PostDto(post)).toList();
+    }
+
+    public PostDto getPost(int postId) throws NonexistentPostException {
+        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
+        return new PostDto(post);
     }
 
     public PageBarDto getPageBar(int pageNumber, int postCountPerPage, int pageCountPerPageBar) throws NonexistentPageException {
@@ -54,6 +61,8 @@ public class PostService {
 
     public PostDto read(int postId) throws NonexistentPostException {
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
+        post.setViews(post.getViews()+1);
+        postRepository.save(post);
         return new PostDto(post);
     }
 
@@ -68,28 +77,25 @@ public class PostService {
         postRepository.save(post);
     }
 
-    public void update(int postId, String title, String content) throws NonexistentPostException {
+    public PostUpdateFormDto updateForm(String userId, int postId) throws NonexistentPostException, PermissionException {
         Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
+        if(!post.getUserId().equals(userId)) throw new PermissionException();
+        return new PostUpdateFormDto(post);
+    }
+
+    public void update(String userId, int postId, String title, String content) throws NonexistentPostException, PermissionException {
+        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
+        if(!post.getUserId().equals(userId)) throw new PermissionException();
         post.setTitle(title);
         post.setContent(content);
         postRepository.save(post);
     }
 
-    public void delete(int postId) throws NonexistentPostException {
-        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
+    public void delete(String userId, int postId) throws NonexistentPostException, PermissionException {
+        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
+        if(!post.getUserId().equals(userId)) throw new PermissionException();
         commentRepository.deleteAllByPostId(postId);
         postRepository.deleteByPostId(postId);
-    }
-
-    public boolean verifyPermission(String userId, int postId) throws NonexistentPostException {
-        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
-        return post.getUserId().equals(userId);
-    }
-
-    public void increaseViews(int postId) throws NonexistentPostException {
-        Post post = postRepository.findByPostId(postId).orElseThrow(() -> new NonexistentPostException());
-        post.setViews(post.getViews()+1);
-        postRepository.save(post);
     }
 
 }

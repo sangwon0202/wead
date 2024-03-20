@@ -3,6 +3,7 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import sangwon.wead.exception.PermissionException;
 import sangwon.wead.service.DTO.CommentDto;
 import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.exception.NonexistentCommentException;
@@ -43,13 +44,9 @@ public class CommentService {
         commentRepository.save(comment);
     }
 
-    public boolean verifyPermission(String userId, int commentId) throws NonexistentCommentException {
+    public void delete(String userId, int commentId) throws NonexistentCommentException, PermissionException {
         Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
-        return comment.getUserId().equals(userId);
-    }
-
-    public void delete(int commentId) throws NonexistentCommentException {
-        if(commentRepository.findByCommentId(commentId).isEmpty()) throw new NonexistentCommentException();
+        if(!comment.getUserId().equals(userId)) throw new PermissionException();
         commentRepository.deleteByCommentId(commentId);
     }
 

@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sangwon.wead.controller.model.*;
-import sangwon.wead.exception.NonexistentCommentException;
 import sangwon.wead.exception.NonexistentPageException;
 import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.exception.NonexistentUserException;

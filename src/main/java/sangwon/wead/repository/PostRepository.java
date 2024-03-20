@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.repository.entity.Post;
 
 import java.util.List;
@@ -72,6 +71,7 @@ public class PostRepository {
                         .title(rs.getString("title"))
                         .content(rs.getString("content"))
                         .uploadDate(rs.getDate("upload_date"))
+                        .views(rs.getInt("views"))
                         .build();
     }
 

@@ -2,7 +2,7 @@ package sangwon.wead.controller.requestParam;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
-import sangwon.wead.service.DTO.RegisterDto;
+import sangwon.wead.service.DTO.UserRegisterDto;
 
 @Data
 public class RegisterRequestParam {
@@ -13,8 +13,8 @@ public class RegisterRequestParam {
     @NotBlank(message = "닉네임을 입력해주세요.")
     private String nickname;
 
-    public RegisterDto toRegisterDto() {
-        return RegisterDto.builder()
+    public UserRegisterDto toRegisterDto() {
+        return UserRegisterDto.builder()
                 .userId(this.userId)
                 .password(this.password)
                 .nickname(this.nickname)
