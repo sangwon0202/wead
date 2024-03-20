@@ -19,7 +19,6 @@ bin/
 
 ### IntelliJ IDEA ###
 application-private.properties
-
 .idea
 *.iws
 *.iml
