@@ -1,0 +1,49 @@
+.main > .side {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    padding: 20px;
+}
+
+.side > * {
+    margin: 5px;
+    padding: 15px;
+    border: 2px solid gray;
+}
+
+.side > .login {
+    display: flex;
+    flex-direction: column;
+    border: 2px solid green;
+}
+
+.side > .login > form {
+    display: flex;
+    flex-direction: column;
+}
+
+.side > .login > form > input {
+    margin: 2px;
+}
+
+.side > .login > form > input[type=text] {
+    height: 40px;
+}
+
+.side > .login > form > input[type=submit] {
+    height: 30px;
+    background-color: green;
+    color: white;
+}
+
+.side > .login > a {
+    text-align: center;
+}
+
+.side > .login > .status {
+    padding: 10px;
+}
+
+.side > .box {
+    height: 400px;
+}

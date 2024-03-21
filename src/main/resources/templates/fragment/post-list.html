@@ -1,0 +1,46 @@
+<div class="post-list" th:fragment="post-list">
+
+    <!-- 글쓰기 버튼 -->
+    <div class="buttons">
+        <a href="/post/upload">글쓰기</a>
+    </div>
+
+    <table>
+        <!-- 리스트 헤더 -->
+        <tr>
+            <th class="title">제목</td>
+            <th class="user">작성자</td>
+            <th class="date">날짜</td>
+            <th class="date">조회수</td>
+        </tr>
+
+        <!-- 리스트 목록 -->
+        <tr th:each="element : ${postList}">
+
+
+            <td class="title">
+
+                <!-- 게시글 제목 -->
+                <a th:href="@{/post/{postId}(postId=${element.postId})}">
+                    <span th:text="${element.title}">게시글 제목</span>
+                </a>
+
+                <!-- 댓글 갯수 -->
+                <span style="color:red" th:text="|[${element.commentCount}]|">[0]</span>
+            </td>
+
+            <td class="user" th:text="${element.nickname}">사용자 이름</td>
+            <td class="date" th:text="${element.uploadDate}">YYYY-MM-DD</td>
+            <td class="views" th:text="${element.views}">0</td>
+        </tr>
+    </table>
+
+    <div class = "pageBar">
+        <a class="prev" th:if="${pageBar.prev}" th:href="@{/post(page=${pageBar.start} - 1 )}"> < </a>
+        <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
+            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/post(page=${number})}"></a>
+        </th:block>
+        <a class="next" th:if="${pageBar.next}" th:href="@{/post(page=${pageBar.end} + 1)}"> > </a>
+    </div>
+
+</div>

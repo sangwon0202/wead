@@ -1,24 +1,24 @@
-.upload {
+.post-upload {
     border: 1px solid grey;
     padding: 50px;
     margin: 50px;
 }
 
-.upload > form {
+.post-upload > form {
     display: flex;
     flex-direction: column;
 }
 
-.upload > form > input[type="text"] {
+.post-upload > form > input[type="text"] {
     height: 40px;
     font-size: 20px;
 }
 
-.upload > form > * {
+.post-upload > form > * {
     margin: 5px;
 }
 
-.upload > form > input[type="submit"] {
+.post-upload > form > input[type="submit"] {
     height: 40px;
     font-size: 20px;
     background-color: green;

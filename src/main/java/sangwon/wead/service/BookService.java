@@ -32,7 +32,9 @@ public class BookService {
         int count = naverAPIBookClient.search(query,1, 1, "sim").getTotal();
         if(count > 1000) count = 1000;
         if(!PageUtil.checkPageExistence(count, pageNumber, countPerPage)) throw new NonexistentPageException();
-        return naverAPIBookClient.search(query,countPerPage, 1, "sim")
+
+        int start = (pageNumber-1)*pageNumber + 1;
+        return naverAPIBookClient.search(query,countPerPage, start, "sim")
                 .getItems()
                 .stream()
                 .map(item -> new BookDto(item)).toList();

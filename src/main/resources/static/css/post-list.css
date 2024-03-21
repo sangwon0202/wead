@@ -1,0 +1,73 @@
+
+.post-list > .buttons {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.post-list > .buttons > a {
+    color: green;
+    border: 2px solid green;
+    padding: 2px 7px 2px 7px;
+    margin: 5px;
+}
+
+/* list - table */
+
+.post-list > table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+.post-list > table > tbody > tr > td.title {
+    width: 60%;
+    text-align: left;
+}
+
+.post-list > table > tbody > tr > td.user {
+    width: 15%;
+    text-align: center;
+}
+
+.post-list > table > tbody > tr > td.date {
+    width: 15%;
+    text-align: center;
+}
+
+.post-list > table > tbody > tr > td.views {
+    width: 5%;
+    text-align: center;
+}
+
+.post-list > table > tbody > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+.post-list > table > tbody > tr > td {
+    height: 30px;
+    border-bottom: 1px solid grey;
+
+}
+
+.post-list > table > tbody td {
+    padding: 10px;
+}
+
+/* list - pageBar */
+
+.post-list > .pageBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+}
+
+.post-list > .pageBar > * {
+    margin: 5px;
+}
+
+.post-list > .pageBar > .number.current {
+    font-weight: bold;
+}

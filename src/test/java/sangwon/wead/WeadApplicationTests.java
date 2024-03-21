@@ -6,6 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import sangwon.wead.exception.APICallFailException;
 import sangwon.wead.exception.NonexistentBookException;
+import sangwon.wead.exception.NonexistentPageException;
 import sangwon.wead.service.BookService;
 
 @SpringBootTest
@@ -18,10 +19,10 @@ class WeadApplicationTests {
 	void contextLoads() {
 
 		try {
-			System.out.println(bookService.getBook("9791171231328").toString());
+			System.out.println(bookService.getBookList("주",1,10).toString());
 		} catch (APICallFailException e) {
 			throw new RuntimeException(e);
-		} catch (NonexistentBookException e) {
+		} catch (NonexistentPageException e) {
 			throw new RuntimeException(e);
 		}
 	}

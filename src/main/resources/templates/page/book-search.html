@@ -6,7 +6,9 @@
     <title> wead - 독서 커뮤니티 </title>
 
     <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
-    <link th:href="@{/css/upload.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/book-search.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/side.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -15,7 +17,10 @@
 
 <article>
 
-    <div th:replace="~{fragment/upload.html::upload}"></div>
+    <div class="main">
+        <div th:replace="~{fragment/book-search.html::book-search}"></div>
+        <div th:replace="~{fragment/side.html::side}"></div>
+    </div>
 
 </article>
 

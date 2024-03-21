@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> wead - 독서 커뮤니티 </title>
+
+    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/post-upload.css}" rel="stylesheet" type="text/css" />
+</head>
+<body>
+
+<!-- 사이트 공통 헤더 -->
+<div th:replace="~{fragment/common.html::header}"></div>
+
+<article>
+
+    <div th:replace="~{fragment/post-upload.html::post-upload}"></div>
+
+</article>
+
+<!-- 사이트 공통 푸터 -->
+<div th:replace="~{fragment/common.html::footer}"></div>
+
+</body>
+</html>

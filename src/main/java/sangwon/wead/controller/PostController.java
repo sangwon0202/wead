@@ -7,8 +7,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.controller.model.CommentModel;
-import sangwon.wead.controller.model.PostModel;
+import sangwon.wead.controller.model.*;
+import sangwon.wead.exception.NonexistentPageException;
 import sangwon.wead.exception.NonexistentUserException;
 import sangwon.wead.exception.PermissionException;
 import sangwon.wead.service.DTO.CommentDto;
@@ -30,7 +30,37 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final UserService userService;
+    private final int countPerPage = 10;
+    private final int pageCountPerPageBar = 10;
 
+    @GetMapping("/post")
+    public String postList(@RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
+                       HttpServletRequest request,
+                       Model model) {
+
+        // 로그인 정보
+        HttpSession session = request.getSession();
+        String userId = (String)session.getAttribute("userId");
+
+        try { if(userId != null) model.addAttribute("userInfo", new UserInfoModel(userService.getUser(userId))); }
+        // 존재하지 않는 회원인 경우 (회원 탈퇴했으나 세션이 동기화 안된 경우)
+        catch (NonexistentUserException e) {
+            session.removeAttribute("userId");
+            return "redirect:/";
+        }
+
+        // 게시글 리스트 및 페이지바
+        try {
+            model.addAttribute("postList", buildPostList(postService.getPostList(pageNumber, countPerPage)));
+            model.addAttribute("pageBar",new PageBarModel(postService.getPageBar(pageNumber, countPerPage, pageCountPerPageBar)));
+            return "page/post-list";
+        }
+        // 해당 페이지가 존재하지 않을 경우
+        catch (NonexistentPageException e) {
+            model.addAttribute("message", "존재하지 않는 페이지입니다.");
+            return "alert";
+        }
+    }
 
     @GetMapping("/post/{postId}")
     public String read(HttpServletRequest request,
@@ -64,7 +94,7 @@ public class PostController {
         }
 
         model.addAttribute("type", "upload");
-        return "page/upload";
+        return "page/post-upload";
     }
 
     @PostMapping("/post/upload")
@@ -117,7 +147,7 @@ public class PostController {
             model.addAttribute("type", "update");
             model.addAttribute("title", postUpdateFormDto.getTitle());
             model.addAttribute("content", postUpdateFormDto.getContent());
-            return "page/upload";
+            return "page/post-upload";
         }
         // 게시글이 존재하지 않는 경우
         catch (NonexistentPostException e) {
@@ -208,6 +238,32 @@ public class PostController {
             model.addAttribute("redirect", "/post/" + postId);
             return "alert";
         }
+    }
+
+    private List<PostLineModel> buildPostList(List<PostDto> postDtoList) {
+        return postDtoList.stream().map((postDto -> {
+            String nickname;
+            try {
+                UserDto userDto = userService.getUser(postDto.getUserId());
+                nickname = userDto.getNickname();
+            }
+            catch (NonexistentUserException e) { nickname = "알 수 없음"; }
+
+            int commentCount;
+            try {
+                commentCount = commentService.getCommentList(postDto.getPostId()).size();
+            }
+            catch (NonexistentPostException e) { commentCount = 0; }
+
+            return PostLineModel.builder()
+                    .postId(postDto.getPostId())
+                    .title(postDto.getTitle())
+                    .commentCount(commentCount)
+                    .nickname(nickname)
+                    .uploadDate(postDto.getUploadDate())
+                    .views(postDto.getViews())
+                    .build();
+        })).toList();
     }
 
     private PostModel buildPost(String userId, PostDto postDto) {
