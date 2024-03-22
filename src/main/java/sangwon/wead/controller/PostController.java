@@ -8,12 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.controller.model.*;
-import sangwon.wead.exception.NonexistentPageException;
-import sangwon.wead.exception.NonexistentUserException;
-import sangwon.wead.exception.PermissionException;
+import sangwon.wead.exception.*;
+import sangwon.wead.service.BookService;
 import sangwon.wead.service.DTO.CommentDto;
 import sangwon.wead.service.DTO.PostDto;
-import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.service.DTO.PostUpdateFormDto;
 import sangwon.wead.service.DTO.UserDto;
 import sangwon.wead.service.PostService;
@@ -30,6 +28,7 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final UserService userService;
+    private final BookService bookService;
     private final int countPerPage = 10;
     private final int pageCountPerPageBar = 10;
 
@@ -82,7 +81,7 @@ public class PostController {
     }
 
     @GetMapping("/post/upload")
-    public String uploadForm(HttpServletRequest request, Model model) {
+    public String uploadForm(@RequestParam("isbn") String isbn, HttpServletRequest request, Model model) {
 
         HttpSession session = request.getSession();
         String userId = (String)session.getAttribute("userId");
@@ -93,8 +92,20 @@ public class PostController {
             return "alert";
         }
 
-        model.addAttribute("type", "upload");
-        return "page/post-upload";
+        try {
+            model.addAttribute("bookInfo",new BookInfoModel(bookService.getBook(isbn)));
+            model.addAttribute("type", "upload");
+            return "page/post-upload";
+        }
+        // API 접속에 장애가 발생할 경우
+        catch (APICallFailException e) {
+            throw new RuntimeException(e);
+        }
+        // isbn 에 해당하는 책이 존재하지 않을 경우
+        catch (NonexistentBookException e) {
+            model.addAttribute("message", "존재하지 않는 책입니다.");
+            return "alert";
+        }
     }
 
     @PostMapping("/post/upload")

@@ -1,0 +1,10 @@
+<div class="book-info" th:fragment="book-info">
+
+    <img th:src="${bookInfo.image}" alt="no image">
+    <div class="info">
+        <div class="title" th:text="${bookInfo.title}">책 제목</div>
+        <div class="author" th:text="${bookInfo.author}">작가</div>
+        <div class="pubdate" th:text="${bookInfo.pubdate}">YYYY-MM-DD</div>
+    </div>
+
+</div>

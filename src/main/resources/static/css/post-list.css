@@ -1,4 +1,11 @@
 
+.post-list {
+    display: flex;
+    flex-direction: column;
+}
+
+/* 글쓰기 버튼
+
 .post-list > .buttons {
     display: flex;
     flex-direction: row;
@@ -11,6 +18,7 @@
     padding: 2px 7px 2px 7px;
     margin: 5px;
 }
+*/
 
 /* list - table */
 
@@ -19,22 +27,26 @@
     border-collapse : collapse;
 }
 
-.post-list > table > tbody > tr > td.title {
+.post-list > table > tbody > tr .title {
     width: 60%;
     text-align: left;
 }
 
-.post-list > table > tbody > tr > td.user {
+.post-list > table > tbody > tr .title > a {
+    color: black;
+}
+
+.post-list > table > tbody > tr .user {
     width: 15%;
     text-align: center;
 }
 
-.post-list > table > tbody > tr > td.date {
+.post-list > table > tbody > tr .date {
     width: 15%;
     text-align: center;
 }
 
-.post-list > table > tbody > tr > td.views {
+.post-list > table > tbody > tr .views {
     width: 5%;
     text-align: center;
 }
@@ -66,6 +78,7 @@
 
 .post-list > .pageBar > * {
     margin: 5px;
+    color: black;
 }
 
 .post-list > .pageBar > .number.current {

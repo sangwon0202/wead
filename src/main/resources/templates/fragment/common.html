@@ -2,7 +2,13 @@
 
   <header th:fragment="header">
     <h1><a href="/">Wead - 독서 커뮤니티</a></h1>
-    <div class="box"></div>
+    <div class="box">
+      <div class="page-button">
+        <a th:href="@{/book}">책 검색</a>
+        <a th:href="@{/post}">독후감</a>
+      </div>
+
+    </div>
   </header>
 
   <footer th:fragment="footer">

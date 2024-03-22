@@ -23,8 +23,8 @@ public class UserController {
 
     @PostMapping("/login")
     public String login(HttpServletRequest request,
-                        @RequestParam String userId,
-                        @RequestParam String password,
+                        @RequestParam("userId") String userId,
+                        @RequestParam("password") String password,
                         Model model) {
 
         HttpSession session = request.getSession();

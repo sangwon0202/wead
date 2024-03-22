@@ -1,0 +1,85 @@
+
+.book-search {
+    display: flex;
+    flex-direction: column;
+}
+
+.book-search > form {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.book-search > form > * {
+    margin: 2px;
+}
+
+
+
+/* book-search - table */
+
+.book-search > table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+.book-search > table > tbody > tr .image {
+    width: 10%;
+}
+
+.book-search > table > tbody > tr > td.image > img {
+    width: 100%;
+}
+
+.book-search > table > tbody  > tr .title {
+    width: 45%;
+    text-align: left;
+}
+
+.book-search > table > tbody > tr .author {
+    width: 15%;
+    text-align: center;
+}
+
+.book-search > table > tbody > tr .pubdate {
+    width: 15%;
+    text-align: center;
+}
+
+.book-search > table > tbody > tr .upload-button {
+    width: 15%;
+    text-align: center;
+}
+
+.book-search > table > tbody > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+.book-search > table > tbody > tr > td {
+    border-bottom: 1px solid grey;
+
+}
+
+.book-search > table > tbody td {
+    padding: 10px;
+}
+
+/* list - pageBar */
+
+.book-search > .pageBar {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 10px;
+}
+
+.book-search > .pageBar > * {
+    margin: 5px;
+    color: black;
+}
+
+.book-search > .pageBar > .number.current {
+    font-weight: bold;
+}

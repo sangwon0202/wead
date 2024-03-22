@@ -1,13 +1,10 @@
-package sangwon.wead.naverAPI;
+package sangwon.wead.API.book;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
-
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
-public class NaverAPIBookResponse {
+public class BookResponse {
 
     private String lastBuildDate;
     private int total;

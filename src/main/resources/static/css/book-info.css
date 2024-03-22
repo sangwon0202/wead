@@ -1,0 +1,14 @@
+.book-info {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    border: 1px gray solid;
+}
+
+.book-info > img {
+    width: 20%;
+}
+
+.book-info > .info {
+    width: 80%;
+}
