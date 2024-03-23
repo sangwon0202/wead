@@ -23,7 +23,7 @@ public class CommentController {
     @PostMapping("/comment/upload/{postId}")
     public String upload(HttpServletRequest request,
                          @PathVariable("postId") int postId,
-                         @RequestParam String content,
+                         @RequestParam("content") String content,
                          RedirectAttributes redirectAttributes,
                          Model model) {
 
