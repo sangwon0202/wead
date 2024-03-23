@@ -7,9 +7,11 @@ import sangwon.wead.repository.entity.Post;
 public class PostUpdateFormDto {
     private String title;
     private String content;
+    private String isbn;
 
     public PostUpdateFormDto(Post post) {
         this.title = post.getTitle();
-        this.content =post.getContent();
+        this.content = post.getContent();
+        this.isbn = post.getIsbn();
     }
 }

@@ -18,6 +18,7 @@ public class BookDto {
     private String isbn;
     private String title;
     private String image;
+    private String description;
     private List<String> authors;
     private LocalDate pubdate;
 
@@ -25,6 +26,7 @@ public class BookDto {
         this.isbn = item.getIsbn();
         this.title = item.getTitle();
         this.image = item.getImage();
+        this.description = item.getDescription();
         this.authors = Arrays.stream(item.getAuthor().split("\\^")).toList();
         this.pubdate = LocalDate.parse(item.getPubdate(),DateTimeFormatter.ofPattern("yyyyMMdd"));
     }

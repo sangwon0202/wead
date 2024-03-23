@@ -1,7 +1,10 @@
 .post-upload {
     border: 1px solid grey;
-    padding: 50px;
-    margin: 50px;
+    margin: 10px 50px 10px 50px;
+}
+
+.post-upload > * {
+    margin: 20px;
 }
 
 .post-upload > form {

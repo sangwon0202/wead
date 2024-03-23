@@ -1,6 +1,7 @@
 package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 import sangwon.wead.API.book.NaverAPIBookClient;
 import sangwon.wead.exception.APICallFailException;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Primary
 public class NaverAPIBookService implements BookService {
     private final NaverAPIBookClient NaverAPIbookClient;
 

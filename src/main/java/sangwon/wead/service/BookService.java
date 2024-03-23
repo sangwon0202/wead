@@ -9,6 +9,7 @@ import sangwon.wead.service.DTO.PageBarDto;
 import java.util.List;
 
 public interface BookService {
+
     BookDto getBook(String isbn) throws APICallFailException, NonexistentBookException;
     List<BookDto> getBookList(String query, int pageNumber, int countPerPage) throws APICallFailException, NonexistentPageException;
     PageBarDto getPageBar(String query, int pageNumber, int countPerPage, int pageCountPerPageBar) throws APICallFailException, NonexistentPageException;

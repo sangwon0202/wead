@@ -37,24 +37,26 @@ public class PostRepository {
 
         // update
         if(optionalPost.isPresent()) {
-            jdbcTemplate.update("update post set user_id = ?, title = ?, content = ?, upload_date = ?, views = ? " +
+            jdbcTemplate.update("update post set user_id = ?, title = ?, content = ?, upload_date = ?, views = ?, isbn = ?" +
                     "where post_id = ?",
                     post.getUserId(),
                     post.getTitle(),
                     post.getContent(),
                     post.getUploadDate(),
                     post.getViews(),
+                    post.getIsbn(),
                     post.getPostId()
                     );
         }
         // insert
         else {
-            jdbcTemplate.update("insert post(user_id, title, content, upload_date, views) values(?, ?, ?, ?, ?)",
+            jdbcTemplate.update("insert post(user_id, title, content, upload_date, views, isbn) values(?, ?, ?, ?, ?, ?)",
                     post.getUserId(),
                     post.getTitle(),
                     post.getContent(),
                     post.getUploadDate(),
-                    post.getViews()
+                    post.getViews(),
+                    post.getIsbn()
             );
         }
     }
@@ -72,6 +74,7 @@ public class PostRepository {
                         .content(rs.getString("content"))
                         .uploadDate(rs.getDate("upload_date").toLocalDate())
                         .views(rs.getInt("views"))
+                        .isbn(rs.getString("isbn"))
                         .build();
     }
 

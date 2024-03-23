@@ -15,4 +15,5 @@ public class Post {
     private String content;
     private LocalDate uploadDate;
     private int views;
+    private String isbn;
 }

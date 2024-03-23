@@ -23,7 +23,8 @@ CREATE TABLE post
     `title`        VARCHAR(50)     NOT NULL    COMMENT '제목',
     `content`      TEXT            NOT NULL    COMMENT '내용',
     `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
-    `views`        INT             NULL        COMMENT '조회수',
+    `views`        INT             NOT NULL    COMMENT '조회수',
+    `isbn`         VARCHAR(13)     NOT NULL    COMMENT 'isbn',
     PRIMARY KEY (post_id)
 );
 

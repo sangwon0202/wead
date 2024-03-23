@@ -1,7 +1,7 @@
 .book-info {
     display: flex;
     flex-direction: row;
-    width: 100%;
+    align-items: center;
     border: 1px gray solid;
 }
 
@@ -10,5 +10,17 @@
 }
 
 .book-info > .info {
+    display: flex;
+    flex-direction: column;
     width: 80%;
+    padding: 30px;
+}
+
+.book-info > .info > * {
+    margin: 10px;
+}
+
+.book-info > .info > .title {
+    font-size: 20px;
+    font-weight: bold;
 }

@@ -23,8 +23,7 @@
             <td class="author" th:text="${element.author}">작가</td>
             <td class="pubdate" th:text="${element.pubdate}">YYYY-MM-DD</td>
             <td class="upload-button">
-                <form th:action="@{/post/upload}" method="get">
-                    <input type="hidden" th:name="isbn" th:value="${element.isbn}">
+                <form th:action="@{/post/upload/{isbn}(isbn=${element.isbn})}" method="get">
                     <input type="submit" value="독서록 작성">
                 </form>
             </td>

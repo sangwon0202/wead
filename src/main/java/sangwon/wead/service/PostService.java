@@ -45,13 +45,14 @@ public class PostService {
         return new PostDto(post);
     }
 
-    public void create(String userId, String title, String content) {
+    public void create(String userId, String title, String content, String isbn) {
         Post post = Post.builder()
                 .userId(userId)
                 .title(title)
                 .content(content)
                 .uploadDate(LocalDate.now())
                 .views(0)
+                .isbn(isbn)
                 .build();
         postRepository.save(post);
     }
