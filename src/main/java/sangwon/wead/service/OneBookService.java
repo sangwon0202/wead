@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Primary
 public class OneBookService implements BookService {
     private BookDto bookDto;
 

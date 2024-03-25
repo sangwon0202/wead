@@ -12,19 +12,8 @@ import sangwon.wead.service.BookService;
 @SpringBootTest
 class WeadApplicationTests {
 
-	@Autowired
-	private BookService bookService;
-
 	@Test
 	void contextLoads() {
-
-		try {
-			System.out.println(bookService.getBook("9788960773417").toString());
-		} catch (APICallFailException e) {
-			throw new RuntimeException(e);
-		} catch (NonexistentBookException e) {
-			throw new RuntimeException(e);
-		}
 	}
 
 }

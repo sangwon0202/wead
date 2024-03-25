@@ -15,7 +15,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Primary
 public class NaverAPIBookService implements BookService {
     private final NaverAPIBookClient NaverAPIbookClient;
 
