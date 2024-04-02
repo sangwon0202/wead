@@ -2,29 +2,28 @@ package sangwon.wead.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.exception.DuplicateUserIdException;
-import sangwon.wead.controller.requestParam.RegisterRequestParam;
+import sangwon.wead.DTO.LoginForm;
+import sangwon.wead.DTO.PageBar;
+import sangwon.wead.DTO.UserRegisterForm;
+import sangwon.wead.exception.UserIdDuplicateException;
 import sangwon.wead.service.UserService;
 
 @Controller
 @RequiredArgsConstructor
 public class UserController {
 
+
     private final UserService userService;
 
     @PostMapping("/login")
     public String login(HttpServletRequest request,
-                        @RequestParam("userId") String userId,
-                        @RequestParam("password") String password,
+                        @ModelAttribute LoginForm loginForm,
                         Model model) {
 
         HttpSession session = request.getSession();
@@ -35,28 +34,14 @@ public class UserController {
             return "alert";
         }
 
-        // 아이디를 입력하지 않은 경우
-        if(userId.isEmpty()) {
-            model.addAttribute("message", "아이디를 입력해주세요.");
-            return "alert";
-        }
-
-        // 비밀번호를 입력하지 않은 경우
-        if(password.isEmpty()) {
-            model.addAttribute("message", "비밀번호를 입력해주세요.");
-            return "alert";
-        }
-
         // 로그인을 실패한 경우
-        if(!userService.login(userId, password)) {
+        if(!userService.login(loginForm)) {
             model.addAttribute("message", "아이디와 비밀번호를 확인해주세요.");
             return "alert";
         }
 
-        session.setAttribute("userId", userId);
+        session.setAttribute("userId", loginForm.getUserId());
         return "redirect:/";
-
-
     }
 
     @PostMapping("/logout")
@@ -90,8 +75,7 @@ public class UserController {
 
     @PostMapping("/register")
     public String register(HttpServletRequest request,
-                           @Valid @ModelAttribute RegisterRequestParam registerRequestParam,
-                           BindingResult bindingResult,
+                           @ModelAttribute UserRegisterForm userRegisterForm,
                            Model model) {
 
         HttpSession session = request.getSession();
@@ -102,26 +86,17 @@ public class UserController {
             return "alert";
         }
 
-        // registerRequestParam 유효성 검사
-        if(bindingResult.hasErrors()) {
-            model.addAttribute("message", "모든 빈칸을 채워주세요.");
-            model.addAttribute("redirect", "/register");
-            return "alert";
-        }
-
         try {
-            userService.register(registerRequestParam.toRegisterDto());
-            model.addAttribute("message", "회원가입에 성공하였습니다!");
+            userService.register(userRegisterForm);
+            model.addAttribute("message", "회원가입에 성공하였습니다.");
             return "alert";
         }
-        // 아이디가 중복될 경우
-        catch (DuplicateUserIdException e) {
-            model.addAttribute("message", "이미 존재하는 아이디입니다.");
+        catch(UserIdDuplicateException e) {
+            model.addAttribute("message", "아이디가 중복되었습니다.");
             model.addAttribute("redirect", "/register");
             return "alert";
         }
 
     }
-
 
 }

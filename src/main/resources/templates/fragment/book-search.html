@@ -16,11 +16,16 @@
         </tr>
 
         <!-- 리스트 목록 -->
-        <tr th:each="element : ${bookList}">
+        <tr th:each="element : ${bookInfoList}">
 
             <td class="image"><img th:src="${element.image}" alt="no image"></td>
             <td class="title" th:text="${element.title}">책 제목</td>
-            <td class="author" th:text="${element.author}">작가</td>
+            <td class="author">
+                <th:block th:each="author : ${element.authors}">
+                    <span th:text="${author}">작가 이름</span>
+                    </br>
+                </th:block>
+            </td>
             <td class="pubdate" th:text="${element.pubdate}">YYYY-MM-DD</td>
             <td class="upload-button">
                 <form th:action="@{/post/upload/{isbn}(isbn=${element.isbn})}" method="get">
@@ -28,6 +33,7 @@
                 </form>
             </td>
         </tr>
+
     </table>
 
     <!-- 페이지바 - 쿼리가 존재하지 않을 경우 -->

@@ -1,10 +1,9 @@
-package sangwon.wead.service.DTO;
-
+package sangwon.wead.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import sangwon.wead.API.book.BookResponse;
+import sangwon.wead.API.BookResponse;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,19 +13,17 @@ import java.util.List;
 @Data
 @Builder
 @AllArgsConstructor
-public class BookDto {
+public class BookInfo {
     private String isbn;
     private String title;
     private String image;
-    private String description;
     private List<String> authors;
     private LocalDate pubdate;
 
-    public BookDto(BookResponse.Item item) {
+    public BookInfo(BookResponse.Item item) {
         this.isbn = item.getIsbn();
         this.title = item.getTitle();
         this.image = item.getImage();
-        this.description = item.getDescription();
         this.authors = Arrays.stream(item.getAuthor().split("\\^")).toList();
         this.pubdate = LocalDate.parse(item.getPubdate(),DateTimeFormatter.ofPattern("yyyyMMdd"));
     }

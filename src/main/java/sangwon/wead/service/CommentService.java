@@ -3,51 +3,54 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import sangwon.wead.exception.PermissionException;
-import sangwon.wead.service.DTO.CommentDto;
+import org.springframework.transaction.annotation.Transactional;
+import sangwon.wead.DTO.CommentUploadForm;
+import sangwon.wead.exception.NonexistentUserException;
+import sangwon.wead.repository.UserRepository;
+import sangwon.wead.repository.entity.Post;
+import sangwon.wead.repository.entity.User;
+import sangwon.wead.DTO.CommentInfo;
 import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.exception.NonexistentCommentException;
 import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.PostRepository;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
+    private final UserRepository userRepository;
 
-    public CommentDto getComment(int commentId) throws NonexistentCommentException {
-        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
-        return new CommentDto(comment);
+    public CommentInfo getCommentInfo(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NonexistentCommentException());
+        return new CommentInfo(comment);
     }
 
-    public List<CommentDto> getCommentList(int postId) throws NonexistentPostException {
-        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
-        return commentRepository.findAllByPostId(postId).stream().map((comment) -> new CommentDto(comment)).toList();
+    public List<CommentInfo> getCommentInfoList(Long postId) {
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NonexistentPostException());
+        return post.getComments().stream().map((comment -> new CommentInfo(comment))).toList();
     }
 
-    public void create(String userId, int postId, String content) throws NonexistentPostException {
-        if(postRepository.findByPostId(postId).isEmpty()) throw new NonexistentPostException();
-
+    public void uploadComment(String userId, Long postId, CommentUploadForm commentUploadForm) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NonexistentUserException());
+        Post post = postRepository.findById(postId).orElseThrow(() -> new NonexistentPostException());
         Comment comment = Comment.builder()
-                .userId(userId)
-                .postId(postId)
-                .content(content)
-                .uploadDate(LocalDate.now())
+                .user(user)
+                .post(post)
+                .content(commentUploadForm.getContent())
                 .build();
-
         commentRepository.save(comment);
     }
 
-    public void delete(String userId, int commentId) throws NonexistentCommentException, PermissionException {
-        Comment comment = commentRepository.findByCommentId(commentId).orElseThrow(() -> new NonexistentCommentException());
-        if(!comment.getUserId().equals(userId)) throw new PermissionException();
-        commentRepository.deleteByCommentId(commentId);
+    public void deleteComment(Long commentId) {
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new NonexistentCommentException());
+        commentRepository.delete(comment);
     }
 
 }

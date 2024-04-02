@@ -1,13 +1,5 @@
 <div class="post-list" th:fragment="post-list">
 
-    <!-- 글쓰기 버튼
-
-    <div class="buttons">
-        <a href="/post/upload">글쓰기</a>
-    </div>
-
-    -->
-
     <table>
         <!-- 리스트 헤더 -->
         <tr>
@@ -19,7 +11,6 @@
 
         <!-- 리스트 목록 -->
         <tr th:each="element : ${postList}">
-
 
             <td class="title">
 
@@ -36,6 +27,7 @@
             <td class="date" th:text="${element.uploadDate}">YYYY-MM-DD</td>
             <td class="views" th:text="${element.views}">0</td>
         </tr>
+
     </table>
 
     <div class = "pageBar">

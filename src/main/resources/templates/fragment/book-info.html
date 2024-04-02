@@ -3,7 +3,12 @@
     <img th:src="${bookInfo.image}" alt="no image">
     <div class="info">
         <div class="title" th:text="${bookInfo.title}">책 제목</div>
-        <div class="author" th:text="${bookInfo.author}">작가</div>
+        <div class="author">
+            <th:block th:each="author : ${bookInfo.authors}">
+                <span th:text="${author}">작가 이름</span>
+                </br>
+            </th:block>
+        </div>
         <div class="pubdate" th:text="${bookInfo.pubdate}">YYYY-MM-DD</div>
     </div>
 

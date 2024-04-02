@@ -1,4 +1,4 @@
 package sangwon.wead.exception;
 
-public class NonexistentPostException extends Exception {
+public class NonexistentPostException extends RuntimeException {
 }

@@ -3,38 +3,43 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import sangwon.wead.DTO.LoginForm;
 import sangwon.wead.exception.NonexistentUserException;
-import sangwon.wead.service.DTO.UserRegisterDto;
-import sangwon.wead.service.DTO.UserDto;
+import sangwon.wead.DTO.UserRegisterForm;
+import sangwon.wead.DTO.UserInfo;
+import sangwon.wead.exception.UserIdDuplicateException;
 import sangwon.wead.repository.entity.User;
-import sangwon.wead.exception.DuplicateUserIdException;
 import sangwon.wead.repository.UserRepository;
 
-import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
 
-    public UserDto getUser(String userId) throws NonexistentUserException {
-        User user = userRepository.findByUserId(userId).orElseThrow(() -> new NonexistentUserException());
-        return new UserDto(user);
+    public UserInfo getUserInfo(String userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new NonexistentUserException());
+        return new UserInfo(user);
     }
 
-    public boolean login(String userId, String password) {
-        Optional<User> optionalUser = userRepository.findByUserId(userId);
-        if(optionalUser.isEmpty()) return false;
-        else {
-            User user = optionalUser.get();
-            return user.getPassword().equals(password);
+    public boolean login(LoginForm loginForm) {
+        if(userRepository.existsById(loginForm.getUserId())) {
+            User user = userRepository.findById(loginForm.getUserId()).get();
+            return user.getPassword().equals(loginForm.getPassword());
         }
+        else return false;
     }
 
-    public void register(UserRegisterDto userRegisterDto) throws DuplicateUserIdException {
-        if(userRepository.findByUserId(userRegisterDto.getUserId()).isPresent()) throw new DuplicateUserIdException();
-        userRepository.save(userRegisterDto.toUser());
+    public void register(UserRegisterForm userRegisterForm) {
+        if(userRepository.existsById(userRegisterForm.getUserId())) throw new UserIdDuplicateException();
+        User user = User.builder()
+                .id(userRegisterForm.getUserId())
+                .password(userRegisterForm.getPassword())
+                .nickname(userRegisterForm.getNickname())
+                .build();
+        userRepository.save(user);
     }
-
 }

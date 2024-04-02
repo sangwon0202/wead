@@ -1,4 +1,4 @@
-package sangwon.wead.API.book;
+package sangwon.wead.API;
 
 import lombok.Data;
 import java.util.List;

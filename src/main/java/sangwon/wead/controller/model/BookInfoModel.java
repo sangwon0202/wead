@@ -1,7 +1,7 @@
 package sangwon.wead.controller.model;
 
 import lombok.Data;
-import sangwon.wead.service.DTO.BookDto;
+import sangwon.wead.DTO.BookInfo;
 
 import java.time.LocalDate;
 
@@ -13,7 +13,7 @@ public class BookInfoModel {
     private String author;
     private LocalDate pubdate;
 
-    public BookInfoModel(BookDto bookDto) {
+    public BookInfoModel(BookInfo bookDto) {
         this.isbn = bookDto.getIsbn();
         this.title = bookDto.getTitle();
         this.image = bookDto.getImage();
