@@ -1,27 +1,27 @@
-.post-upload {
+.post-form {
     border: 1px solid grey;
     margin: 10px 50px 10px 50px;
 }
 
-.post-upload > * {
+.post-form > * {
     margin: 20px;
 }
 
-.post-upload > form {
+.post-form > form {
     display: flex;
     flex-direction: column;
 }
 
-.post-upload > form > input[type="text"] {
+.post-form > form > input[type="text"] {
     height: 40px;
     font-size: 20px;
 }
 
-.post-upload > form > * {
+.post-form > form > * {
     margin: 5px;
 }
 
-.post-upload > form > input[type="submit"] {
+.post-form > form > input[type="submit"] {
     height: 40px;
     font-size: 20px;
     background-color: green;

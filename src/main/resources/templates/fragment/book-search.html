@@ -16,7 +16,7 @@
         </tr>
 
         <!-- 리스트 목록 -->
-        <tr th:each="element : ${bookInfoList}">
+        <tr th:each="element : ${bookList}">
 
             <td class="image"><img th:src="${element.image}" alt="no image"></td>
             <td class="title" th:text="${element.title}">책 제목</td>
@@ -28,7 +28,8 @@
             </td>
             <td class="pubdate" th:text="${element.pubdate}">YYYY-MM-DD</td>
             <td class="upload-button">
-                <form th:action="@{/post/upload/{isbn}(isbn=${element.isbn})}" method="get">
+                <form th:action="@{/post/upload}" method="get">
+                    <input type="hidden" name="isbn" th:value="${element.isbn}">
                     <input type="submit" value="독서록 작성">
                 </form>
             </td>
@@ -36,17 +37,8 @@
 
     </table>
 
-    <!-- 페이지바 - 쿼리가 존재하지 않을 경우 -->
-    <div class = "pageBar" th:if="${query == null}">
-        <a class="prev" th:if="${pageBar.prev}" th:href="@{/book(page=${pageBar.start} - 1 )}"> < </a>
-        <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
-            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/book(page=${number})}"></a>
-        </th:block>
-        <a class="next" th:if="${pageBar.next}" th:href="@{/book(page=${pageBar.end} + 1)}"> > </a>
-    </div>
-
-    <!-- 페이지바 - 쿼리가 존재하는 경우 -->
-    <div class = "pageBar" th:if="${query != null}">
+    <!-- 페이지바 -->
+    <div class = "pageBar" th:if="${pageBar != null}">
         <a class="prev" th:if="${pageBar.prev}" th:href="@{/book(query=${query}, page=${pageBar.start} - 1 )}"> < </a>
         <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
             <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/book(query=${query}, page=${number})}"></a>

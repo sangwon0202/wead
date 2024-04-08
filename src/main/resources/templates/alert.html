@@ -6,14 +6,8 @@
 </head>
 <body>
 <script type="text/javascript">
-    if([[${message != null}]])
-        alert("[[${message}]]");
-    else alert("잘못된 접근입니다.");
-
-    if([[${redirect != null}]])
-        window.location.replace("[[${redirect}]]");
-    else window.location.replace("/");
-
+    alert("[[${message}]]");
+    window.location.replace("[[${redirectUrl}]]");
 </script>
 </body>
 </html>

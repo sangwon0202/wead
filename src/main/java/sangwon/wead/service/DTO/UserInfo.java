@@ -1,4 +1,4 @@
-package sangwon.wead.DTO;
+package sangwon.wead.service.DTO;
 
 import lombok.Data;
 import sangwon.wead.repository.entity.User;

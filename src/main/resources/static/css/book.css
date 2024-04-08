@@ -1,26 +1,26 @@
-.book-info {
+.book {
     display: flex;
     flex-direction: row;
     align-items: center;
     border: 1px gray solid;
 }
 
-.book-info > img {
+.book > img {
     width: 20%;
 }
 
-.book-info > .info {
+.book > .info {
     display: flex;
     flex-direction: column;
     width: 80%;
     padding: 30px;
 }
 
-.book-info > .info > * {
+.book > .info > * {
     margin: 10px;
 }
 
-.book-info > .info > .title {
+.book > .info > .title {
     font-size: 20px;
     font-weight: bold;
 }

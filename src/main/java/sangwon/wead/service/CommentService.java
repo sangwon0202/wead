@@ -4,12 +4,12 @@ package sangwon.wead.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.DTO.CommentUploadForm;
+import sangwon.wead.service.DTO.CommentUploadForm;
 import sangwon.wead.exception.NonexistentUserException;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.entity.User;
-import sangwon.wead.DTO.CommentInfo;
+import sangwon.wead.service.DTO.CommentInfo;
 import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.exception.NonexistentCommentException;
 import sangwon.wead.exception.NonexistentPostException;
@@ -37,9 +37,9 @@ public class CommentService {
         return post.getComments().stream().map((comment -> new CommentInfo(comment))).toList();
     }
 
-    public void uploadComment(String userId, Long postId, CommentUploadForm commentUploadForm) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NonexistentUserException());
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NonexistentPostException());
+    public void uploadComment(CommentUploadForm commentUploadForm) {
+        User user = userRepository.findById(commentUploadForm.getUserId()).orElseThrow(() -> new NonexistentUserException());
+        Post post = postRepository.findById(commentUploadForm.getPostId()).orElseThrow(() -> new NonexistentPostException());
         Comment comment = Comment.builder()
                 .user(user)
                 .post(post)

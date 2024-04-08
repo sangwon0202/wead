@@ -4,7 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> wead - 독서 커뮤니티 </title>
-
+    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/side.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/register.css}" rel="stylesheet" type="text/css" />
 </head>
@@ -13,9 +15,13 @@
 <!-- 사이트 공통 헤더 -->
 <div th:replace="~{fragment/common.html::header}"></div>
 
+
 <article>
 
-    <div th:replace="~{fragment/register.html::register}"></div>
+    <div class="main">
+        <div th:replace="~{fragment/register.html::register}"></div>
+        <div th:replace="~{fragment/side.html::side}"></div>
+    </div>
 
 </article>
 

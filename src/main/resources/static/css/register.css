@@ -1,7 +1,5 @@
 .register {
     border: 1px solid grey;
-    padding: 50px;
-    margin: 50px;
 }
 
 .register > form {

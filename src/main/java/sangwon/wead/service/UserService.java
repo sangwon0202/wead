@@ -4,10 +4,9 @@ package sangwon.wead.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.DTO.LoginForm;
 import sangwon.wead.exception.NonexistentUserException;
-import sangwon.wead.DTO.UserRegisterForm;
-import sangwon.wead.DTO.UserInfo;
+import sangwon.wead.service.DTO.UserRegisterForm;
+import sangwon.wead.service.DTO.UserInfo;
 import sangwon.wead.exception.UserIdDuplicateException;
 import sangwon.wead.repository.entity.User;
 import sangwon.wead.repository.UserRepository;
@@ -25,16 +24,20 @@ public class UserService {
         return new UserInfo(user);
     }
 
-    public boolean login(LoginForm loginForm) {
-        if(userRepository.existsById(loginForm.getUserId())) {
-            User user = userRepository.findById(loginForm.getUserId()).get();
-            return user.getPassword().equals(loginForm.getPassword());
+    public boolean login(String userId, String password) {
+        if(userRepository.existsById(userId)) {
+            User user = userRepository.findById(userId).get();
+            return user.getPassword().equals(password);
         }
         else return false;
     }
 
+    public boolean checkUserIdDuplication(String userId) {
+        return userRepository.existsById(userId);
+    }
+
     public void register(UserRegisterForm userRegisterForm) {
-        if(userRepository.existsById(userRegisterForm.getUserId())) throw new UserIdDuplicateException();
+        if(checkUserIdDuplication(userRegisterForm.getUserId())) throw new UserIdDuplicateException();
         User user = User.builder()
                 .id(userRegisterForm.getUserId())
                 .password(userRegisterForm.getPassword())

@@ -1,22 +1,21 @@
 
 
-<div class = "post-upload" th:fragment="post-upload">
+<div class = "post-form" th:fragment="post-form(type)">
 
-    <h1>책 제목: <div th:text="${bookInfo.title}"></div></h1>
+    <h1>책 제목: <div th:text="${bookTitle}"></div></h1>
 
     <!-- 새로 업로드 -->
     <form th:if="${type == 'upload'}" th:action="@{/post/upload}" method="post">
-
         <input type="text" name="title" placeholder="제목">
         <textarea name="content" cols="100" rows="30"></textarea>
         <input type="submit" value="등록">
-        <input type="hidden" name="isbn" th:value="${bookInfo.isbn}">
+        <input type="hidden" name="isbn" th:value="${isbn}">
     </form>
 
     <!-- 업데이트 -->
     <form th:if="${type == 'update'}" th:action="@{/post/update/{postId}(postId=${postId})}" method="post">
-        <input type="text" name="title" placeholder="제목" th:value="${postInfo.title}">
-        <textarea name="content" cols="100" rows="30" th:text="${postInfo.content}"></textarea>
+        <input type="text" name="title" placeholder="제목" th:value="${title}">
+        <textarea name="content" cols="100" rows="30" th:text="${content}"></textarea>
         <input type="submit" value="등록">
     </form>
 

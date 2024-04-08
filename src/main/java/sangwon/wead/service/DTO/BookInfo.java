@@ -1,4 +1,4 @@
-package sangwon.wead.DTO;
+package sangwon.wead.service.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,8 @@ public class BookInfo {
         this.title = item.getTitle();
         this.image = item.getImage();
         this.authors = Arrays.stream(item.getAuthor().split("\\^")).toList();
-        this.pubdate = LocalDate.parse(item.getPubdate(),DateTimeFormatter.ofPattern("yyyyMMdd"));
+        if(item.getPubdate().isEmpty()) this.pubdate = null;
+        else this.pubdate = LocalDate.parse(item.getPubdate(),DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
 }

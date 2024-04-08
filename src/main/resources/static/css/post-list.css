@@ -4,22 +4,6 @@
     flex-direction: column;
 }
 
-/* 글쓰기 버튼
-
-.post-list > .buttons {
-    display: flex;
-    flex-direction: row;
-    justify-content: end;
-}
-
-.post-list > .buttons > a {
-    color: green;
-    border: 2px solid green;
-    padding: 2px 7px 2px 7px;
-    margin: 5px;
-}
-*/
-
 /* list - table */
 
 .post-list > table {
@@ -28,7 +12,7 @@
 }
 
 .post-list > table > tbody > tr .title {
-    width: 60%;
+    width: 55%;
     text-align: left;
 }
 
@@ -42,7 +26,7 @@
 }
 
 .post-list > table > tbody > tr .date {
-    width: 15%;
+    width: 20%;
     text-align: center;
 }
 

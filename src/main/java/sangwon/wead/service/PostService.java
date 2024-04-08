@@ -7,13 +7,13 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.DTO.PostUpdateForm;
+import sangwon.wead.service.DTO.PostUpdateForm;
 import sangwon.wead.exception.*;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.PostRepository;
-import sangwon.wead.DTO.PostInfo;
-import sangwon.wead.DTO.PostUploadForm;
+import sangwon.wead.service.DTO.PostInfo;
+import sangwon.wead.service.DTO.PostUploadForm;
 import sangwon.wead.repository.entity.User;
 
 @Service
@@ -39,8 +39,8 @@ public class PostService {
         post.increaseViews();
     }
 
-    public void uploadPost(String userId, PostUploadForm postUploadForm) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NonexistentUserException());
+    public Long uploadPost(PostUploadForm postUploadForm) {
+        User user = userRepository.findById(postUploadForm.getUserId()).orElseThrow(() -> new NonexistentUserException());
         Post post = Post.builder()
                 .user(user)
                 .title(postUploadForm.getTitle())
@@ -48,10 +48,11 @@ public class PostService {
                 .isbn(postUploadForm.getIsbn())
                 .build();
         postRepository.save(post);
+        return post.getId();
     }
 
-    public void updatePost(Long postId, PostUpdateForm postUpdateForm) {
-        Post post = postRepository.findById(postId).orElseThrow(() -> new NonexistentPostException());
+    public void updatePost(PostUpdateForm postUpdateForm) {
+        Post post = postRepository.findById(postUpdateForm.getPostId()).orElseThrow(() -> new NonexistentPostException());
         post.update(postUpdateForm.getTitle(), postUpdateForm.getContent());
     }
 

@@ -2,7 +2,7 @@
 <div class = "side" th:fragment="side">
 
   <!-- 로그인이 안되어 있을 때 -->
-  <div class ="login" th:if="${userInfo == null}">
+  <div class ="login" th:if="${nickname == null}">
     <form action="/login" method="post">
       <input type="text" name = "userId" placeholder="아이디">
       <input type="text" name = "password" placeholder="비밀번호">
@@ -12,11 +12,11 @@
   </div>
 
   <!-- 로그인이 되어 있을 때 -->
-  <div class ="login" th:if="${userInfo != null}">
+  <div class ="login" th:if="${nickname != null}">
 
     <!-- 사용자 이름 -->
     <div class="status">
-      <span th:text="${userInfo.nickname}">상원</span>님, 환영합니다.
+      <span th:text="${nickname}">상원</span>님, 환영합니다.
     </div>
 
     <!-- 로그아웃 버튼 -->

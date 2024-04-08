@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sangwon.wead.API.NaverAPIBookClient;
 import sangwon.wead.exception.NonexistentBookException;
-import sangwon.wead.DTO.BookInfo;
+import sangwon.wead.service.DTO.BookInfo;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -4,18 +4,13 @@
     width: 100%;
 }
 
+.main >:first-child {
+    width: 75%;
+    margin: 20px;
+}
+
 .main > .side {
     width: 25%;
-    padding: 20px;
-}
-
-.main > .post-list {
-    width: 75%;
-    padding: 20px;
-}
-
-.main > .book-search {
-    width: 75%;
-    padding: 20px;
+    margin: 20px;
 }
 

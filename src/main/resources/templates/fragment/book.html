@@ -1,0 +1,9 @@
+<div class="book" th:fragment="book">
+
+    <img th:src="${book.image}" alt="no image">
+    <div class="info">
+        <div class="title" th:text="${book.title}">책 제목</div>
+        <div class="author" th:text="${book.authors}"></div>
+    </div>
+
+</div>

@@ -32,7 +32,7 @@
 }
 
 .book-search > table > tbody  > tr .title {
-    width: 45%;
+    width: 40%;
     text-align: left;
 }
 
@@ -42,7 +42,7 @@
 }
 
 .book-search > table > tbody > tr .pubdate {
-    width: 15%;
+    width: 20%;
     text-align: center;
 }
 

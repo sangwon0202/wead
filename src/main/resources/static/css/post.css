@@ -1,7 +1,5 @@
 
-.post {
-    padding: 20px;
-}
+
 
 /* header */
 
@@ -42,7 +40,7 @@
     padding: 10px;
 }
 
-.post > .book-info {
+.post > .book {
     margin: 50px 200px 50px 200px;
 }
 

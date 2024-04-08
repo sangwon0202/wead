@@ -1,7 +1,7 @@
 package sangwon.wead.service.book;
 
 import org.springframework.data.domain.Page;
-import sangwon.wead.DTO.BookInfo;
+import sangwon.wead.service.DTO.BookInfo;
 
 public interface BookService {
 

@@ -1,4 +1,4 @@
-package sangwon.wead.DTO;
+package sangwon.wead.controller.DTO;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;
@@ -28,6 +28,7 @@ public class PageBar {
             }
             else throw new IllegalPageBarException();
         }
+
         if(number > total) throw new IllegalPageBarException();
 
         this.current = number;
