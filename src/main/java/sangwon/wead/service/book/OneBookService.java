@@ -5,7 +5,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import sangwon.wead.exception.NonexistentBookException;
+import sangwon.wead.exception.server.NonexistentBookException;
 import sangwon.wead.service.DTO.BookInfo;
 
 
@@ -32,6 +32,11 @@ public class OneBookService implements BookService {
                 .build();
     }
 
+
+    @Override
+    public boolean checkBookExistence(String isbn) {
+        return bookDto.getIsbn().equals(isbn);
+    }
 
     @Override
     public BookInfo getBookInfo(String isbn) {

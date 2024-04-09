@@ -7,8 +7,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sangwon.wead.exception.server.NonexistentPostException;
+import sangwon.wead.exception.server.NonexistentUserException;
 import sangwon.wead.service.DTO.PostUpdateForm;
-import sangwon.wead.exception.*;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.PostRepository;
@@ -23,6 +24,10 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+
+    public boolean checkPostExistence(Long postId) {
+        return postRepository.existsById(postId);
+    }
 
     public PostInfo getPostInfo(Long postId) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new NonexistentPostException());

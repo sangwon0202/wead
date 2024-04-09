@@ -1,4 +1,4 @@
-package sangwon.wead.exception;
+package sangwon.wead.exception.client;
 
 public class PermissionException extends RuntimeException {
 }

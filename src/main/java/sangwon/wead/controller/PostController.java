@@ -11,12 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.controller.DTO.*;
-import sangwon.wead.exception.NotLoginException;
-import sangwon.wead.exception.PermissionException;
+import sangwon.wead.exception.client.NotLoginException;
+import sangwon.wead.exception.client.PermissionException;
+import sangwon.wead.exception.client.InvalidIsbnException;
+import sangwon.wead.exception.client.PostNotFoundException;
 import sangwon.wead.service.DTO.*;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
-import sangwon.wead.service.UserService;
 import sangwon.wead.service.book.BookService;
 
 import java.util.List;
@@ -31,18 +32,11 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final BookService bookService;
-    private final UserService userService;
 
 
-    @GetMapping({"/", "/post"})
+    @GetMapping( "/post")
     public String postList(@RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
-                       HttpServletRequest request,
                        Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-        if(userId != null)  model.addAttribute("nickname", userService.getUserInfo(userId).getNickname());
 
         if(pageNumber < 1) pageNumber = 1;
         Page<PostInfo> page = postService.getPostInfoPage(pageNumber-1, 10);
@@ -64,7 +58,9 @@ public class PostController {
         // 로그인 정보
         HttpSession session = request.getSession();
         String userId = (String)session.getAttribute("userId");
-        if(userId != null)  model.addAttribute("nickname", userService.getUserInfo(userId).getNickname());
+
+        // 게시물이 존재하지 않을 경우
+        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         // 조회수 올리기
         postService.increasePostViews(postId);
@@ -82,29 +78,27 @@ public class PostController {
     }
 
 
-
-
     @GetMapping("/post/upload")
     public String uploadForm(@RequestParam("isbn") String isbn, HttpServletRequest request, Model model) {
 
         // 로그인 정보
         HttpSession session = request.getSession();
         String userId = (String)session.getAttribute("userId");
-        if(userId != null)  model.addAttribute("nickname", userService.getUserInfo(userId).getNickname());
 
         // 이전 URL
         String referer = request.getHeader("referer");
 
-        // 로그인이 안되어 있을 경우
+        // 로그인을 하지 않은 경우
         if(userId == null) return redirectAlertPage("로그인을 먼저 해주세요.", referer, model);
+
+        // 유효하지 않은 isbn 일 경우
+        if(!bookService.checkBookExistence(isbn)) throw new InvalidIsbnException();
 
         BookInfo bookInfo = bookService.getBookInfo(isbn);
         model.addAttribute("bookTitle", bookInfo.getTitle());
         model.addAttribute("isbn", bookInfo.getIsbn());
         return "page/post-upload";
     }
-
-
 
 
     @PostMapping("/post/upload")
@@ -127,6 +121,9 @@ public class PostController {
         // 제목 및 내용이 입력되지 않을 경우
         if(bindingResult.hasErrors()) return redirectAlertPage("제목 및 내용을 모두 입력해주세요.", referer, model);
 
+        // 유효하지 않은 isbn 일 경우
+        if(!bookService.checkBookExistence(postUploadParam.getIsbn())) throw new InvalidIsbnException();
+
         Long postId = postService.uploadPost(postUploadParam.toPostUploadForm(userId));
         redirectAttributes.addAttribute("postId", postId);
         return "redirect:/post/{postId}";
@@ -141,10 +138,12 @@ public class PostController {
         // 로그인 정보
         HttpSession session = request.getSession();
         String userId = (String)session.getAttribute("userId");
-        if(userId != null)  model.addAttribute("nickname", userService.getUserInfo(userId).getNickname());
 
         // 로그인이 안되어 있을 경우
         if(userId == null) throw new NotLoginException();
+
+        // 게시물이 존재하지 않을 경우
+        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         PostInfo postInfo = postService.getPostInfo(postId);
 
@@ -178,6 +177,9 @@ public class PostController {
         // 이전 URL
         String referer = request.getHeader("referer");
 
+        // 게시물이 존재하지 않을 경우
+        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
+
         // 제목 및 내용이 입력되지 않을 경우
         if(bindingResult.hasErrors()) return redirectAlertPage("제목 및 내용을 모두 입력해주세요.", referer, model);
 
@@ -202,6 +204,9 @@ public class PostController {
 
         // 로그인이 안되어 있을 경우
         if(userId == null) throw new NotLoginException();
+
+        // 게시물이 존재하지 않을 경우
+        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         PostInfo postInfo = postService.getPostInfo(postId);
 

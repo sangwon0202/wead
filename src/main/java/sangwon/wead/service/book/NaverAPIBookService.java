@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sangwon.wead.API.NaverAPIBookClient;
-import sangwon.wead.exception.NonexistentBookException;
+import sangwon.wead.exception.server.NonexistentBookException;
 import sangwon.wead.service.DTO.BookInfo;
 
 import java.util.ArrayList;
@@ -20,6 +20,17 @@ import java.util.List;
 public class NaverAPIBookService implements BookService {
     private final NaverAPIBookClient NaverAPIbookClient;
 
+
+    @Override
+    public boolean checkBookExistence(String isbn) {
+        try {
+            getBookInfo(isbn);
+            return true;
+        }
+        catch(NonexistentBookException e) {
+            return false;
+        }
+    }
 
     @Override
     public BookInfo getBookInfo(String isbn) {

@@ -1,7 +1,6 @@
 package sangwon.wead.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
@@ -9,10 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sangwon.wead.controller.DTO.BookLine;
-import sangwon.wead.exception.NonexistentPageException;
 import sangwon.wead.service.DTO.BookInfo;
 import sangwon.wead.controller.DTO.PageBar;
-import sangwon.wead.service.UserService;
 import sangwon.wead.service.book.BookService;
 
 import java.util.Optional;
@@ -24,7 +21,6 @@ import static sangwon.wead.controller.util.AlertPageRedirector.redirectAlertPage
 public class BookController {
 
     private final BookService bookService;
-    private final UserService userService;
 
 
     @GetMapping( "/book")
@@ -32,11 +28,6 @@ public class BookController {
                              @RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
                            HttpServletRequest request,
                            Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-        if(userId != null) model.addAttribute("nickname", userService.getUserInfo(userId).getNickname());
 
         // 이전 URL
         String referer = request.getHeader("referer");

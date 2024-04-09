@@ -9,11 +9,14 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.exception.NotLoginException;
-import sangwon.wead.exception.PermissionException;
+import sangwon.wead.exception.client.NotLoginException;
+import sangwon.wead.exception.client.PermissionException;
+import sangwon.wead.exception.client.CommentNotFoundException;
+import sangwon.wead.exception.client.PostNotFoundException;
 import sangwon.wead.service.DTO.CommentInfo;
 import sangwon.wead.service.DTO.CommentUploadForm;
 import sangwon.wead.service.CommentService;
+import sangwon.wead.service.PostService;
 
 import static sangwon.wead.controller.util.AlertPageRedirector.redirectAlertPage;
 
@@ -22,6 +25,7 @@ import static sangwon.wead.controller.util.AlertPageRedirector.redirectAlertPage
 public class CommentController {
 
     private final CommentService commentService;
+    private final PostService postService;
 
 
     @PostMapping("/comment/upload/{postId}")
@@ -37,11 +41,14 @@ public class CommentController {
         // 이전 URL
         String referer = request.getHeader("referer");
 
-        // 로그인이 안되어 있을 경우
+        // 로그인을 하지 않은 경우
         if(userId == null) return redirectAlertPage("로그인을 먼저 해주세요.", referer, model);
 
         // 댓글이 입력되지 않은 경우
-        if(content.isBlank()) return redirectAlertPage("내용을 작성해주세요", referer, model);
+        if(content.isBlank()) return redirectAlertPage("내용을 작성해주세요.", referer, model);
+
+        // 게시물이 존재하지 않을 경우
+        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         // 댓글 업로드
         CommentUploadForm commentUploadForm = CommentUploadForm.builder()
@@ -67,6 +74,9 @@ public class CommentController {
 
         // 로그인이 안되어 있을 경우
         if(userId == null) throw new NotLoginException();
+
+        // 댓글이 존재하지 않을 경우
+        if(!commentService.checkCommentExistence(commentId)) throw new CommentNotFoundException();
 
         // 수정 권한이 없는 경우
         CommentInfo commentInfo = commentService.getCommentInfo(commentId);
