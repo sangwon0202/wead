@@ -6,7 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import sangwon.wead.exception.server.IllegalPageBarException;
+import sangwon.wead.exception.IllegalPageBarException;
 import sangwon.wead.controller.DTO.PageBar;
 
 import java.util.ArrayList;

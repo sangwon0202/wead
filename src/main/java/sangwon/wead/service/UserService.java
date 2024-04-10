@@ -4,7 +4,7 @@ package sangwon.wead.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.exception.server.NonexistentUserException;
+import sangwon.wead.exception.NonexistentUserException;
 import sangwon.wead.service.DTO.UserRegisterForm;
 import sangwon.wead.service.DTO.UserInfo;
 import sangwon.wead.repository.entity.User;

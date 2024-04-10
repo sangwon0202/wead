@@ -1,4 +1,4 @@
-package sangwon.wead.exception.server;
+package sangwon.wead.exception;
 
 public class NonexistentUserException extends RuntimeException {
 }

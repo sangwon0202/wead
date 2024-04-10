@@ -5,14 +5,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sangwon.wead.service.DTO.CommentUploadForm;
-import sangwon.wead.exception.server.NonexistentUserException;
+import sangwon.wead.exception.NonexistentUserException;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.entity.User;
 import sangwon.wead.service.DTO.CommentInfo;
 import sangwon.wead.repository.entity.Comment;
-import sangwon.wead.exception.server.NonexistentCommentException;
-import sangwon.wead.exception.server.NonexistentPostException;
+import sangwon.wead.exception.NonexistentCommentException;
+import sangwon.wead.exception.NonexistentPostException;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.PostRepository;
 

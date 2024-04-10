@@ -1,7 +1,6 @@
 package sangwon.wead.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -12,8 +11,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import sangwon.wead.controller.DTO.LoginParam;
 import sangwon.wead.controller.DTO.UserRegisterParam;
-import sangwon.wead.exception.client.AlreadyLoginException;
-import sangwon.wead.exception.client.NotLoginException;
 import sangwon.wead.service.UserService;
 
 import static sangwon.wead.controller.util.AlertPageRedirector.redirectAlertPage;
@@ -28,17 +25,14 @@ public class UserController {
     @PostMapping("/login")
     public String login(HttpServletRequest request,
                         @Valid @ModelAttribute LoginParam loginParam,
+                        BindingResult bindingResult,
                         Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
         // 이전 URL
         String referer = request.getHeader("referer");
 
-        // 이미 로그인되어 있을 경우
-        if(userId != null) throw new AlreadyLoginException();
+        if(bindingResult.hasErrors()) {
+            return redirectAlertPage("아이디와 비밀번호를 모두 입력해주세요.", referer, model);
+        }
 
         // 로그인을 실패한 경우
         if(!userService.login(loginParam.getUserId(), loginParam.getPassword())) {
@@ -46,38 +40,20 @@ public class UserController {
         }
 
         // 로그인 성공
-        session.setAttribute("userId", loginParam.getUserId());
-        return "redirect:" + referer;
+        request.getSession().setAttribute("userId", loginParam.getUserId());
+        return "redirect:/";
     }
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
 
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 이미 로그인되어 있을 경우
-        if(userId != null) throw new AlreadyLoginException();
-
-        // 로그인되어 있지 않는 경우
-        if(session.getAttribute("userId") == null) throw new NotLoginException();
-
         // 로그아웃 세션 처리
-        session.removeAttribute("userId");
-        String referer = request.getHeader("referer");
-        return "redirect:" + referer;
+        request.getSession().removeAttribute("userId");
+        return "redirect:/";
     }
 
     @GetMapping("/register")
-    public String registerForm(HttpServletRequest request, Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 이미 로그인되어 있을 경우
-        if(userId != null) throw new AlreadyLoginException();
+    public String registerForm(Model model) {
 
         // 회원가입 폼 전송
         model.addAttribute(new UserRegisterParam());
@@ -89,15 +65,8 @@ public class UserController {
                            @Valid @ModelAttribute UserRegisterParam userRegisterParam,
                            BindingResult bindingResult,
                            Model model) {
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
         // 이전 URL
         String referer = request.getHeader("referer");
-
-        // 이미 로그인되어 있을 경우
-        if(userId != null) throw new AlreadyLoginException();
 
         // 아이디 중복 검사
         if(userService.checkUserIdDuplication(userRegisterParam.getUserId())) {
@@ -109,8 +78,9 @@ public class UserController {
             return redirectAlertPage("모든 값을 입력해주세요.", referer, model);
         }
 
+        // 회원가입 성공
         userService.register(userRegisterParam.toUserRegisterForm());
-        return redirectAlertPage("회원가입에 성공하였습니다.", referer, model);
+        return redirectAlertPage("회원가입에 성공하였습니다.", "/", model);
 
     }
 

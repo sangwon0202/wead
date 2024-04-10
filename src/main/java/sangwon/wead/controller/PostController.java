@@ -1,7 +1,6 @@
 package sangwon.wead.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,10 +10,6 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.controller.DTO.*;
-import sangwon.wead.exception.client.NotLoginException;
-import sangwon.wead.exception.client.PermissionException;
-import sangwon.wead.exception.client.InvalidIsbnException;
-import sangwon.wead.exception.client.PostNotFoundException;
 import sangwon.wead.service.DTO.*;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
@@ -51,16 +46,9 @@ public class PostController {
 
 
     @GetMapping("/post/{postId}")
-    public String post(HttpServletRequest request,
+    public String post(@SessionAttribute(name = "userId", required = false) String userId,
                        @PathVariable("postId") Long postId,
                        Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 게시물이 존재하지 않을 경우
-        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         // 조회수 올리기
         postService.increasePostViews(postId);
@@ -79,20 +67,16 @@ public class PostController {
 
 
     @GetMapping("/post/upload")
-    public String uploadForm(@RequestParam("isbn") String isbn, HttpServletRequest request, Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
+    public String uploadForm(HttpServletRequest request,
+                             @SessionAttribute(name = "userId", required = false) String userId,
+                             @RequestParam("isbn") String isbn,
+                             Model model) {
 
         // 이전 URL
         String referer = request.getHeader("referer");
 
         // 로그인을 하지 않은 경우
         if(userId == null) return redirectAlertPage("로그인을 먼저 해주세요.", referer, model);
-
-        // 유효하지 않은 isbn 일 경우
-        if(!bookService.checkBookExistence(isbn)) throw new InvalidIsbnException();
 
         BookInfo bookInfo = bookService.getBookInfo(isbn);
         model.addAttribute("bookTitle", bookInfo.getTitle());
@@ -103,26 +87,17 @@ public class PostController {
 
     @PostMapping("/post/upload")
     public String upload(HttpServletRequest request,
+                         @SessionAttribute(name = "userId", required = false) String userId,
                          @Valid @ModelAttribute PostUploadParam postUploadParam,
                          BindingResult bindingResult,
                          Model model,
                          RedirectAttributes redirectAttributes) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 로그인이 안되어 있을 경우
-        if(userId == null) throw new NotLoginException();
 
         // 이전 URL
         String referer = request.getHeader("referer");
 
         // 제목 및 내용이 입력되지 않을 경우
         if(bindingResult.hasErrors()) return redirectAlertPage("제목 및 내용을 모두 입력해주세요.", referer, model);
-
-        // 유효하지 않은 isbn 일 경우
-        if(!bookService.checkBookExistence(postUploadParam.getIsbn())) throw new InvalidIsbnException();
 
         Long postId = postService.uploadPost(postUploadParam.toPostUploadForm(userId));
         redirectAttributes.addAttribute("postId", postId);
@@ -131,25 +106,10 @@ public class PostController {
 
 
     @GetMapping("/post/update/{postId}")
-    public String updateForm(HttpServletRequest request,
-                             @PathVariable("postId") Long postId,
+    public String updateForm(@PathVariable("postId") Long postId,
                              Model model) {
 
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 로그인이 안되어 있을 경우
-        if(userId == null) throw new NotLoginException();
-
-        // 게시물이 존재하지 않을 경우
-        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
-
         PostInfo postInfo = postService.getPostInfo(postId);
-
-        // 수정 권한이 없는 경우
-        if(!postInfo.getUserId().equals(userId)) throw new PermissionException();
-
         BookInfo bookInfo = bookService.getBookInfo(postInfo.getIsbn());
 
         model.addAttribute("title", postInfo.getTitle());
@@ -167,55 +127,22 @@ public class PostController {
                          RedirectAttributes redirectAttributes,
                          Model model) {
 
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 로그인이 안되어 있을 경우
-        if(userId == null) throw new NotLoginException();
-
         // 이전 URL
         String referer = request.getHeader("referer");
-
-        // 게시물이 존재하지 않을 경우
-        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
 
         // 제목 및 내용이 입력되지 않을 경우
         if(bindingResult.hasErrors()) return redirectAlertPage("제목 및 내용을 모두 입력해주세요.", referer, model);
 
         PostInfo postInfo = postService.getPostInfo(postId);
-
-        // 수정 권한이 없는 경우
-        if(!postInfo.getUserId().equals(userId)) throw new PermissionException();
-
         postService.updatePost(postUpdatePram.toPostUpdateForm(postInfo.getPostId()));
         redirectAttributes.addAttribute("postId", postId);
         return "redirect:/post/{postId}";
     }
 
     @PostMapping("/post/delete/{postId}")
-    public String delete(HttpServletRequest request,
-                             @PathVariable("postId") Long postId,
-                             Model model) {
-
-        // 로그인 정보
-        HttpSession session = request.getSession();
-        String userId = (String)session.getAttribute("userId");
-
-        // 로그인이 안되어 있을 경우
-        if(userId == null) throw new NotLoginException();
-
-        // 게시물이 존재하지 않을 경우
-        if(!postService.checkPostExistence(postId)) throw new PostNotFoundException();
-
-        PostInfo postInfo = postService.getPostInfo(postId);
-
-        // 수정 권한이 없는 경우
-        if(!postInfo.getUserId().equals(userId)) throw new PermissionException();
-
+    public String delete(@PathVariable("postId") Long postId) {
         postService.deletePost(postId);
         return "redirect:/post";
-
     }
 
 

@@ -2,7 +2,7 @@ package sangwon.wead.controller.DTO;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;
-import sangwon.wead.exception.server.IllegalPageBarException;
+import sangwon.wead.exception.IllegalPageBarException;
 
 @Getter
 public class PageBar {
