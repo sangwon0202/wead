@@ -2,7 +2,6 @@ package sangwon.wead.controller.DTO;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;
-import sangwon.wead.exception.IllegalPageBarException;
 
 @Getter
 public class PageBar {
@@ -26,10 +25,10 @@ public class PageBar {
                 this.end = 1;
                 return;
             }
-            else throw new IllegalPageBarException();
+            else throw new RuntimeException("요소가 없을 땐 무조건 페이지 넘버가 1이여야합니다.");
         }
 
-        if(number > total) throw new IllegalPageBarException();
+        if(number > total) throw new RuntimeException("페이지 넘버가 최대값을 넘었습니다.");
 
         this.current = number;
         this.prev = number > pageBarSize;

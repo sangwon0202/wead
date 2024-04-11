@@ -1,4 +1,4 @@
-package sangwon.wead.controller.util;
+package sangwon.wead.util;
 
 import org.springframework.ui.Model;
 

@@ -4,7 +4,6 @@ package sangwon.wead.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.exception.NonexistentUserException;
 import sangwon.wead.service.DTO.UserRegisterForm;
 import sangwon.wead.service.DTO.UserInfo;
 import sangwon.wead.repository.entity.User;
@@ -19,7 +18,7 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserInfo getUserInfo(String userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NonexistentUserException());
+        User user = userRepository.findById(userId).get();
         return new UserInfo(user);
     }
 

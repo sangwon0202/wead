@@ -9,11 +9,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import sangwon.wead.argument.annotation.Referer;
+import sangwon.wead.aspect.annotation.CheckLogin;
+import sangwon.wead.aspect.annotation.CheckLogout;
 import sangwon.wead.controller.DTO.LoginParam;
 import sangwon.wead.controller.DTO.UserRegisterParam;
 import sangwon.wead.service.UserService;
 
-import static sangwon.wead.controller.util.AlertPageRedirector.redirectAlertPage;
+import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,66 +25,59 @@ public class UserController {
     private final UserService userService;
 
 
+    @CheckLogout
     @PostMapping("/login")
     public String login(HttpServletRequest request,
                         @Valid @ModelAttribute LoginParam loginParam,
                         BindingResult bindingResult,
+                        @Referer String referer,
                         Model model) {
-        // 이전 URL
-        String referer = request.getHeader("referer");
-
+        // 모두 입력하지 않은 경우
         if(bindingResult.hasErrors()) {
             return redirectAlertPage("아이디와 비밀번호를 모두 입력해주세요.", referer, model);
         }
-
         // 로그인을 실패한 경우
         if(!userService.login(loginParam.getUserId(), loginParam.getPassword())) {
             return redirectAlertPage("아이디와 비밀번호를 확인해주세요.", referer, model);
         }
-
         // 로그인 성공
         request.getSession().setAttribute("userId", loginParam.getUserId());
         return "redirect:/";
     }
 
+    @CheckLogin
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
-
         // 로그아웃 세션 처리
         request.getSession().removeAttribute("userId");
         return "redirect:/";
     }
 
+    @CheckLogout
     @GetMapping("/register")
     public String registerForm(Model model) {
-
         // 회원가입 폼 전송
         model.addAttribute(new UserRegisterParam());
         return "page/register";
     }
 
+    @CheckLogout
     @PostMapping("/register")
-    public String register(HttpServletRequest request,
-                           @Valid @ModelAttribute UserRegisterParam userRegisterParam,
+    public String register(@Valid @ModelAttribute UserRegisterParam userRegisterParam,
                            BindingResult bindingResult,
+                           @Referer String referer,
                            Model model) {
-        // 이전 URL
-        String referer = request.getHeader("referer");
-
         // 아이디 중복 검사
         if(userService.checkUserIdDuplication(userRegisterParam.getUserId())) {
             return redirectAlertPage("아이디가 중복되었습니다.", referer, model);
         }
-
         // 모든 값을 입력하지 않은 경우
         if(bindingResult.hasErrors()) {
-            return redirectAlertPage("모든 값을 입력해주세요.", referer, model);
+            return redirectAlertPage("빈칸을 모두 채워주세요.", referer, model);
         }
-
         // 회원가입 성공
         userService.register(userRegisterParam.toUserRegisterForm());
         return redirectAlertPage("회원가입에 성공하였습니다.", "/", model);
-
     }
 
 }

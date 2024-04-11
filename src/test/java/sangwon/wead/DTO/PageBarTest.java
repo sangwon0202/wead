@@ -6,7 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import sangwon.wead.exception.IllegalPageBarException;
 import sangwon.wead.controller.DTO.PageBar;
 
 import java.util.ArrayList;
@@ -35,7 +34,7 @@ class PageBarTest {
             Pageable pageable2 = PageRequest.of(1, 10);
             Page<Integer> page2 = new PageImpl<Integer>(new ArrayList<>(0), pageable2, 0);
             new PageBar(page2,10);
-        }).isInstanceOf(IllegalPageBarException.class);
+        }).isInstanceOf(RuntimeException.class);
 
 
         // number > total
@@ -43,7 +42,7 @@ class PageBarTest {
             Pageable pageable2 = PageRequest.of(10, 10);
             Page<Integer> page2 = new PageImpl<Integer>(new ArrayList<>(10), pageable2, 100);
             new PageBar(page2,10);
-        }).isInstanceOf(IllegalPageBarException.class);
+        }).isInstanceOf(RuntimeException.class);
 
 
 
