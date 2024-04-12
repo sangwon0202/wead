@@ -25,7 +25,7 @@ public class BookController {
     private final BookService bookService;
 
 
-    @GetMapping( "/book")
+    @GetMapping( "/books")
     public String bookSearch(@RequestParam(value = "query", required = false) Optional<String> optionalQuery,
                              @RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
                              @Referer String referer,

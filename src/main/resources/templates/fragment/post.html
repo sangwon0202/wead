@@ -17,10 +17,10 @@
         <!-- 조회수 및 수정 삭제 버튼 -->
         <div class="info2">
             <div> 조회 <span th:text="${post.views}">0</span> </div>
-            <form th:if="${post.permission}" th:action="@{/post/update/{postId}(postId = ${post.postId})}" method="get">
+            <form th:if="${post.permission}" th:action="@{/posts/{postId}/update(postId = ${post.postId})}" method="get">
                 <input type="submit" value="수정">
             </form>
-            <form th:if="${post.permission}" th:action="@{/post/delete/{postId}(postId = ${post.postId})}" method="post">
+            <form th:if="${post.permission}" th:action="@{/posts/{postId}/delete(postId = ${post.postId})}" method="post">
                 <input type="submit" style="color: red" value="삭제">
             </form>
         </div>
@@ -54,7 +54,7 @@
                     <span class="user" th:text="${element.nickname}">상원</span>
                     <sapn>|</sapn>
                     <span class="date" th:text="${element.uploadDate}">2024-02-02</span>
-                    <form th:if="${element.permission}"th:action="@{/comment/delete/{commentId}(commentId=${element.commentId})}" method="post">
+                    <form th:if="${element.permission}"th:action="@{/comments/{commentId}/delete(commentId=${element.commentId})}" method="post">
                         <input type="submit" style="color: red" value="삭제">
                     </form>
                 </div>
@@ -65,8 +65,8 @@
         </div>
 
         <!-- 댓글 작성 창 -->
-        <div class="input">
-            <form th:action="@{/comment/upload/{postId}(postId = ${post.postId})}" method="post">
+        <div class="input" th:if="${login}">
+            <form th:action="@{/posts/{postId}/comments/upload(postId = ${post.postId})}" method="post">
                 <textarea name="content" cols="100" rows="3"></textarea>
                 <input type="submit" value="등록">
             </form>

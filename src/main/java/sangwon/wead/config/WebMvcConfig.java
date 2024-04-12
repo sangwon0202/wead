@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import sangwon.wead.resolover.RefererResolver;
+import sangwon.wead.resolover.UserIdResolver;
 
 import java.util.List;
 
@@ -12,17 +14,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final AutoRegistry autoRegistry;
+    private final AutoInterceptorRegistry autoRegistry;
+    private final RefererResolver refererResolver;
+    private final UserIdResolver userIdResolver;
 
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        autoRegistry.registerInterceptors(registry);
+        autoRegistry.register(registry);
     }
-
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
-        autoRegistry.registerArgumentResolvers(resolvers);
+        resolvers.add(refererResolver);
+        resolvers.add(userIdResolver);
     }
 
 }

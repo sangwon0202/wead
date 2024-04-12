@@ -14,7 +14,10 @@ public class BookView {
         this.isbn = bookInfo.getIsbn();
         this.title = bookInfo.getTitle();
         this.image = bookInfo.getImage();
-        this.authors = bookInfo.getAuthors().get(0);
-        if(bookInfo.getAuthors().size() > 1) this.authors += " 외 " + Integer.toString(bookInfo.getAuthors().size()-1) + "명";
+        if(bookInfo.getAuthors() == null) this.authors = "작가 정보 없음";
+        else {
+            this.authors = bookInfo.getAuthors().get(0);
+            if(bookInfo.getAuthors().size() > 1) this.authors += " 외 " + (bookInfo.getAuthors().size()-1) + "명";
+        }
     }
 }

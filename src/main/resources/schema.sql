@@ -4,9 +4,9 @@
 -- 테이블 생성 SQL - user
 CREATE TABLE user
 (
-    `user_id`   VARCHAR(320)    NOT NULL    COMMENT '사용자 아이디',
-    `password`  VARCHAR(20)     NOT NULL    COMMENT '비밀번호',
-    `nickname`  VARCHAR(10)     NOT NULL    COMMENT '별명',
+    `user_id`   VARCHAR(20)    NOT NULL    COMMENT '사용자 아이디',
+    `password`  VARCHAR(20)    NOT NULL    COMMENT '비밀번호',
+    `nickname`  VARCHAR(10)    NOT NULL    COMMENT '별명',
     PRIMARY KEY (user_id)
 );
 
@@ -18,13 +18,13 @@ ALTER TABLE user COMMENT '사용자 관련 테이블';
 -- 테이블 생성 SQL - post
 CREATE TABLE post
 (
-    `post_id`      INT             NOT NULL    AUTO_INCREMENT COMMENT '게시글 아이디',
-    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
-    `title`        VARCHAR(50)     NOT NULL    COMMENT '제목',
-    `content`      TEXT            NOT NULL    COMMENT '내용',
-    `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
-    `views`        INT             NOT NULL    COMMENT '조회수',
-    `isbn`         VARCHAR(13)     NOT NULL    COMMENT 'isbn',
+    `post_id`      INT            NOT NULL    AUTO_INCREMENT COMMENT '게시글 아이디',
+    `user_id`      VARCHAR(20)    NOT NULL    COMMENT '작성자 아이디',
+    `title`        VARCHAR(50)    NOT NULL    COMMENT '제목',
+    `content`      TEXT           NOT NULL    COMMENT '내용',
+    `upload_date`  DATE           NOT NULL    COMMENT '작성날짜',
+    `views`        INT            NOT NULL    COMMENT '조회수',
+    `isbn`         VARCHAR(13)    NOT NULL    COMMENT 'isbn',
     PRIMARY KEY (post_id)
 );
 
@@ -47,7 +47,7 @@ CREATE TABLE comment
 (
     `comment_id`   INT             NOT NULL    AUTO_INCREMENT COMMENT '댓글 아이디',
     `post_id`      INT             NOT NULL    COMMENT '게시글 아이디',
-    `user_id`      VARCHAR(320)    NOT NULL    COMMENT '작성자 아이디',
+    `user_id`      VARCHAR(20)     NOT NULL    COMMENT '작성자 아이디',
     `content`      VARCHAR(400)    NOT NULL    COMMENT '내용',
     `upload_date`  DATE            NOT NULL    COMMENT '작성날짜',
     PRIMARY KEY (comment_id)
@@ -75,3 +75,17 @@ ALTER TABLE comment
 -- DROP FOREIGN KEY FK_comment_user_id_user_user_id;
 
 
+-- book_info_cache Table Create SQL
+-- 테이블 생성 SQL - book_info_cache
+CREATE TABLE book_info_cache
+(
+    `isbn`     VARCHAR(13)     NOT NULL    COMMENT 'isbn',
+    `title`    VARCHAR(100)    NOT NULL    COMMENT '제목',
+    `image`    VARCHAR(100)    NULL        COMMENT '이미지',
+    `authors`  VARCHAR(100)    NULL        COMMENT '작가들',
+    `pubdate`  DATE            NULL        COMMENT '출판일',
+    PRIMARY KEY (isbn)
+);
+
+-- 테이블 Comment 설정 SQL - book_info_cache
+ALTER TABLE book_info_cache COMMENT 'BookInfo 캐시 테이블';

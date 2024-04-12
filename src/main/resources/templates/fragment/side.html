@@ -2,17 +2,17 @@
 <div class = "side" th:fragment="side">
 
   <!-- 로그인이 안되어 있을 때 -->
-  <div class ="login" th:if="${nickname == null}">
+  <div class ="login" th:if="${!login}">
     <form action="/login" method="post">
       <input type="text" name = "userId" placeholder="아이디">
       <input type="text" name = "password" placeholder="비밀번호">
       <input type="submit" value="로그인">
     </form>
-    <a href = "/register">회원가입</a>
+    <a href = "/users/register">회원가입</a>
   </div>
 
   <!-- 로그인이 되어 있을 때 -->
-  <div class ="login" th:if="${nickname != null}">
+  <div class ="login" th:if="${login}">
 
     <!-- 사용자 이름 -->
     <div class="status">

@@ -20,7 +20,7 @@ public class Post {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
-    @Column(name="title", length = 50)
+    @Column(name="title")
     private String title;
     @Column(name="content", columnDefinition = "TEXT")
     private String content;

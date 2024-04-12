@@ -23,7 +23,7 @@ public class Comment {
     @ManyToOne()
     @JoinColumn(name = "user_id")
     private User user;
-    @Column(name="content", length = 400)
+    @Column(name="content")
     private String content;
     @Column(name="upload_date")
     private LocalDate uploadDate;

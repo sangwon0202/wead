@@ -1,14 +1,13 @@
 package sangwon.wead.service.book;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import sangwon.wead.API.BookResponse;
 import sangwon.wead.API.NaverAPIBookClient;
+import sangwon.wead.aspect.annotation.CacheBookInfo;
 import sangwon.wead.exception.NonexistentBookException;
 import sangwon.wead.service.DTO.BookInfo;
 
@@ -17,7 +16,6 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Primary
 public class NaverAPIBookService implements BookService {
     private final NaverAPIBookClient NaverAPIbookClient;
 
@@ -34,13 +32,15 @@ public class NaverAPIBookService implements BookService {
     }
 
     @Override
+    @CacheBookInfo
     public BookInfo getBookInfo(String isbn) {
-        return new BookInfo(NaverAPIbookClient.searchBook(isbn,10, 1, "sim")
+        return NaverAPIbookClient.searchBook(isbn,10, 1, "sim")
                 .getItems()
                 .stream()
                 .filter(item -> item.getIsbn().equals(isbn))
                 .findAny()
-                .orElseThrow(() -> new NonexistentBookException()));
+                .orElseThrow(() -> new NonexistentBookException())
+                .toBookInfo();
     }
 
     @Override
@@ -64,7 +64,7 @@ public class NaverAPIBookService implements BookService {
             bookInfoList = NaverAPIbookClient.searchBook(query, display, start, "sim")
                     .getItems()
                     .stream()
-                    .map(item -> new BookInfo(item)).toList();
+                    .map(BookResponse.Item::toBookInfo).toList();
         }
 
         return new PageImpl<>(bookInfoList, pageable, total);

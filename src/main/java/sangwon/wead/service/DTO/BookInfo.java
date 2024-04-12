@@ -3,11 +3,8 @@ package sangwon.wead.service.DTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import sangwon.wead.API.BookResponse;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -19,14 +16,5 @@ public class BookInfo {
     private String image;
     private List<String> authors;
     private LocalDate pubdate;
-
-    public BookInfo(BookResponse.Item item) {
-        this.isbn = item.getIsbn();
-        this.title = item.getTitle();
-        this.image = item.getImage();
-        this.authors = Arrays.stream(item.getAuthor().split("\\^")).toList();
-        if(item.getPubdate().isEmpty()) this.pubdate = null;
-        else this.pubdate = LocalDate.parse(item.getPubdate(),DateTimeFormatter.ofPattern("yyyyMMdd"));
-    }
 
 }

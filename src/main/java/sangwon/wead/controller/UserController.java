@@ -10,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import sangwon.wead.resolover.annotation.Referer;
-import sangwon.wead.aspect.annotation.CheckLogin;
-import sangwon.wead.aspect.annotation.CheckLogout;
 import sangwon.wead.controller.DTO.LoginParam;
 import sangwon.wead.controller.DTO.UserRegisterParam;
 import sangwon.wead.service.UserService;
@@ -24,8 +22,6 @@ public class UserController {
 
     private final UserService userService;
 
-
-    @CheckLogout
     @PostMapping("/login")
     public String login(HttpServletRequest request,
                         @Valid @ModelAttribute LoginParam loginParam,
@@ -45,7 +41,6 @@ public class UserController {
         return "redirect:/";
     }
 
-    @CheckLogin
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {
         // 로그아웃 세션 처리
@@ -53,16 +48,14 @@ public class UserController {
         return "redirect:/";
     }
 
-    @CheckLogout
-    @GetMapping("/register")
+    @GetMapping("/users/register")
     public String registerForm(Model model) {
         // 회원가입 폼 전송
         model.addAttribute(new UserRegisterParam());
         return "page/register";
     }
 
-    @CheckLogout
-    @PostMapping("/register")
+    @PostMapping("/users/register")
     public String register(@Valid @ModelAttribute UserRegisterParam userRegisterParam,
                            BindingResult bindingResult,
                            @Referer String referer,

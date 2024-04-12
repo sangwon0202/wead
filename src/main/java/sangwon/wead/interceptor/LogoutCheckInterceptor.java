@@ -2,27 +2,25 @@ package sangwon.wead.interceptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import sangwon.wead.config.ConfigurableInterceptor;
+import sangwon.wead.exception.ClientFaultException;
 
-@Slf4j
 @Component
-public class ControllerMappingFailInterceptor implements ConfigurableInterceptor {
-
+public class LogoutCheckInterceptor implements ConfigurableInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(handler.getClass() != HandlerMethod.class) {
-            response.sendRedirect("/");
-            return false;
-        }
+        String userId = (String)request.getSession().getAttribute("userId");
+        if(userId != null) throw new ClientFaultException();
         return true;
     }
 
     @Override
     public void configure(InterceptorRegistration registration) {
-        registration.excludePathPatterns("/css/**");
+        registration
+                .addPathPatterns("/login")
+                .addPathPatterns("/users/register")
+                .order(1);
     }
 }

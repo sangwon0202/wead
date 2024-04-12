@@ -1,6 +1,11 @@
 package sangwon.wead.API;
 
 import lombok.Data;
+import sangwon.wead.service.DTO.BookInfo;
+
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Arrays;
 import java.util.List;
 
 @Data
@@ -23,5 +28,22 @@ public class BookResponse {
         private String pubdate;
         private String isbn;
         private String description;
+
+        public BookInfo toBookInfo() {
+            List<String> authors = null;
+            LocalDate pubdate = null;
+            if(!this.author.isBlank()) authors = Arrays.stream(this.author.split("\\^")).toList();
+            if(!this.pubdate.isBlank()) pubdate = LocalDate.parse(this.pubdate, DateTimeFormatter.ofPattern("yyyyMMdd"));
+
+            return BookInfo.builder()
+                    .isbn(this.isbn)
+                    .title(this.title)
+                    .image(this.image)
+                    .authors(authors)
+                    .pubdate(pubdate)
+                    .build();
+        }
     }
+
+
 }

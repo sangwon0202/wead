@@ -14,8 +14,6 @@
     margin: 2px;
 }
 
-
-
 /* book-search - table */
 
 .book-search > table {
@@ -23,48 +21,51 @@
     border-collapse : collapse;
 }
 
-.book-search > table > tbody > tr .image {
+.book-search > table  tr > * {
+    padding: 10px;
+    text-align: center;
+}
+
+.book-search > table tr > .image {
     width: 10%;
 }
 
-.book-search > table > tbody > tr > td.image > img {
+.book-search > table tr > .title {
+    width: 35%;
+}
+
+.book-search > table tr > .author {
+    width: 20%;
+}
+
+.book-search > table tr > .pubdate {
+    width: 20%;
+}
+
+.book-search > table tr > .upload-button {
+    width: 15%;
+}
+
+.book-search > table > tbody > tr > .image > img {
     width: 100%;
 }
 
-.book-search > table > tbody  > tr .title {
-    width: 40%;
+.book-search > table > tbody > tr .title {
     text-align: left;
 }
 
-.book-search > table > tbody > tr .author {
-    width: 15%;
-    text-align: center;
-}
-
-.book-search > table > tbody > tr .pubdate {
-    width: 20%;
-    text-align: center;
-}
-
-.book-search > table > tbody > tr .upload-button {
-    width: 15%;
-    text-align: center;
-}
-
-.book-search > table > tbody > tr > th {
+.book-search > table > thead > tr > th {
     height: 50px;
     border-bottom: 1px solid green;
     border-top: 3px solid green;
 }
 
 .book-search > table > tbody > tr > td {
+    height: 30px;
     border-bottom: 1px solid grey;
 
 }
 
-.book-search > table > tbody td {
-    padding: 10px;
-}
 
 /* list - pageBar */
 

@@ -11,11 +11,11 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
-    @Column(name = "user_id", length = 320)
+    @Column(name = "user_id")
     private String id;
-    @Column(name = "password", length = 20)
+    @Column(name = "password")
     private String password;
-    @Column(name = "nickname", length = 10)
+    @Column(name = "nickname")
     private String nickname;
 
     @Builder

@@ -1,49 +1,55 @@
+<link rel="stylesheet" href="../../static/css/post-list.css">
 <div class="book-search" th:fragment="book-search">
 
-    <form th:action="@{/book}" method="get">
+    <form th:action="@{/books}" method="get">
         <input type="text" name="query" placeholder="검색" th:value="${query}">
         <input type="submit" value="검색">
     </form>
 
     <table>
         <!-- 리스트 헤더 -->
-        <tr>
-            <th class="image">사진</td>
-            <th class="title">제목</td>
-            <th class="author">작가</td>
-            <th class="pubdate">출간일</td>
-            <th class="upload-button">독서록 작성</td>
-        </tr>
+        <thead>
+            <tr>
+                <th class="image">사진</td>
+                <th class="title">제목</td>
+                <th class="author">작가</td>
+                <th class="pubdate">출간일</td>
+                <th class="upload-button">독서록 작성</td>
+            </tr>
+        </thead>
+
 
         <!-- 리스트 목록 -->
-        <tr th:each="element : ${bookList}">
+        <tbody>
+            <tr th:each="element : ${bookList}">
 
-            <td class="image"><img th:src="${element.image}" alt="no image"></td>
-            <td class="title" th:text="${element.title}">책 제목</td>
-            <td class="author">
-                <th:block th:each="author : ${element.authors}">
-                    <span th:text="${author}">작가 이름</span>
-                    </br>
-                </th:block>
-            </td>
-            <td class="pubdate" th:text="${element.pubdate}">YYYY-MM-DD</td>
-            <td class="upload-button">
-                <form th:action="@{/post/upload}" method="get">
-                    <input type="hidden" name="isbn" th:value="${element.isbn}">
-                    <input type="submit" value="독서록 작성">
-                </form>
-            </td>
-        </tr>
+                <td class="image"><img th:src="${element.image}" alt="no image"></td>
+                <td class="title" th:text="${element.title}">책 제목</td>
+                <td class="author">
+                    <th:block th:each="author : ${element.authors}">
+                        <span th:text="${author}">작가 이름</span>
+                        </br>
+                    </th:block>
+                </td>
+                <td class="pubdate" th:text="${element.pubdate}">YYYY-MM-DD</td>
+                <td class="upload-button">
+                    <form th:action="@{/books/{isbn}/posts/upload(isbn=${element.isbn})}" method="get">
+                        <input th:if="${login}" type="submit" value="독서록 작성">
+                        <input th:if="${!login}" type="submit" value="독서록 작성" disabled>
+                    </form>
+                </td>
+            </tr>
+        </tbody>
 
     </table>
 
     <!-- 페이지바 -->
     <div class = "pageBar" th:if="${pageBar != null}">
-        <a class="prev" th:if="${pageBar.prev}" th:href="@{/book(query=${query}, page=${pageBar.start} - 1 )}"> < </a>
+        <a class="prev" th:if="${pageBar.prev}" th:href="@{/books(query=${query}, page=${pageBar.start} - 1 )}"> < </a>
         <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
-            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/book(query=${query}, page=${number})}"></a>
+            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/books(query=${query}, page=${number})}"></a>
         </th:block>
-        <a class="next" th:if="${pageBar.next}" th:href="@{/book(query=${query}, page=${pageBar.end} + 1)}"> > </a>
+        <a class="next" th:if="${pageBar.next}" th:href="@{/books(query=${query}, page=${pageBar.end} + 1)}"> > </a>
     </div>
 
 </div>

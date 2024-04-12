@@ -3,3 +3,4 @@ spring:
     open-in-view: false
   profiles:
     include: private
+

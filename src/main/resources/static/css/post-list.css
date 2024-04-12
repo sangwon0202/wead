@@ -11,8 +11,36 @@
     border-collapse : collapse;
 }
 
+.post-list > table  tr > * {
+    padding: 10px;
+    text-align: center;
+}
+
+.post-list > table tr > .image {
+    width: 10%;
+}
+
+.post-list > table tr > .title {
+    width: 35%;
+}
+
+.post-list > table tr > .user {
+    width: 20%;
+}
+
+.post-list > table tr > .date {
+    width: 20%;
+}
+
+.post-list > table tr > .views {
+    width: 15%;
+}
+
+.post-list > table > tbody > tr > .image > img {
+    width: 100%;
+}
+
 .post-list > table > tbody > tr .title {
-    width: 55%;
     text-align: left;
 }
 
@@ -20,22 +48,7 @@
     color: black;
 }
 
-.post-list > table > tbody > tr .user {
-    width: 15%;
-    text-align: center;
-}
-
-.post-list > table > tbody > tr .date {
-    width: 20%;
-    text-align: center;
-}
-
-.post-list > table > tbody > tr .views {
-    width: 5%;
-    text-align: center;
-}
-
-.post-list > table > tbody > tr > th {
+.post-list > table > thead > tr > th {
     height: 50px;
     border-bottom: 1px solid green;
     border-top: 3px solid green;
@@ -47,9 +60,7 @@
 
 }
 
-.post-list > table > tbody td {
-    padding: 10px;
-}
+
 
 /* list - pageBar */
 

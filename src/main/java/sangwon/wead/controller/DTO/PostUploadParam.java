@@ -10,9 +10,8 @@ public class PostUploadParam {
     private String title;
     @NotBlank
     private String content;
-    private String isbn;
 
-    public PostUploadForm toPostUploadForm(String userId) {
+    public PostUploadForm toPostUploadForm(String userId, String isbn) {
         return PostUploadForm.builder()
                 .userId(userId)
                 .title(title)
