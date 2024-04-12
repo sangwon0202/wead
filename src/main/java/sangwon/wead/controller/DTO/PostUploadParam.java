@@ -10,7 +10,6 @@ public class PostUploadParam {
     private String title;
     @NotBlank
     private String content;
-    @NotBlank
     private String isbn;
 
     public PostUploadForm toPostUploadForm(String userId) {

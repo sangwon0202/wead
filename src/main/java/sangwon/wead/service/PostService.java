@@ -32,8 +32,7 @@ public class PostService {
         return new PostInfo(post);
     }
 
-    public Page<PostInfo> getPostInfoPage(int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<PostInfo> getPostInfoPage(Pageable pageable) {
         return postRepository.findAll(pageable).map(PostInfo::new);
     }
 

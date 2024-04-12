@@ -8,8 +8,10 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.argument.annotation.Referer;
-import sangwon.wead.argument.annotation.UserId;
+import sangwon.wead.page.PageAdjuster;
+import sangwon.wead.page.PostInfoPageAdapter;
+import sangwon.wead.resolover.annotation.Referer;
+import sangwon.wead.resolover.annotation.UserId;
 import sangwon.wead.aspect.annotation.CheckLogin;
 import sangwon.wead.aspect.annotation.NeedLogin;
 import sangwon.wead.controller.DTO.*;
@@ -38,14 +40,11 @@ public class PostController {
     @GetMapping( "/post")
     public String postList(@RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
                        Model model) {
-        // 페이지가 범위를 벗어날 경우 재조정
-        if(pageNumber < 1) pageNumber = 1;
-        Page<PostInfo> page = postService.getPostInfoPage(pageNumber-1, 10);
-        int totalPages = page.getTotalPages();
-        if(totalPages == 0) totalPages = 1;
-        if(pageNumber > totalPages) page = postService.getPostInfoPage(totalPages-1, 10);
-
         // 게시글 리스트
+        Page<PostInfo> page = PageAdjuster
+                .pageAdapter(new PostInfoPageAdapter(postService))
+                .getPage(pageNumber, 10, PostInfo.class);
+
         model.addAttribute("postList", page.getContent().stream().map(postInfo -> new PostLine(postInfo)));
         model.addAttribute("pageBar", new PageBar(page, 10));
         return "page/post-list";
@@ -61,7 +60,6 @@ public class PostController {
 
         // 조회수 올리기
         postService.increasePostViews(postId);
-
         // 게시글, 댓글, 책 정보
         PostInfo postInfo = postService.getPostInfo(postId);
         List<CommentInfo> commentInfoList = commentService.getCommentInfoList(postId);

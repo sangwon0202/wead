@@ -1,6 +1,7 @@
 package sangwon.wead.service.book;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.data.web.SpringDataWebProperties;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -43,10 +44,11 @@ public class NaverAPIBookService implements BookService {
     }
 
     @Override
-    public Page<BookInfo> getBookInfoPageByQuery(String query, int pageNumber, int pageSize) {
+    public Page<BookInfo> getBookInfoPageByQuery(Pageable pageable, String query) {
+        int pageNumber = pageable.getPageNumber();
+        int pageSize = pageable.getPageSize();
         if(pageSize > 100) throw new IllegalArgumentException("The page size should not exceed 100.");
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
         int total = NaverAPIbookClient.searchBook(query,10, 1, "sim").getTotal();
         if(total > 1000) total = 1000;
 
@@ -65,7 +67,7 @@ public class NaverAPIBookService implements BookService {
                     .map(item -> new BookInfo(item)).toList();
         }
 
-        return new PageImpl<BookInfo>(bookInfoList, pageable, total);
+        return new PageImpl<>(bookInfoList, pageable, total);
     }
 
 }

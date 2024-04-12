@@ -32,7 +32,6 @@ public class OneBookService implements BookService {
                 .build();
     }
 
-
     @Override
     public boolean checkBookExistence(String isbn) {
         return bookDto.getIsbn().equals(isbn);
@@ -45,11 +44,11 @@ public class OneBookService implements BookService {
     }
 
     @Override
-    public Page<BookInfo> getBookInfoPageByQuery(String query, int pageNumber, int pageSize) {
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
+    public Page<BookInfo> getBookInfoPageByQuery(Pageable pageable, String query) {
+        int pageNumber = pageable.getPageNumber();
         List<BookInfo> bookInfoList = new ArrayList<>();
         if(pageNumber == 0) bookInfoList.add(bookDto);
-        return new PageImpl<BookInfo>(bookInfoList, pageable, 1);
+        return new PageImpl<>(bookInfoList, pageable, 1);
     }
 
 }

@@ -9,7 +9,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import sangwon.wead.argument.annotation.Referer;
+import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.aspect.annotation.CheckLogin;
 import sangwon.wead.aspect.annotation.CheckLogout;
 import sangwon.wead.controller.DTO.LoginParam;
@@ -79,5 +79,4 @@ public class UserController {
         userService.register(userRegisterParam.toUserRegisterForm());
         return redirectAlertPage("회원가입에 성공하였습니다.", "/", model);
     }
-
 }

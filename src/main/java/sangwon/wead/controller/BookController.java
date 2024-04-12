@@ -6,7 +6,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.argument.annotation.Referer;
+import sangwon.wead.page.BookInfoPageByQueryAdapter;
+import sangwon.wead.page.PageAdjuster;
+import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.controller.DTO.BookLine;
 import sangwon.wead.service.DTO.BookInfo;
 import sangwon.wead.controller.DTO.PageBar;
@@ -37,12 +39,10 @@ public class BookController {
             // 쿼리가 50자를 넘는 경우
             if(query.length() > 50) return redirectAlertPage("검색어는 최대 50자입니다.", referer, model);
 
-            // 페이지가 범위를 벗어날 경우 재조정
-            if(pageNumber < 1) pageNumber = 1;
-            Page<BookInfo> page = bookService.getBookInfoPageByQuery(query, pageNumber-1, 10);
-            int totalPages = page.getTotalPages();
-            if(totalPages == 0) totalPages = 1;
-            if(pageNumber > totalPages) page = bookService.getBookInfoPageByQuery(query, totalPages - 1, 10);
+            Page<BookInfo> page = PageAdjuster
+                    .pageAdapter(new BookInfoPageByQueryAdapter(bookService))
+                    .arg("query", query)
+                    .getPage(pageNumber, 10, BookInfo.class);
 
             // 책 리스트
             model.addAttribute("bookList", page.getContent().stream().map(bookinfo -> new BookLine(bookinfo)));

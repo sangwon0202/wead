@@ -28,9 +28,8 @@ public class NicknameInjectAspect {
 
         Object[] args = joinPoint.getArgs();
         for (Object arg : args) {
-            if(arg != null && arg instanceof Model) {
+            if(arg instanceof Model model) {
                 String nickname = userService.getUserInfo(userId).getNickname();
-                Model model = (Model)arg;
                 model.addAttribute("nickname",nickname);
             }
         }
