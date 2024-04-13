@@ -3,6 +3,7 @@ package sangwon.wead.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,7 +43,7 @@ public class PostController {
         // 게시글 리스트
         Page<PostInfo> page = PageAdjuster
                 .pageAdapter(new PostInfoPageAdapter(postService))
-                .getPage(pageNumber, 10, PostInfo.class);
+                .getPage(pageNumber, 10, Sort.by("id").descending(), PostInfo.class);
 
         // DTO 전환
         List<PostLine> postList = page.getContent()

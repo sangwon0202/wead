@@ -2,6 +2,7 @@ package sangwon.wead.page;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,11 +23,15 @@ public class PageAdjuster {
         }
 
         public <T> Page<T> getPage(int pageNumber, int pageSize, Class<T> cast) {
+            return getPage(pageNumber, pageSize, Sort.unsorted(), cast);
+        }
+
+        public <T> Page<T> getPage(int pageNumber, int pageSize, Sort sort, Class<T> cast) {
             if(pageNumber < 1) pageNumber = 1;
-            Page<?> page = pageAdapter.getPage(PageRequest.of(pageNumber-1, pageSize), args);
+            Page<?> page = pageAdapter.getPage(PageRequest.of(pageNumber-1, pageSize, sort), args);
             int totalPages = page.getTotalPages();
             if(totalPages == 0) totalPages = 1;
-            if(pageNumber > totalPages) page = pageAdapter.getPage(PageRequest.of(totalPages-1, pageSize), args);
+            if(pageNumber > totalPages) page = pageAdapter.getPage(PageRequest.of(totalPages-1, pageSize, sort), args);
             return (Page<T>)page;
         }
     }

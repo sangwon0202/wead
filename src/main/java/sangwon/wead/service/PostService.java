@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import sangwon.wead.aspect.annotation.Log;
 import sangwon.wead.service.DTO.PostUpdateForm;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
@@ -34,6 +35,10 @@ public class PostService {
 
     public Page<PostInfo> getPostInfoPage(Pageable pageable) {
         return postRepository.findAll(pageable).map(PostInfo::new);
+    }
+
+    public Page<PostInfo> getPostInfoPageByTitle(String title, Pageable pageable) {
+        return postRepository.findByTitleContains(title, pageable).map(PostInfo::new);
     }
 
     public void increasePostViews(Long postId) {

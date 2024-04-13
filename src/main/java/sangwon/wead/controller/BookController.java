@@ -45,7 +45,7 @@ public class BookController {
                     .getPage(pageNumber, 10, BookInfo.class);
 
             // 책 리스트
-            model.addAttribute("bookList", page.getContent().stream().map(bookinfo -> new BookLine(bookinfo)));
+            model.addAttribute("bookList", page.getContent().stream().map(BookLine::new));
             model.addAttribute("pageBar", new PageBar(page,10));
             model.addAttribute("query", query);
         }
