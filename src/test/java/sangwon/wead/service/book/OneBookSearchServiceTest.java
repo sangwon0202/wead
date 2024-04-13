@@ -6,15 +6,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import sangwon.wead.service.DTO.BookInfo;
+import sangwon.wead.service.book.search.OneBookSearchService;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
-class OneBookServiceTest {
+class OneBookSearchServiceTest {
 
     @Autowired
-    private OneBookService oneBookService;
+    private OneBookSearchService oneBookService;
 
     @Test
     void getBookInfo() {

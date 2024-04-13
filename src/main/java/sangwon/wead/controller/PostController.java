@@ -17,6 +17,7 @@ import sangwon.wead.service.DTO.*;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
 import sangwon.wead.service.book.BookService;
+import sangwon.wead.service.book.search.BookSearchService;
 import sangwon.wead.util.AlertPageRedirector;
 
 import java.util.List;
@@ -31,6 +32,8 @@ public class PostController {
     private final PostService postService;
     private final CommentService commentService;
     private final BookService bookService;
+    private final BookSearchService bookSearchService;
+    private final DTOConverter dtoConverter;
 
 
     @GetMapping( "/posts")
@@ -41,7 +44,13 @@ public class PostController {
                 .pageAdapter(new PostInfoPageAdapter(postService))
                 .getPage(pageNumber, 10, PostInfo.class);
 
-        model.addAttribute("postList", PostInfoListToPostLineList(page.getContent()));
+        // DTO 전환
+        List<PostLine> postList = page.getContent()
+                .stream()
+                .map(dtoConverter::postInfoToPostLine)
+                .toList();
+
+        model.addAttribute("postList", postList);
         model.addAttribute("pageBar", new PageBar(page, 10));
         return "page/post-list";
     }
@@ -59,19 +68,26 @@ public class PostController {
         List<CommentInfo> commentInfoList = commentService.getCommentInfoList(postId);
         BookInfo bookInfo = bookService.getBookInfo(postInfo.getIsbn());
 
-        model.addAttribute("post", new PostView(postInfo, userId));
-        model.addAttribute("commentList",commentInfoList.stream().map(commentInfo -> new CommentView(commentInfo, userId)).toList());
-        model.addAttribute("book", new BookView(bookInfo));
+        //DTO 전환
+        PostView post = dtoConverter.postInfoToPostView(postInfo, userId);
+        List<CommentView> commentList =commentInfoList
+                .stream()
+                .map(commentInfo -> dtoConverter.commentInfoToCommentView(commentInfo, userId))
+                .toList();
 
+        model.addAttribute("post", post);
+        model.addAttribute("commentList", commentList);
+        model.addAttribute("book", new BookView(bookInfo));
         return "page/post";
     }
 
     @GetMapping("/books/{isbn}/posts/upload")
     public String uploadForm(@PathVariable("isbn") String isbn, Model model) {
-        // 업로드 폼 전송
-        BookInfo bookInfo = bookService.getBookInfo(isbn);
+        // 업로드 폼
+        BookInfo bookInfo = bookSearchService.getBookInfo(isbn);
         model.addAttribute("bookTitle", bookInfo.getTitle());
         model.addAttribute("isbn", bookInfo.getIsbn());
+
         return "page/post-upload";
     }
 
@@ -87,10 +103,15 @@ public class PostController {
         if(bindingResult.hasErrors()) {
             return redirectAlertPage("제목 및 내용을 모두 입력해주세요.", referer, model);
         }
-        // 책 등록
 
-        // 게시글 업로드
+        // 책 등록 및 게시글 업로드
+        if(!bookService.checkBookExistence(isbn)) {
+            BookInfo bookInfo = bookSearchService.getBookInfo(isbn);
+            bookService.saveBook(bookInfo);
+        }
         Long postId = postService.uploadPost(postUploadParam.toPostUploadForm(userId, isbn));
+
+
         redirectAttributes.addAttribute("postId", postId);
         return "redirect:/posts/{postId}";
     }
@@ -100,7 +121,7 @@ public class PostController {
                              Model model) {
         // 수정 폼 전송
         PostInfo postInfo = postService.getPostInfo(postId);
-        BookInfo bookInfo = bookService.getBookInfo(postInfo.getIsbn());
+        BookInfo bookInfo = bookSearchService.getBookInfo(postInfo.getIsbn());
 
         model.addAttribute("title", postInfo.getTitle());
         model.addAttribute("content", postInfo.getContent());
@@ -133,11 +154,5 @@ public class PostController {
         return "redirect:/posts";
     }
 
-    private List<PostLine> PostInfoListToPostLineList(List<PostInfo> postInfoList) {
-        return postInfoList.stream().map(postInfo -> {
-            String image = bookService.getBookInfo(postInfo.getIsbn()).getImage();
-            return new PostLine(postInfo, image);
-        }).toList();
-    }
 
 }

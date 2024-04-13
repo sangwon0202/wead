@@ -1,10 +1,9 @@
-package sangwon.wead.API;
+package sangwon.wead.API.naver;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import sangwon.wead.API.BookResponse;
 
 @Component
 public class NaverAPIBookClient {
@@ -14,10 +13,10 @@ public class NaverAPIBookClient {
     @Value("${naverAPI.client.password}")
     private String clientSecret;
 
-    public BookResponse searchBook(String query,
-                                   int display,
-                                   int start,
-                                   String sort) {
+    public NaverAPIBookResponse searchBook(String query,
+                                           int display,
+                                           int start,
+                                           String sort) {
 
         RestClient restClient = RestClient.create();
         String uri = ServletUriComponentsBuilder.newInstance()
@@ -37,6 +36,6 @@ public class NaverAPIBookClient {
                     httpHeaders.add("X-Naver-Client-Secret", clientSecret);
                 }))
                 .retrieve()
-                .body(BookResponse.class);
+                .body(NaverAPIBookResponse.class);
     }
 }

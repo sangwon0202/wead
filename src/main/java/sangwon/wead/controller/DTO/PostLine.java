@@ -16,13 +16,15 @@ public class PostLine {
     private int commentCount;
     private String image;
 
-    public PostLine(PostInfo postInfo, String image) {
+    @Builder
+    public PostLine(PostInfo postInfo, String nickname, int commentCount, String image) {
         this.postId = postInfo.getPostId();
-        this.nickname = postInfo.getNickname();
+        this.nickname = nickname;
         this.title = postInfo.getTitle();
         this.uploadDate = postInfo.getUploadDate().format(DateTimeFormatter.ofPattern("yyyy년 MM월 dd일"));
         this.views = postInfo.getViews();
-        this.commentCount = postInfo.getCommentCount();
+        this.commentCount = commentCount;
         this.image = image;
     }
+
 }

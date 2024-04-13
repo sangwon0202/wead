@@ -14,6 +14,22 @@ CREATE TABLE user
 ALTER TABLE user COMMENT '사용자 관련 테이블';
 
 
+-- book Table Create SQL
+-- 테이블 생성 SQL - book
+CREATE TABLE book
+(
+    `isbn`     VARCHAR(13)     NOT NULL    COMMENT 'isbn',
+    `title`    VARCHAR(100)    NOT NULL    COMMENT '제목',
+    `image`    VARCHAR(100)    NULL        COMMENT '이미지',
+    `author`   VARCHAR(100)    NULL        COMMENT '작가',
+    `pubdate`  DATE            NULL        COMMENT '출판일',
+    PRIMARY KEY (isbn)
+);
+
+-- 테이블 Comment 설정 SQL - book
+ALTER TABLE book COMMENT '책 관련 테이블';
+
+
 -- post Table Create SQL
 -- 테이블 생성 SQL - post
 CREATE TABLE post
@@ -39,6 +55,15 @@ ALTER TABLE post
 -- Foreign Key 삭제 SQL - post(user_id)
 -- ALTER TABLE post
 -- DROP FOREIGN KEY FK_post_user_id_user_user_id;
+
+-- Foreign Key 설정 SQL - post(isbn) -> book(isbn)
+ALTER TABLE post
+    ADD CONSTRAINT FK_post_isbn_book_isbn FOREIGN KEY (isbn)
+        REFERENCES book (isbn) ON DELETE RESTRICT ON UPDATE RESTRICT;
+
+-- Foreign Key 삭제 SQL - post(isbn)
+-- ALTER TABLE post
+-- DROP FOREIGN KEY FK_post_isbn_book_isbn;
 
 
 -- comment Table Create SQL
@@ -75,17 +100,3 @@ ALTER TABLE comment
 -- DROP FOREIGN KEY FK_comment_user_id_user_user_id;
 
 
--- book_info_cache Table Create SQL
--- 테이블 생성 SQL - book_info_cache
-CREATE TABLE book_info_cache
-(
-    `isbn`     VARCHAR(13)     NOT NULL    COMMENT 'isbn',
-    `title`    VARCHAR(100)    NOT NULL    COMMENT '제목',
-    `image`    VARCHAR(100)    NULL        COMMENT '이미지',
-    `authors`  VARCHAR(100)    NULL        COMMENT '작가들',
-    `pubdate`  DATE            NULL        COMMENT '출판일',
-    PRIMARY KEY (isbn)
-);
-
--- 테이블 Comment 설정 SQL - book_info_cache
-ALTER TABLE book_info_cache COMMENT 'BookInfo 캐시 테이블';

@@ -8,16 +8,12 @@ public class BookView {
     private String isbn;
     private String title;
     private String image;
-    private String authors;
+    private String author;
 
     public BookView(BookInfo bookInfo) {
         this.isbn = bookInfo.getIsbn();
         this.title = bookInfo.getTitle();
-        this.image = bookInfo.getImage();
-        if(bookInfo.getAuthors() == null) this.authors = "작가 정보 없음";
-        else {
-            this.authors = bookInfo.getAuthors().get(0);
-            if(bookInfo.getAuthors().size() > 1) this.authors += " 외 " + (bookInfo.getAuthors().size()-1) + "명";
-        }
+        this.image = bookInfo.getImage(); // 이미지 없을 경우 처리해야함
+        this.author = bookInfo.getAuthor() == null ? "작가 정보 없음" : bookInfo.getAuthor();
     }
 }

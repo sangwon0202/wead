@@ -1,4 +1,4 @@
-package sangwon.wead.API;
+package sangwon.wead.API.naver;
 
 import lombok.Data;
 import sangwon.wead.service.DTO.BookInfo;
@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Data
-public class BookResponse {
+public class NaverAPIBookResponse {
 
     private String lastBuildDate;
     private int total;
@@ -30,16 +30,13 @@ public class BookResponse {
         private String description;
 
         public BookInfo toBookInfo() {
-            List<String> authors = null;
-            LocalDate pubdate = null;
-            if(!this.author.isBlank()) authors = Arrays.stream(this.author.split("\\^")).toList();
-            if(!this.pubdate.isBlank()) pubdate = LocalDate.parse(this.pubdate, DateTimeFormatter.ofPattern("yyyyMMdd"));
-
+            String author = this.author.isBlank() ? null : Arrays.stream(this.author.split("\\^")).toList().get(0);
+            LocalDate pubdate = this.pubdate.isBlank() ? null : LocalDate.parse(this.pubdate, DateTimeFormatter.ofPattern("yyyyMMdd"));
             return BookInfo.builder()
                     .isbn(this.isbn)
                     .title(this.title)
                     .image(this.image)
-                    .authors(authors)
+                    .author(author)
                     .pubdate(pubdate)
                     .build();
         }

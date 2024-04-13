@@ -12,7 +12,7 @@ import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.controller.DTO.BookLine;
 import sangwon.wead.service.DTO.BookInfo;
 import sangwon.wead.controller.DTO.PageBar;
-import sangwon.wead.service.book.BookService;
+import sangwon.wead.service.book.search.BookSearchService;
 
 import java.util.Optional;
 
@@ -22,7 +22,7 @@ import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 @RequiredArgsConstructor
 public class BookController {
 
-    private final BookService bookService;
+    private final BookSearchService bookSearchService;
 
 
     @GetMapping( "/books")
@@ -40,7 +40,7 @@ public class BookController {
             if(query.length() > 50) return redirectAlertPage("검색어는 최대 50자입니다.", referer, model);
 
             Page<BookInfo> page = PageAdjuster
-                    .pageAdapter(new BookInfoPageByQueryAdapter(bookService))
+                    .pageAdapter(new BookInfoPageByQueryAdapter(bookSearchService))
                     .arg("query", query)
                     .getPage(pageNumber, 10, BookInfo.class);
 

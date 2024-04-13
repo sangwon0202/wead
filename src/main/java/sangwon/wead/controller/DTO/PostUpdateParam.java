@@ -17,7 +17,6 @@ public class PostUpdateParam {
                 .title(title)
                 .content(content)
                 .build();
-
     }
 
 }
