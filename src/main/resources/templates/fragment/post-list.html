@@ -1,5 +1,7 @@
 <div class="post-list" th:fragment="post-list">
 
+    <div th:replace="~{fragment/search-bar.html::search-bar('/posts', true)}"></div>
+
     <table>
         <!-- 리스트 헤더 -->
         <thead>
@@ -32,12 +34,6 @@
 
     </table>
 
-    <div class = "pageBar">
-        <a class="prev" th:if="${pageBar.prev}" th:href="@{/posts(page=${pageBar.start} - 1 )}"> < </a>
-        <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
-            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/posts(page=${number})}"></a>
-        </th:block>
-        <a class="next" th:if="${pageBar.next}" th:href="@{/posts(page=${pageBar.end} + 1)}"> > </a>
-    </div>
+    <div th:replace="~{fragment/page-bar.html::page-bar}"></div>
 
 </div>

@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 
 @Getter
 public class PageBar {
+    private String url;
     private int current;
     private boolean prev;
     private boolean next;
@@ -12,7 +13,11 @@ public class PageBar {
     private int end;
 
 
-    public PageBar(Page<?> page, int pageBarSize) {
+    public PageBar(Page<?> page, int pageBarSize, String url) {
+        this.url = url;
+        if(url.contains("?")) this.url += "&page=";
+        else this.url += "?page=";
+
         int total = page.getTotalPages();
         int number = page.getNumber() + 1;
 

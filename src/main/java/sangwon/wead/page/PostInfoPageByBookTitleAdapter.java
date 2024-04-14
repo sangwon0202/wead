@@ -5,13 +5,14 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import sangwon.wead.service.PostService;
 
-import java.util.Map;
 
 @RequiredArgsConstructor
-public class PostInfoPageAdapter implements PageAdapter {
+public class PostInfoPageByBookTitleAdapter implements PageAdapter {
+
     private final PostService postService;
+
     @Override
     public Page<?> getPage(Pageable pageable, String query) {
-        return postService.getPostInfoPage(pageable);
+        return postService.getPostInfoPageByBookTitle(pageable, query);
     }
 }

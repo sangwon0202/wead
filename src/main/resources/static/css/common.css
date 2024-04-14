@@ -40,10 +40,21 @@ header > .box > .page-button > * {
     text-decoration-line: none;
 }
 
+
 article {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     width: 1250px;
+}
+
+article >:first-child {
+    width: 75%;
+    margin: 20px;
+}
+
+article > .side {
+    width: 25%;
+    margin: 20px;
 }
 
 footer {

@@ -9,6 +9,8 @@
     <link th:href="@{/css/side.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
     <link th:href="@{/css/book-search.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/page-bar.css}" rel="stylesheet" type="text/css" />
+    <link th:href="@{/css/search-bar.css}" rel="stylesheet" type="text/css" />
 </head>
 <body>
 
@@ -16,12 +18,8 @@
 <div th:replace="~{fragment/common.html::header}"></div>
 
 <article>
-
-    <div class="main">
-        <div th:replace="~{fragment/book-search.html::book-search}"></div>
-        <div th:replace="~{fragment/side.html::side}"></div>
-    </div>
-
+    <div th:replace="~{fragment/book-search.html::book-search}"></div>
+    <div th:replace="~{fragment/side.html::side}"></div>
 </article>
 
 <!-- 사이트 공통 푸터 -->

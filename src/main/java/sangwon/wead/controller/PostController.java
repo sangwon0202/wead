@@ -9,8 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.page.PageAdjuster;
-import sangwon.wead.page.PostInfoPageAdapter;
+import org.springframework.web.util.UriComponentsBuilder;
+import sangwon.wead.page.*;
 import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.resolover.annotation.UserId;
 import sangwon.wead.controller.DTO.*;
@@ -22,6 +22,7 @@ import sangwon.wead.service.book.search.BookSearchService;
 import sangwon.wead.util.AlertPageRedirector;
 
 import java.util.List;
+import java.util.Optional;
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 
@@ -39,11 +40,39 @@ public class PostController {
 
     @GetMapping( "/posts")
     public String postList(@RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
-                       Model model) {
+                           @RequestParam(value = "query", required = false) String query,
+                           @RequestParam(value = "search", required = false) String search,
+                           @Referer String referer,
+                           Model model) {
+
+        PageAdapter pageAdapter = null;
+        if(search != null) {
+            if(search.equals("nickname")) pageAdapter = new PostInfoPageByNicknameAdapter(postService);
+            if(search.equals("title")) pageAdapter = new PostInfoPageByTitleAdapter(postService);
+            if(search.equals("book")) pageAdapter = new PostInfoPageByBookTitleAdapter(postService);
+        }
+
+        if(pageAdapter != null) {
+            // 쿼리가 빈 문자열일 경우
+            if(query == null || query.isBlank()) return redirectAlertPage("검색어를 입력해주세요.", referer, model);
+            // 쿼리가 50자를 넘는 경우
+            if(query.length() > 50) return redirectAlertPage("검색어는 최대 50자입니다.", referer, model);
+        }
+
+        if(pageAdapter == null) {
+            search = null;
+            query = null;
+            pageAdapter = new PostInfoPageAdapter(postService);
+        }
+
         // 게시글 리스트
-        Page<PostInfo> page = PageAdjuster
-                .pageAdapter(new PostInfoPageAdapter(postService))
-                .getPage(pageNumber, 10, Sort.by("id").descending(), PostInfo.class);
+        Page<PostInfo> page = PageFactory.builder()
+                .pageAdapter(pageAdapter)
+                .pageNumber(pageNumber)
+                .pageSize(10)
+                .sort(Sort.by("id").descending())
+                .query(query)
+                .build().getPage(PostInfo.class);
 
         // DTO 전환
         List<PostLine> postList = page.getContent()
@@ -51,8 +80,15 @@ public class PostController {
                 .map(dtoConverter::postInfoToPostLine)
                 .toList();
 
+        // url
+        String url = UriComponentsBuilder.fromUriString("/posts")
+                .queryParamIfPresent("search", Optional.ofNullable(search))
+                .queryParamIfPresent("query", Optional.ofNullable(query))
+                .build()
+                .toUriString();
+
         model.addAttribute("postList", postList);
-        model.addAttribute("pageBar", new PageBar(page, 10));
+        model.addAttribute("pageBar", new PageBar(page, 10, url));
         return "page/post-list";
     }
 

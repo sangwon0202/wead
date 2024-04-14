@@ -21,7 +21,7 @@ public class PostInfo {
         this.title = post.getTitle();
         this.content = post.getContent();
         this.uploadDate = post.getUploadDate();
-        this.isbn = post.getIsbn();
+        this.isbn = post.getBook().getIsbn();
         this.views = post.getViews();
     }
 }

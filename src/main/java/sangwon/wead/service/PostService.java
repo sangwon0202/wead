@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sangwon.wead.aspect.annotation.Log;
+import sangwon.wead.repository.BookRepository;
+import sangwon.wead.repository.entity.Book;
 import sangwon.wead.service.DTO.PostUpdateForm;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
@@ -23,6 +25,7 @@ public class PostService {
 
     private final PostRepository postRepository;
     private final UserRepository userRepository;
+    private final BookRepository bookRepository;
 
     public boolean checkPostExistence(Long postId) {
         return postRepository.existsById(postId);
@@ -37,8 +40,20 @@ public class PostService {
         return postRepository.findAll(pageable).map(PostInfo::new);
     }
 
-    public Page<PostInfo> getPostInfoPageByTitle(String title, Pageable pageable) {
-        return postRepository.findByTitleContains(title, pageable).map(PostInfo::new);
+    public Page<PostInfo> getPostInfoPageByTitle(Pageable pageable, String title) {
+        return postRepository.findByTitleContains(pageable, title).map(PostInfo::new);
+    }
+
+    public Page<PostInfo> getPostInfoPageByUserId(Pageable pageable, String userId) {
+        return postRepository.findByUserId(pageable, userId).map(PostInfo::new);
+    }
+
+    public Page<PostInfo> getPostInfoPageByBookTitle(Pageable pageable, String bookTitle) {
+        return postRepository.findByBookTitleContains(pageable, bookTitle).map(PostInfo::new);
+    }
+
+    public Page<PostInfo> getPostInfoPageByNickname(Pageable pageable, String nickname) {
+        return postRepository.findByNicknameContains(pageable, nickname).map(PostInfo::new);
     }
 
     public void increasePostViews(Long postId) {
@@ -48,11 +63,12 @@ public class PostService {
 
     public Long uploadPost(PostUploadForm postUploadForm) {
         User user = userRepository.findById(postUploadForm.getUserId()).get();
+        Book book = bookRepository.findById(postUploadForm.getIsbn()).get();
         Post post = Post.builder()
                 .user(user)
                 .title(postUploadForm.getTitle())
                 .content(postUploadForm.getContent())
-                .isbn(postUploadForm.getIsbn())
+                .book(book)
                 .build();
         postRepository.save(post);
         return post.getId();

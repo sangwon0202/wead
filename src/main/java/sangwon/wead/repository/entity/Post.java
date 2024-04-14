@@ -28,17 +28,18 @@ public class Post {
     private LocalDate uploadDate;
     @Column(name="views")
     private int views;
-    @Column(name="isbn")
-    private String isbn;
+    @ManyToOne()
+    @JoinColumn(name="isbn")
+    private Book book;
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
 
     @Builder
-    public Post(User user, String title, String content,  String isbn) {
+    public Post(User user, String title, String content, Book book) {
         this.user = user;
         this.title = title;
         this.content = content;
-        this.isbn = isbn;
+        this.book = book;
         this.uploadDate = LocalDate.now();
         this.views = 0;
         this.comments = new ArrayList<>();

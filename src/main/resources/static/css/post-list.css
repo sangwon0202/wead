@@ -60,22 +60,3 @@
 
 }
 
-
-
-/* list - pageBar */
-
-.post-list > .pageBar {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    margin: 10px;
-}
-
-.post-list > .pageBar > * {
-    margin: 5px;
-    color: black;
-}
-
-.post-list > .pageBar > .number.current {
-    font-weight: bold;
-}

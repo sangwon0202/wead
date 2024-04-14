@@ -13,9 +13,7 @@ public class BookInfoPageByQueryAdapter implements PageAdapter {
     private final BookSearchService bookSearchService;
 
     @Override
-    public Page<?> getPage(Pageable pageable, Map<String, Object> args) {
-        String query = (String)args.get("query");
-        if(query == null) throw new RuntimeException("쿼리가 전달되지 않았습니다.");
+    public Page<?> getPage(Pageable pageable, String query) {
         return bookSearchService.getBookInfoPageByQuery(pageable, query);
     }
 }

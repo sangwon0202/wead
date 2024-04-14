@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 import java.util.Map;
 
 public interface PageAdapter {
-    Page<?> getPage(Pageable pageable, Map<String, Object> args);
+    Page<?> getPage(Pageable pageable, String query);
 
 }

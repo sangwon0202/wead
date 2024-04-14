@@ -1,10 +1,10 @@
+<link rel="stylesheet" href="../../static/css/search-bar.css">
+<link rel="stylesheet" href="../../static/css/common.css">
+<link rel="stylesheet" href="../../static/css/page-bar.css">
 <link rel="stylesheet" href="../../static/css/post-list.css">
 <div class="book-search" th:fragment="book-search">
 
-    <form th:action="@{/books}" method="get">
-        <input type="text" name="query" placeholder="검색" th:value="${query}">
-        <input type="submit" value="검색">
-    </form>
+    <div th:replace="~{fragment/search-bar.html::search-bar('/books', false)}"></div>
 
     <table>
         <!-- 리스트 헤더 -->
@@ -17,7 +17,6 @@
                 <th class="upload-button">독서록 작성</td>
             </tr>
         </thead>
-
 
         <!-- 리스트 목록 -->
         <tbody>
@@ -38,13 +37,6 @@
 
     </table>
 
-    <!-- 페이지바 -->
-    <div class = "pageBar" th:if="${pageBar != null}">
-        <a class="prev" th:if="${pageBar.prev}" th:href="@{/books(query=${query}, page=${pageBar.start} - 1 )}"> < </a>
-        <th:block th:each="number : ${#numbers.sequence(pageBar.start, pageBar.end)}">
-            <a class="number" th:classappend="${number == pageBar.current ? 'current' : '' }" th:text="${number}" th:href="@{/books(query=${query}, page=${number})}"></a>
-        </th:block>
-        <a class="next" th:if="${pageBar.next}" th:href="@{/books(query=${query}, page=${pageBar.end} + 1)}"> > </a>
-    </div>
+    <div th:replace="~{fragment/page-bar.html::page-bar}"></div>
 
 </div>
