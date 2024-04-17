@@ -17,6 +17,10 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    public Boolean checkUserExistence(String userId) {
+        return userRepository.existsById(userId);
+    }
+
     public UserInfo getUserInfo(String userId) {
         User user = userRepository.findById(userId).get();
         return new UserInfo(user);

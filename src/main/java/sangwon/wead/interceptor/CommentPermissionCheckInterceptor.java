@@ -37,7 +37,7 @@ public class CommentPermissionCheckInterceptor implements ConfigurableIntercepto
     @Override
     public void configure(InterceptorRegistration registration) {
         registration
-                .addPathPatterns("/comments/*/delete")
+                .addPathPatterns("/comments/*/*")
                 .order(3);
     }
 }

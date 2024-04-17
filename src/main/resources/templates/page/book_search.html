@@ -1,0 +1,38 @@
+<div th:replace="~{fragment/common.html::common(~{::section})}">
+    <section>
+        <div class="book_search">
+
+            <div th:replace="~{fragment/search_bar.html::search_bar(${sectionModel.searchBarModel})}"></div>
+
+                <table>
+                    <thead>
+                    <tr>
+                        <th class="image">사진</td>
+                        <th class="title">제목</td>
+                        <th class="author">작가</td>
+                        <th class="pubdate">출간일</td>
+                        <th class="upload-button">독서록 작성</td>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    <tr th:each="book : ${sectionModel.bookList}">
+                        <td class="image"><img th:src="${book.image}" alt="no image"></td>
+                        <td class="title" th:text="${book.title}">책 제목</td>
+                        <td class="author" th:text="${book.author}"></td>
+                        <td class="pubdate" th:text="${book.pubdate}">yyyy년 MM월 dd일</td>
+                        <td class="upload-button">
+                            <form th:action="@{/books/{isbn}/posts/upload(isbn=${book.isbn})}" method="get">
+                                <input th:if="${commonModel.login}" type="submit" value="독서록 작성">
+                                <input th:if="${!commonModel.login}" type="submit" value="독서록 작성" disabled>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            <div th:replace="~{fragment/page_bar.html::page_bar(${sectionModel.pageBarModel})}"></div>
+
+        </div>
+    </section>
+</div>

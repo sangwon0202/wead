@@ -41,6 +41,7 @@ public class PostExistenceCheckInterceptor implements ConfigurableInterceptor {
     public void configure(InterceptorRegistration registration) {
         registration
                 .addPathPatterns("/posts/*")
+                .addPathPatterns("/posts/*/*")
                 .order(2);
     }
 }

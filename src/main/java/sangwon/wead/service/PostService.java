@@ -44,10 +44,6 @@ public class PostService {
         return postRepository.findByTitleContains(pageable, title).map(PostInfo::new);
     }
 
-    public Page<PostInfo> getPostInfoPageByUserId(Pageable pageable, String userId) {
-        return postRepository.findByUserId(pageable, userId).map(PostInfo::new);
-    }
-
     public Page<PostInfo> getPostInfoPageByBookTitle(Pageable pageable, String bookTitle) {
         return postRepository.findByBookTitleContains(pageable, bookTitle).map(PostInfo::new);
     }

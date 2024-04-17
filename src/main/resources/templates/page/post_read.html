@@ -1,0 +1,59 @@
+<div th:replace="~{fragment/common.html::common(~{::section})}">
+  <section>
+    <div class="post_read">
+
+      <div class = "header">
+        <div class="title" th:text="${sectionModel.post.title}">게시글 제목</div>
+        <div class="info1">
+          <div th:text="${sectionModel.post.nickname}">사용자 이름</div>
+          <div>|</div>
+          <div th:text="${sectionModel.post.uploadDate}">업로드 날짜</div>
+        </div>
+        <div class="info2">
+          <div> 조회 <span th:text="${sectionModel.post.views}">수</span> </div>
+          <form th:if="${sectionModel.post.permission}" th:action="@{/posts/{postId}/update(postId = ${sectionModel.post.postId})}" method="get">
+            <input type="submit" value="수정">
+          </form>
+          <form th:if="${sectionModel.post.permission}" th:action="@{/posts/{postId}/delete(postId = ${sectionModel.post.postId})}" method="post">
+            <input type="submit" style="color: red" value="삭제">
+          </form>
+        </div>
+      </div>
+
+      <div class = "content" th:text="${sectionModel.post.content}">게시글 내용</div>
+      <div class="book">
+        <img th:src="${sectionModel.book.image}" alt="no image">
+        <div class="info">
+          <div class="title" th:text="${sectionModel.book.title}">책 제목</div>
+          <div class="author" th:text="${sectionModel.book.author}">작가</div>
+        </div>
+      </div>
+
+      <div class = "comment_list">
+        <div class = "header">
+          전체 댓글 <span style="color:red" th:text="${#lists.size(sectionModel.commentList)}">1</span>개
+        </div>
+
+        <div class="comment" th:each="comment : ${sectionModel.commentList}">
+          <div class ="header">
+            <div class="nickname" th:text="${comment.nickname}">상원</div>
+            <div>|</div>
+            <div class="uploadDate" th:text="${comment.uploadDate}">yyyy년 MM월 dd일</div>
+            <form th:if="${comment.permission}"th:action="@{/comments/{commentId}/delete(commentId=${comment.commentId})}" method="post">
+              <input type="submit" style="color: red" value="삭제">
+            </form>
+          </div>
+          <div class="content" th:text="${comment.content}">댓글 내용</div>
+        </div>
+
+        <div class="input" th:if="${commonModel.login}">
+          <form th:action="@{/posts/{postId}/comments/upload(postId = ${sectionModel.post.postId})}" method="post">
+            <textarea name="content" cols="100" rows="3"></textarea>
+            <input type="submit" value="등록">
+          </form>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>

@@ -6,13 +6,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
+import sangwon.wead.controller.param.LoginParam;
+import sangwon.wead.controller.param.UserRegisterParam;
 import sangwon.wead.resolover.annotation.Referer;
-import sangwon.wead.controller.DTO.LoginParam;
-import sangwon.wead.controller.DTO.UserRegisterParam;
 import sangwon.wead.service.UserService;
+
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 
@@ -21,6 +20,7 @@ import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 public class UserController {
 
     private final UserService userService;
+
 
     @PostMapping("/login")
     public String login(HttpServletRequest request,
@@ -58,17 +58,15 @@ public class UserController {
     @PostMapping("/users/register")
     public String register(@Valid @ModelAttribute UserRegisterParam userRegisterParam,
                            BindingResult bindingResult,
-                           @Referer String referer,
                            Model model) {
-        // 아이디 중복 검사
         if(userService.checkUserIdDuplication(userRegisterParam.getUserId())) {
-            return redirectAlertPage("아이디가 중복되었습니다.", referer, model);
+            bindingResult.rejectValue("userId", "duplication", "아이디가 중복되었습니다.");
         }
-        // 모든 값을 입력하지 않은 경우
         if(bindingResult.hasErrors()) {
-            return redirectAlertPage("빈칸을 모두 채워주세요.", referer, model);
+            model.addAttribute("userRegisterParam", userRegisterParam);
+            return "page/register";
         }
-        // 회원가입 성공
+
         userService.register(userRegisterParam.toUserRegisterForm());
         return redirectAlertPage("회원가입에 성공하였습니다.", "/", model);
     }

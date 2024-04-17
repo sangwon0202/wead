@@ -38,6 +38,7 @@ public class CommentExistenceCheckInterceptor implements ConfigurableInterceptor
     public void configure(InterceptorRegistration registration) {
         registration
                 .addPathPatterns("/comments/*")
+                .addPathPatterns("/comments/*/*")
                 .order(2);
     }
 }

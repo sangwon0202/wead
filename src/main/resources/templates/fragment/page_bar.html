@@ -1,0 +1,24 @@
+
+<div class = "page_bar" th:fragment="page_bar(model)">
+  <form th:if = "${model.prev}"th:action="${model.url}" method="get">
+    <th:block th:each = "query : ${model.queryMap}">
+      <input type="hidden" th:name="${query.key}" th:value="${query.value}">
+    </th:block>
+    <input type="hidden" name="page" th:value="${model.start - 1}">
+    <input type="submit" value="<">
+  </form>
+  <form th:each="number : ${#numbers.sequence(model.start, model.end)}" th:action="${model.url}" method="get">
+    <th:block th:each = "query : ${model.queryMap}">
+      <input type="hidden" th:name="${query.key}" th:value="${query.value}">
+    </th:block>
+    <input type="hidden" name="page" th:value="${number}">
+    <input type="submit" th:value="${number}" th:classappend="${number == model.current ? 'current' : '' }">
+  </form>
+  <form th:if = "${model.next}"th:action="${model.url}" method="get">
+    <th:block th:each = "query : ${model.queryMap}">
+      <input type="hidden" th:name="${query.key}" th:value="${query.value}">
+    </th:block>
+    <input type="hidden" name="page" th:value="${model.end + 1}">
+    <input type="submit" value=">">
+  </form>
+</div>

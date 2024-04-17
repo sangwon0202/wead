@@ -30,7 +30,7 @@ public class BookExistenceCheckInterceptor implements ConfigurableInterceptor {
     @Override
     public void configure(InterceptorRegistration registration) {
         registration
-                .addPathPatterns("/books/*")
+                .addPathPatterns("/books/*/**")
                 .order(2);
     }
 }

@@ -22,5 +22,4 @@ public class CommentInfo {
         this.content = comment.getContent();
         this.uploadDate = comment.getUploadDate();
     }
-
 }

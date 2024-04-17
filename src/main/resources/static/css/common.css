@@ -1,67 +1,126 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 0;
 }
 
 header {
-    display: flex;
-    flex-direction: column;
-    width:  100%;
+    margin: 20px;
 }
 
-header > h1 {
-    text-align: center;
+header > a {
+    font-size: 50px;
+    color: black;
+    font-weight: bold;
 }
 
-header > .box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width:  100%;
-    background-color: green;
-    margin-bottom: 20px;
-}
-
-header > .box > .page-button {
+nav {
     display: flex;
     flex-direction: row;
     justify-content: start;
-    width: 1250px;
-    padding: 20px 40px 20px 40px;
+    align-items: center;
+    width:  1250px;
+    background-color: green;
+    border-radius: 30px;
+    padding: 15px 30px 15px 30px;
+    gap:30px;
 }
 
-header > .box > .page-button > * {
-    margin: 0px 20px 0px 20px;
-    color: white;
-    font-weight: bold;
+nav > a {
     font-size: 20px;
+    color: white;
     text-decoration-line: none;
+    font-weight: bold;
 }
 
 
-article {
+main {
     display: flex;
     flex-direction: row;
     width: 1250px;
 }
 
-article >:first-child {
+section {
     width: 75%;
-    margin: 20px;
+    padding: 20px;
 }
 
-article > .side {
+aside {
     width: 25%;
-    margin: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+aside > .box {
+    width: 100%;
+    padding: 10px;
+    border: gray 1px solid;
+}
+
+aside > .box.user {
+    display: flex;
+    flex-direction: column;
+    height: 180px;
+}
+
+aside > .box.user > form {
+    display: flex;
+    flex-direction: column;
+}
+
+aside > .box.user > form.login {
+    gap: 5px;
+}
+
+aside > .box.user > .welcome_sentence {
+    padding: 20px;
+    height: 80px;
+}
+
+aside > .box.user > form.login > input[type=text] {
+    height: 40px;
+}
+
+aside > .box.user > form > input[type=submit] {
+    height: 30px;
+    font-weight: bold;
+}
+aside > .box.user > form.login > input[type=submit] {
+    color: white;
+    background-color: green;
+}
+
+aside > .box.user > form.register > input[type=submit] {
+    color: green;
+    background-color: white;
+}
+
+aside > .box.user > form.user_info > input[type=submit] {
+    color: white;
+    background-color: green;
+}
+
+aside > .box.user > form.logout > input[type=submit] {
+    color: red;
+    background-color: white;
 }
 
 footer {
-    width:  100%;
+    width: 1250px;
+    padding: 20px;
     text-align: center;
+    border-top: gray 1px solid;
 
 }
+
+
 
 
 

@@ -7,9 +7,11 @@ import sangwon.wead.repository.entity.User;
 public class UserInfo {
     private String userId;
     private String nickname;
+    private String password;
 
     public UserInfo(User user) {
         this.userId = user.getId();
         this.nickname = user.getNickname();
+        this.password = user.getPassword();
     }
 }

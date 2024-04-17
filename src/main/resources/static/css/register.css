@@ -1,29 +1,51 @@
 .register {
+    display: flex;
+    flex-direction: column;
     border: 1px solid grey;
+}
+
+.register > .banner {
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    gap: 5px;
+}
+
+.register > .banner > .title {
+    font-size: 40px;
+    font-weight: bold;
+    color: green;;
 }
 
 .register > form {
     display: flex;
     flex-direction: column;
+    align-items: start;
+    gap: 10px;
 }
 
-.register > form > .element {
-    display: flex;
-    flex-direction: column;
-}
-
-.register > form > * {
-    margin: 10px;
-}
 
 .register > form > input[type="text"] {
+    width: 300px;
     height: 30px;
     font-size: 15px;
 }
 
-.register > form > input[type="submit"] {
+.register > form > .submit {
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.register > form > .submit > input[type="submit"] {
     height: 40px;
     font-size: 20px;
     background-color: green;
     color: white;
+}
+
+.register > form .error {
+    color: red;
 }

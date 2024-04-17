@@ -1,0 +1,15 @@
+.page_bar {
+    padding: 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.page_bar > form > input[type=submit] {
+    height: 40px;
+}
+
+.page_bar > form > input[type=submit].current {
+    color: green;
+    font-weight: bold;
+}

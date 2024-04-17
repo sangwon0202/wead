@@ -13,6 +13,8 @@ import sangwon.wead.service.DTO.CommentUploadForm;
 import sangwon.wead.service.CommentService;
 import sangwon.wead.util.AlertPageRedirector;
 
+import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
+
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
@@ -24,12 +26,11 @@ public class CommentController {
                          @UserId String userId,
                          @Referer String referer,
                          Model model) {
-        // 댓글 내용이 비었을 경우
+
         if(content.isBlank()) {
-            return AlertPageRedirector.redirectAlertPage("댓글을 작성해주세요.", referer, model);
+            return redirectAlertPage("댓글을 작성해주세요.", referer, model);
         }
 
-        // 댓글 업로드
         CommentUploadForm commentUploadForm = CommentUploadForm.builder()
                 .userId(userId)
                 .postId(postId)

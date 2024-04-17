@@ -21,10 +21,9 @@ public class LoginCheckInterceptor implements ConfigurableInterceptor {
         registration
                 .addPathPatterns("/logout")
                 .addPathPatterns("/books/*/posts/upload")
-                .addPathPatterns("/posts/*/update")
-                .addPathPatterns("/posts/*/delete")
-                .addPathPatterns("/comments/*/upload")
-                .addPathPatterns("/comments/*/delete")
+                .addPathPatterns("/posts/*/*")
+                .addPathPatterns("/comments/*/*")
+                .addPathPatterns("/users/*/*")
                 .order(1);
     }
 }

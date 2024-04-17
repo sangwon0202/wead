@@ -1,0 +1,59 @@
+
+.post_list {
+    display: flex;
+    flex-direction: column;
+}
+
+.post_list > table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+.post_list > table tr > * {
+    padding: 10px;
+    text-align: center;
+}
+
+.post_list > table tr > .image {
+    width: 10%;
+}
+
+.post_list > table tr > .title {
+    width: 35%;
+}
+
+.post_list > table tr > .nickname {
+    width: 20%;
+}
+
+.post_list > table tr > .upload_date {
+    width: 20%;
+}
+
+.post_list > table tr > .views {
+    width: 15%;
+}
+
+.post_list > table > tbody > tr > .image > img {
+    width: 70%;
+}
+
+.post_list > table > tbody > tr > .title {
+    text-align: left;
+}
+
+.post_list > table > tbody > tr > .title > a {
+    color: black;
+}
+
+.post_list > table > thead > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+.post_list > table > tbody > tr > td {
+    height: 30px;
+    border-bottom: 1px solid grey;
+}
+

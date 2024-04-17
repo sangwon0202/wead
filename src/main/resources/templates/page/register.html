@@ -1,28 +1,39 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> wead - 독서 커뮤니티 </title>
-    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
-    <link th:href="@{/css/main.css}" rel="stylesheet" type="text/css" />
-    <link th:href="@{/css/side.css}" rel="stylesheet" type="text/css" />
-    <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
-    <link th:href="@{/css/register.css}" rel="stylesheet" type="text/css" />
-</head>
-<body>
+<div th:replace="~{fragment/common.html::common(~{::section})}">
+    <section>
+        <div class="register">
 
-<!-- 사이트 공통 헤더 -->
-<div th:replace="~{fragment/common.html::header}"></div>
+            <div class="banner">
+                <div class="title">Wead에 오신걸 환영합니다.</div>
+                <div class="sentence">Wead는 당신의 독서 생활을 응원합니다.</div>
+            </div>
 
+            <form th:action="@{/users/register}" th:object="${userRegisterParam}" method="post">
 
-<article>
-    <div th:replace="~{fragment/register.html::register}"></div>
-    <div th:replace="~{fragment/side.html::side}"></div>
-</article>
+                <div class="question">아이디를 입력해주세요.</div>
+                <input th:field="*{userId}" type="text" name="userId" placeholder="아이디">
+                <ul>
+                    <li th:each="err : ${#fields.errors('userId')}" th:text="${err}" class="error"></li>
+                </ul>
 
-<!-- 사이트 공통 푸터 -->
-<div th:replace="~{fragment/common.html::footer}"></div>
+                <div class="question">
+                    비밀번호를 입력해주세요
+                </div>
+                <input th:field="*{password}" type="text" name="password" placeholder="비밀번호">
+                <ul>
+                    <li th:each="err : ${#fields.errors('password')}" th:text="${err}" class="error"></li>
+                </ul>
 
-</body>
-</html>
+                <div class="question">
+                    닉네임을 입력해주세요.
+                </div>
+                <input th:field="*{nickname}" type="text" name="nickname" placeholder="닉네임">
+                <ul>
+                    <li th:each="err : ${#fields.errors('nickname')}" th:text="${err}" class="error"></li>
+                </ul>
+                <div class="submit">
+                    <input type="submit" value="회원가입">
+                </div>
+            </form>
+        </div>
+    </section>
+</div>

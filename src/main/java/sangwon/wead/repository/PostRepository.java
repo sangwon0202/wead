@@ -11,7 +11,6 @@ import sangwon.wead.repository.entity.Post;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
     Page<Post> findByTitleContains(Pageable pageable, String title);
-    Page<Post> findByUserId(Pageable pageable, String userId);
 
     @Query("select p from Post p join p.book b where b.title like %:bookTitle%")
     Page<Post> findByBookTitleContains(Pageable pageable, @Param("bookTitle") String bookTitle);

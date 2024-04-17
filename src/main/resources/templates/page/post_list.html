@@ -1,0 +1,40 @@
+<div th:replace="~{fragment/common.html::common(~{::section})}">
+  <section>
+    <div class="post_list">
+
+      <div th:replace="~{fragment/search_bar.html::search_bar(${sectionModel.searchBarModel})}"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th class="image">사진</th>
+            <th class="title">제목</th>
+            <th class="nickname">작성자</th>
+            <th class="upload_date">날짜</th>
+            <th class="views">조회수</th>
+          </tr>
+        </thead>
+
+        <tbody>
+        <tr th:each=" post : ${sectionModel.postList}">
+
+          <td class="image"><img th:src="${post.image}" alt="no image"></td>
+          <td class="title">
+            <a th:href="@{/posts/{postId}(postId=${post.postId})}">
+              <span th:text="${post.title}">게시글 제목</span>
+            </a>
+            <span style="color:red" th:text="|[${post.commentCount}]|">[0]</span>
+          </td>
+          <td class="user" th:text="${post.nickname}">사용자 이름</td>
+          <td class="date" th:text="${post.uploadDate}">2000년 2월 2일</td>
+          <td class="views" th:text="${post.views}">0</td>
+        </tr>
+        </tbody>
+
+      </table>
+
+      <div th:replace="~{fragment/page_bar.html::page_bar(${sectionModel.pageBarModel})}"></div>
+
+    </div>
+  </section>
+</div>

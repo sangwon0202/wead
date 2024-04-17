@@ -1,0 +1,11 @@
+<div class = "search_bar" th:fragment="search_bar(model)">
+  <form th:action="${model.url}" method="get">
+    <select th:if="${model.optionMap != null}" name="search">
+      <th:block th:each = "option : ${model.optionMap}">
+        <option th:value="${option.key}" th:text="${option.value}"></option>
+      </th:block>
+    </select>
+    <input type="text" name="query" placeholder="검색" th:value="${query}">
+    <input type="submit" value="검색">
+  </form>
+</div>

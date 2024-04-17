@@ -1,20 +1,62 @@
-<div>
+<th:block th:fragment="common(section)">
+  <!DOCTYPE html>
+  <html lang="en">
 
-  <header th:fragment="header">
-    <h1><a href="/">Wead - 독서 커뮤니티</a></h1>
-    <div class="box">
-      <div class="page-button">
-        <a th:href="@{/books}">책 검색</a>
-        <a th:href="@{/posts}">독후감</a>
-      </div>
+    <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title> wead - 독서 커뮤니티 </title>
+      <link th:href="@{/css/common.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/page_bar.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/search_bar.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/post_list.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/post_read.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/book_search.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/post_form.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/register.css}" rel="stylesheet" type="text/css" />
+      <link th:href="@{/css/user_info.css}" rel="stylesheet" type="text/css" />
+    </head>
 
-    </div>
-  </header>
+    <body>
+    <header>
+      <a th:href="@{/}">Wead - 독서 커뮤니티</a>
+    </header>
 
-  <footer th:fragment="footer">
-    made by 상원
-  </footer>
+    <nav>
+      <a th:href="@{/books}">책 검색</a>
+      <a th:href="@{/posts}">독후감</a>
+    </nav>
 
-</div>
+    <main>
+      <section th:replace="${section}"></section>
 
+      <aside>
+        <div class="box user">
+          <th:block th:if="${!commonModel.login}">
+            <form class ="login" th:action="@{/login}" method="post">
+              <input type="text" name = "userId" placeholder="아이디">
+              <input type="text" name = "password" placeholder="비밀번호">
+              <input type="submit" value="로그인">
+            </form>
+            <form class="register" th:action="@{/users/register}" method="get">
+              <input type="submit" value="회원가입">
+            </form>
+          </th:block>
+          <th:block th:if="${commonModel.login}">
+            <div class="welcome_sentence">
+              <span th:text="${commonModel.nickname}">상원</span>님, 환영합니다.
+            </div>
+            <form class="logout" action="/logout" method="post">
+              <input type="submit" value="로그아웃">
+            </form>
+          </th:block>
+        </div>
+      </aside>
+    </main>
 
+    <footer>
+      made by sangwon
+    </footer>
+    </body>
+  </html>
+</th:block>
