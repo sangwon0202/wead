@@ -6,15 +6,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import sangwon.wead.controller.model.builder.ModelBuilder;
-import sangwon.wead.page.BookInfoPageByQueryAdapter;
-import sangwon.wead.page.PageFactory;
 import sangwon.wead.resolover.annotation.Referer;
-import sangwon.wead.service.DTO.BookInfo;
-import sangwon.wead.service.book.search.BookSearchService;
 
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
+
+/*
 
 @Controller
 @RequiredArgsConstructor
@@ -46,3 +43,5 @@ public class BookController {
     }
 
 }
+
+ */

@@ -7,10 +7,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-import sangwon.wead.controller.model.CommonModel;
-import sangwon.wead.service.DTO.UserInfo;
 import sangwon.wead.service.UserService;
 
+/*
 
 @Component
 @RequiredArgsConstructor
@@ -43,3 +42,6 @@ public class CommonModelInjectInterceptor implements HandlerInterceptor {
         modelAndView.addObject("commonModel",commonModel);
     }
 }
+
+
+ */

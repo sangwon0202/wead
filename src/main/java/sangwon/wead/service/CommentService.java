@@ -2,18 +2,23 @@ package sangwon.wead.service;
 
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sangwon.wead.service.DTO.CommentUploadForm;
+import sangwon.wead.service.DTO.CommentRowDto;
+import sangwon.wead.service.DTO.CommentUploadDto;
 import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.entity.User;
-import sangwon.wead.service.DTO.CommentInfo;
 import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.PostRepository;
+import sangwon.wead.service.exception.NonAuthorException;
+import sangwon.wead.service.exception.NonExistentCommentException;
+import sangwon.wead.service.exception.NonExistentPostException;
+import sangwon.wead.service.exception.NonExistentUserException;
 
-import java.util.List;
 
 @Service
 @Transactional
@@ -24,33 +29,36 @@ public class CommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
 
-    public boolean checkCommentExistence(Long commentId) {
-        return commentRepository.existsById(commentId);
+    public Page<CommentRowDto> getCommentByPostId(Pageable pageable, Long postId) {
+        return commentRepository.findByPostIdFetchJoin(pageable,postId)
+                .map(CommentRowDto::new);
     }
 
-    public CommentInfo getCommentInfo(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).get();
-        return new CommentInfo(comment);
+    public void checkCommentPermission(Long commentId, String userId) {
+        if(!userRepository.existsById(userId))
+            throw new NonExistentUserException();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(NonExistentCommentException::new);
+        if(!comment.getUser().getUserId().equals(userId))
+            throw new NonAuthorException();
     }
 
-    public List<CommentInfo> getCommentInfoList(Long postId) {
-        Post post = postRepository.findById(postId).get();
-        return post.getComments().stream().map((CommentInfo::new)).toList();
-    }
-
-    public void uploadComment(CommentUploadForm commentUploadForm) {
-        User user = userRepository.findById(commentUploadForm.getUserId()).get();
-        Post post = postRepository.findById(commentUploadForm.getPostId()).get();
+    public void uploadComment(CommentUploadDto commentUploadDto) {
+        User user = userRepository.findById(commentUploadDto.getUserId())
+                .orElseThrow(NonExistentUserException::new);
+        Post post = postRepository.findById(commentUploadDto.getPostId())
+                .orElseThrow(NonExistentPostException::new);
         Comment comment = Comment.builder()
                 .user(user)
                 .post(post)
-                .content(commentUploadForm.getContent())
+                .content(commentUploadDto.getContent())
                 .build();
         commentRepository.save(comment);
     }
 
     public void deleteComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).get();
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(NonExistentCommentException::new);
         commentRepository.delete(comment);
     }
 

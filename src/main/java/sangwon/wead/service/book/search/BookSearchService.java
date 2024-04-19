@@ -1,12 +1,14 @@
 package sangwon.wead.service.book.search;
 
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import sangwon.wead.service.DTO.BookInfo;
+import sangwon.wead.service.DTO.BookDto;
+import sangwon.wead.service.DTO.BookRowDto;
 
 public interface BookSearchService {
 
-    boolean checkBookExistence(String isbn);
-    BookInfo getBookInfo(String isbn);
-    Page<BookInfo> getBookInfoPageByQuery(Pageable pageable, String query);
+    BookDto getBook(String isbn);
+    Page<BookRowDto> getBookByQuery(Pageable pageable, String query);
 }
+

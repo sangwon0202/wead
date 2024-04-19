@@ -20,7 +20,7 @@ CREATE TABLE book
 (
     `isbn`     VARCHAR(13)     NOT NULL    COMMENT 'isbn',
     `title`    VARCHAR(100)    NOT NULL    COMMENT '제목',
-    `image`    VARCHAR(100)    NULL        COMMENT '이미지',
+    `image`    VARCHAR(100)    NOT NULL    COMMENT '이미지',
     `author`   VARCHAR(100)    NULL        COMMENT '작가',
     `pubdate`  DATE            NULL        COMMENT '출판일',
     PRIMARY KEY (isbn)

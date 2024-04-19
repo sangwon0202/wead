@@ -1,10 +1,10 @@
 package sangwon.wead.controller.param;
 
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import sangwon.wead.service.DTO.UserRegisterForm;
+import sangwon.wead.service.DTO.UserRegisterDto;
+
 
 @Data
 public class UserRegisterParam {
@@ -19,8 +19,8 @@ public class UserRegisterParam {
             message = "2자 이상 10자 이하여야합니다.")
     private String nickname;
 
-    public UserRegisterForm toUserRegisterForm() {
-        return UserRegisterForm.builder()
+    public UserRegisterDto toUserRegisterForm() {
+        return UserRegisterDto.builder()
                 .userId(userId)
                 .password(password)
                 .nickname(nickname)

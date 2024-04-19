@@ -2,8 +2,8 @@ package sangwon.wead.repository.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Formula;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -15,34 +15,32 @@ import java.util.List;
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "post_id")
-    private Long id;
-    @ManyToOne()
-    @JoinColumn(name = "user_id")
+    private Long postId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="user_id")
     private User user;
-    @Column(name="title")
-    private String title;
-    @Column(name="content", columnDefinition = "TEXT")
-    private String content;
-    @Column(name="upload_date")
-    private LocalDate uploadDate;
-    @Column(name="views")
-    private int views;
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="isbn")
     private Book book;
-    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    @BatchSize(size = 10)
+    @OneToMany(mappedBy = "post", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+    private String title;
+    private String content;
+    private LocalDate uploadDate;
+    private int views;
+    @Formula("(select count(*) from comment c where c.comment_id = post_Id)")
+    private int commentCount;
 
     @Builder
-    public Post(User user, String title, String content, Book book) {
+    public Post(User user, Book book, String title, String content) {
         this.user = user;
+        this.book = book;
+        this.comments = new ArrayList<>();
         this.title = title;
         this.content = content;
-        this.book = book;
         this.uploadDate = LocalDate.now();
         this.views = 0;
-        this.comments = new ArrayList<>();
     }
 
     public void update(String title, String content) {

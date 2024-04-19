@@ -14,7 +14,7 @@ import sangwon.wead.service.UserService;
 
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
-
+/*
 @Controller
 @RequiredArgsConstructor
 public class UserController {
@@ -71,3 +71,5 @@ public class UserController {
         return redirectAlertPage("회원가입에 성공하였습니다.", "/", model);
     }
 }
+
+ */

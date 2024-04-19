@@ -9,20 +9,17 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import sangwon.wead.controller.model.builder.ModelBuilder;
 import sangwon.wead.controller.param.PostFormParam;
-import sangwon.wead.page.*;
 import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.resolover.annotation.UserId;
-import sangwon.wead.service.DTO.*;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
 import sangwon.wead.service.book.BookService;
-import sangwon.wead.service.book.search.BookSearchService;
 
-import java.util.List;
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
+
+/*
 
 
 @Controller
@@ -162,3 +159,6 @@ public class PostController {
 
 
 }
+
+
+ */

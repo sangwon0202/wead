@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.resolover.annotation.UserId;
-import sangwon.wead.service.DTO.CommentUploadForm;
 import sangwon.wead.service.CommentService;
-import sangwon.wead.util.AlertPageRedirector;
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 
+/*
 @Controller
 @RequiredArgsConstructor
 public class CommentController {
@@ -49,3 +48,4 @@ public class CommentController {
     }
 
 }
+*/

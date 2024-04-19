@@ -8,14 +8,30 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sangwon.wead.repository.entity.Post;
 
+import java.util.List;
+import java.util.Optional;
+
 
 public interface PostRepository extends JpaRepository<Post, Long> {
-    Page<Post> findByTitleContains(Pageable pageable, String title);
 
-    @Query("select p from Post p join p.book b where b.title like %:bookTitle%")
-    Page<Post> findByBookTitleContains(Pageable pageable, @Param("bookTitle") String bookTitle);
 
-    @Query("select p from Post p join p.user u where u.nickname like %:nickname%")
-    Page<Post> findByNicknameContains(Pageable pageable, @Param("nickname") String nickname);
+    @Query("select p from Post p join fetch p.user join fetch p.book")
+    Page<Post> findAllFetchJoin(Pageable pageable);
+
+    @Query("select p from Post p join fetch p.user u join fetch p.book " +
+            "where u.userId like %:userId%")
+    Page<Post> findByUserIdFetchJoin(Pageable pageable, @Param("userId") String userId);
+
+    @Query("select p from Post p join fetch p.user join fetch p.book " +
+            "where p.title like %:title%")
+    Page<Post> findByTitleContainsFetchJoin(Pageable pageable, @Param("title") String title);
+
+    @Query("select p from Post p join fetch p.user join fetch p.book b " +
+            "where b.title like %:bookTitle%")
+    Page<Post> findByBookTitleContainsFetchJoin(Pageable pageable, @Param("bookTitle") String bookTitle);
+
+    @Query("select p from Post p join fetch p.user u join fetch p.book " +
+            "where u.nickname like %:nickname%")
+    Page<Post> findByNicknameContainsFetchJoin(Pageable pageable, @Param("nickname") String nickname);
 
 }
