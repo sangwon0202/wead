@@ -34,6 +34,8 @@ public class ApiBookSearchService implements BookSearchService {
 
     @Override
     public Page<BookRowDto> getBookByQuery(Pageable pageable, String query) {
+        if(query == null || query.isBlank()) return new PageImpl<>(new ArrayList<>(), pageable, 0);
+
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
         if(pageSize > 100) throw new IllegalArgumentException("페이지의 크기는 100 이하여야합니다.");

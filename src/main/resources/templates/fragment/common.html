@@ -32,7 +32,7 @@
 
       <aside>
         <div class="box user">
-          <th:block th:if="${!commonModel.login}">
+          <th:block th:if="${!loginStatus}">
             <form class ="login" th:action="@{/login}" method="post">
               <input type="text" name = "userId" placeholder="아이디">
               <input type="text" name = "password" placeholder="비밀번호">
@@ -42,9 +42,9 @@
               <input type="submit" value="회원가입">
             </form>
           </th:block>
-          <th:block th:if="${commonModel.login}">
+          <th:block th:if="${loginStatus}">
             <div class="welcome_sentence">
-              <span th:text="${commonModel.nickname}">상원</span>님, 환영합니다.
+              <span th:text="${userBox.nickname}">상원</span>님, 환영합니다.
             </div>
             <form class="logout" action="/logout" method="post">
               <input type="submit" value="로그아웃">

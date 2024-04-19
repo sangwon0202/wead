@@ -3,6 +3,7 @@ package sangwon.wead.service;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sangwon.wead.service.DTO.ListDto;
 import sangwon.wead.service.DTO.PageBarDto;
@@ -35,18 +36,21 @@ public class ListService {
             return this;
         }
 
-        public ListDto<T> build(int pageNumber, int pageSize) {
-            Page<T> page = getPage(pageNumber, pageSize);
+        public ListDto<T> build(Pageable pageable) {
+            Page<T> page = getPage(pageable);
             PageBarDto pageBar = getPageBar(page.getNumber()+1, page.getTotalPages());
             return new ListDto<>(page.getContent(), pageBar);
         }
 
-        private Page<T> getPage(int pageNumber, int pageSize) {
+        private Page<T> getPage(Pageable pageable) {
+            int pageNumber = pageable.getPageNumber();
+            int pageSize = pageable.getPageSize();
+            Sort sort = pageable.getSort();
             if(pageNumber < 1) pageNumber = 1;
-            Page<T> page = pageFactory.getPage(PageRequest.of(pageNumber-1, pageSize));
+            Page<T> page = pageFactory.getPage(PageRequest.of(pageNumber-1, pageSize, sort));
             int totalPages = page.getTotalPages();
             if(totalPages == 0) totalPages = 1;
-            if(pageNumber > totalPages) return pageFactory.getPage(PageRequest.of(totalPages-1,pageSize));
+            if(pageNumber > totalPages) return pageFactory.getPage(PageRequest.of(totalPages-1,pageSize, sort));
             return page;
         }
 

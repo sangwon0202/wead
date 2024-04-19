@@ -14,4 +14,9 @@ public class User {
     private String userId;
     private String password;
     private String nickname;
+
+    public void changePassword(String password) {
+        this.password = password;
+    }
+
 }

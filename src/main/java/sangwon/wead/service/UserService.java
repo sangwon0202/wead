@@ -44,4 +44,16 @@ public class UserService {
         userRepository.save(user);
     }
 
+    public void changePassword(String userId, String password) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(NonExistentUserException::new);
+        user.changePassword(password);
+    }
+
+    public void withDraw(String userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(NonExistentUserException::new);
+        userRepository.delete(user);
+    }
+
 }

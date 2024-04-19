@@ -3,18 +3,17 @@ package sangwon.wead.interceptor;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
+import sangwon.wead.service.DTO.UserDto;
 import sangwon.wead.service.UserService;
 
-/*
+
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
-public class CommonModelInjectInterceptor implements HandlerInterceptor {
+public class CommonModelInterceptor implements HandlerInterceptor {
 
     private final UserService userService;
 
@@ -25,23 +24,9 @@ public class CommonModelInjectInterceptor implements HandlerInterceptor {
         if(viewName == null || viewName.equals("error") || viewName.contains("redirect:/")) return;
 
         String userId = (String)request.getSession().getAttribute("userId");
-        CommonModel commonModel;
-        if(userId != null) {
-            UserInfo userInfo = userService.getUserInfo(userId);
-            commonModel = CommonModel.builder()
-                    .login(true)
-                    .userId(userId)
-                    .nickname(userInfo.getNickname())
-                    .build();
-        }
-        else {
-            commonModel = CommonModel.builder()
-                    .login(false)
-                    .build();
-        }
-        modelAndView.addObject("commonModel",commonModel);
+        modelAndView.addObject("loginStatus", userId != null);
+        if(userId != null) modelAndView.addObject("userBox", userService.getUser(userId));
     }
+
 }
 
-
- */

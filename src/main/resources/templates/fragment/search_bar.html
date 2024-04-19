@@ -1,11 +1,18 @@
-<div class = "search_bar" th:fragment="search_bar(model)">
-  <form th:action="${model.url}" method="get">
-    <select th:if="${model.optionMap != null}" name="search">
-      <th:block th:each = "option : ${model.optionMap}">
-        <option th:value="${option.key}" th:text="${option.value}"></option>
-      </th:block>
+<div class = "search_bar" th:fragment="search_bar(type)">
+
+  <form th:if="${type == 'post'}" th:action="@{/posts}" method="get">
+    <select name="search">
+      <option value="title">제목</option>
+      <option value="book-title">책 제목</option>
+      <option value="nickname">닉네임</option>
     </select>
-    <input type="text" name="query" placeholder="검색" th:value="${query}">
+    <input type="text" name="query" placeholder="검색">
     <input type="submit" value="검색">
   </form>
+
+  <form th:if="${type == 'book'}" th:action="@{/books}" method="get">
+    <input type="text" name="query" placeholder="검색">
+    <input type="submit" value="검색">
+  </form>
+
 </div>

@@ -1,15 +1,14 @@
 spring:
+  profiles:
+    include: private
   jpa:
     show-sql: true
+    open-in-view: false
     properties:
       hibernate:
         format_sql: true
         highlight_sql: true
 
 
-    open-in-view: false
-
-  profiles:
-    include: private
 
 

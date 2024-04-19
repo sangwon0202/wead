@@ -3,6 +3,7 @@ package sangwon.wead.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,14 +13,18 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import sangwon.wead.controller.param.PostFormParam;
 import sangwon.wead.resolover.annotation.Referer;
 import sangwon.wead.resolover.annotation.UserId;
+import sangwon.wead.service.DTO.ListDto;
+import sangwon.wead.service.DTO.PostRowDto;
+import sangwon.wead.service.ListService;
 import sangwon.wead.service.PostService;
 import sangwon.wead.service.CommentService;
 import sangwon.wead.service.book.BookService;
+import sangwon.wead.service.book.search.BookSearchService;
 
 
 import static sangwon.wead.util.AlertPageRedirector.redirectAlertPage;
 
-/*
+
 
 
 @Controller
@@ -30,47 +35,43 @@ public class PostController {
     private final CommentService commentService;
     private final BookService bookService;
     private final BookSearchService bookSearchService;
+    private final ListService listService;
 
-    private final ModelBuilder modelBuilder;
 
 
     @GetMapping( "/posts")
     public String list(@RequestParam(value = "page", required = false, defaultValue = "1") int pageNumber,
-                           @RequestParam(value = "query", required = false) String query,
-                           @RequestParam(value = "search", required = false) String search,
+                           @RequestParam(value = "query", required = false, defaultValue = "") String query,
+                           @RequestParam(value = "search", required = false, defaultValue = "") String search,
                            @Referer String referer,
                            Model model) {
 
-        PageAdapter pageAdapter = null;
-        if(search != null) {
-            if(search.equals("nickname")) pageAdapter = new PostInfoPageByNicknameAdapter(postService);
-            if(search.equals("title")) pageAdapter = new PostInfoPageByTitleAdapter(postService);
-            if(search.equals("book")) pageAdapter = new PostInfoPageByBookTitleAdapter(postService);
+        if(query.length() > 50) return redirectAlertPage("검색어는 최대 50자입니다.", referer, model);
+
+        final String finalQuery = query;
+        ListService.PageFactory<PostRowDto> pageFactory = postService::getPostALL;
+        switch (search) {
+            case "title" -> pageFactory = pageable -> postService.getPostByTitle(pageable, finalQuery);
+            case "book-title" -> pageFactory = pageable -> postService.getPostByBookTitle(pageable, finalQuery);
+            case "nickname" -> pageFactory = pageable -> postService.getPostByNickname(pageable, finalQuery);
+            default -> {
+                query = "";
+                search = "";
+            }
         }
 
-        if(pageAdapter != null) {
-            if(query == null || query.isBlank()) return redirectAlertPage("검색어를 입력해주세요.", referer, model);
-            if(query.length() > 50) return redirectAlertPage("검색어는 최대 50자입니다.", referer, model);
-        }
+        ListDto<PostRowDto> listDto = listService.builder(pageFactory)
+                .setUrl("/posts")
+                .setQuery("search", search)
+                .setQuery("query", query)
+                .build(PageRequest.of(pageNumber, 10, Sort.by("postId").descending()));
 
-        if(pageAdapter == null) {
-            search = null;
-            query = null;
-            pageAdapter = new PostInfoPageAdapter(postService);
-        }
-
-        Page<PostInfo> page = PageFactory.builder()
-                .pageAdapter(pageAdapter)
-                .pageNumber(pageNumber)
-                .pageSize(10)
-                .sort(Sort.by("id").descending())
-                .query(query)
-                .build().getPage(PostInfo.class);
-
-        model.addAttribute("sectionModel",modelBuilder.buildPostListModel(page, search, query));
+        model.addAttribute("list", listDto.getList());
+        model.addAttribute("pageBar",listDto.getPageBar());
         return "page/post_list";
     }
 
+    /*
 
     @GetMapping("/posts/{postId}")
     public String read(@UserId(required = false) String userId,
@@ -157,8 +158,8 @@ public class PostController {
         return "redirect:/posts";
     }
 
+     */
 
 }
 
 
- */
