@@ -1,4 +1,4 @@
-package sangwon.wead.controller.param;
+package sangwon.wead.controller.DTO;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;

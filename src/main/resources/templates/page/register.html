@@ -18,7 +18,7 @@
                 <div class="question">
                     비밀번호를 입력해주세요
                 </div>
-                <input th:field="*{password}" type="text" name="password" placeholder="비밀번호">
+                <input th:field="*{password}" type="password" name="password" placeholder="비밀번호">
                 <ul>
                     <li th:each="err : ${#fields.errors('password')}" th:text="${err}" class="error"></li>
                 </ul>

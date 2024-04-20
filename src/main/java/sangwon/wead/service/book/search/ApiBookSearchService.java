@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import sangwon.wead.API.BookClient;
 import sangwon.wead.service.DTO.BookDto;
 import sangwon.wead.service.DTO.BookRowDto;
-import sangwon.wead.service.exception.NonExistentBookException;
+import sangwon.wead.exception.BookSearchFailException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +29,7 @@ public class ApiBookSearchService implements BookSearchService {
                 .filter(item -> item.getIsbn().equals(isbn))
                 .map(BookDto::new)
                 .findAny()
-                .orElseThrow(NonExistentBookException::new);
+                .orElseThrow(BookSearchFailException::new);
     }
 
     @Override

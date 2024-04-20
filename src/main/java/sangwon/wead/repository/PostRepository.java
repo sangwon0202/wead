@@ -8,9 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import sangwon.wead.repository.entity.Post;
 
-import java.util.List;
-import java.util.Optional;
-
 
 public interface PostRepository extends JpaRepository<Post, Long> {
 
@@ -33,5 +30,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     @Query("select p from Post p join fetch p.user u join fetch p.book " +
             "where u.nickname like %:nickname%")
     Page<Post> findByNicknameContainsFetchJoin(Pageable pageable, @Param("nickname") String nickname);
+
+    int countByUserUserId(String userId);
 
 }

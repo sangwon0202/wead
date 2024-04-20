@@ -8,14 +8,9 @@ body {
     align-items: center;
 }
 
-header {
-    margin: 20px;
-}
-
-header > a {
-    font-size: 50px;
-    color: black;
-    font-weight: bold;
+header > a > img {
+    width: 300px;
+    margin: 10px;
 }
 
 nav {
@@ -88,6 +83,10 @@ aside > .box.user > form.login > input[type=text] {
     height: 40px;
 }
 
+aside > .box.user > form.login > input[type=password] {
+    height: 40px;
+}
+
 aside > .box.user > form > input[type=submit] {
     height: 30px;
     font-weight: bold;
@@ -102,7 +101,7 @@ aside > .box.user > form.register > input[type=submit] {
     background-color: white;
 }
 
-aside > .box.user > form.user_info > input[type=submit] {
+aside > .box.user > form.my_page > input[type=submit] {
     color: white;
     background-color: green;
 }
@@ -111,6 +110,23 @@ aside > .box.user > form.logout > input[type=submit] {
     color: red;
     background-color: white;
 }
+
+aside > .box.most_view {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+aside > .box.most_view > .banner {
+    color: green;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+aside > .box.most_view > a > .title {
+    color: black;
+}
+
 
 footer {
     width: 1250px;

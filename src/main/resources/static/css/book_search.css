@@ -1,55 +1,55 @@
 
-.book_search {
+section > .book_search {
     display: flex;
     flex-direction: column;
 }
 
 
-.book_search > table {
+section > .book_search > table {
     width: 100%;
     border-collapse : collapse;
 }
 
-.book_search > table  tr > * {
+section > .book_search > table  tr > * {
     padding: 10px;
     text-align: center;
 }
 
-.book_search > table tr > .image {
+section > .book_search > table tr > .image {
     width: 10%;
 }
 
-.book_search > table tr > .title {
+section > .book_search > table tr > .title {
     width: 35%;
 }
 
-.book_search > table tr > .author {
+section > .book_search > table tr > .author {
     width: 20%;
 }
 
-.book_search > table tr > .pubdate {
+section > .book_search > table tr > .pubdate {
     width: 20%;
 }
 
-.book_search > table tr > .upload-button {
+section > .book_search > table tr > .upload-button {
     width: 15%;
 }
 
-.book_search > table > tbody > tr > .image > img {
+section > .book_search > table > tbody > tr > .image > img {
     width: 70%;
 }
 
-.book_search > table > tbody > tr .title {
+section > .book_search > table > tbody > tr .title {
     text-align: left;
 }
 
-.book_search > table > thead > tr > th {
+section > .book_search > table > thead > tr > th {
     height: 50px;
     border-bottom: 1px solid green;
     border-top: 3px solid green;
 }
 
-.book_search > table > tbody > tr > td {
+section > .book_search > table > tbody > tr > td {
     height: 30px;
     border-bottom: 1px solid grey;
 }

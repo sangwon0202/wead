@@ -12,6 +12,7 @@ public class PostDto {
     String content;
     LocalDate uploadDate;
     int views;
+    String isbn;
 
     public PostDto(Post post) {
         this.postId = post.getPostId();
@@ -20,5 +21,6 @@ public class PostDto {
         this.content = post.getContent();
         this.uploadDate = post.getUploadDate();
         this.views = post.getViews();
+        this.isbn = post.getBook().getIsbn();
     }
 }

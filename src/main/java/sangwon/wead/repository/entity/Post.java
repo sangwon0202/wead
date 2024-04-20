@@ -29,7 +29,7 @@ public class Post {
     private String content;
     private LocalDate uploadDate;
     private int views;
-    @Formula("(select count(*) from comment c where c.comment_id = post_Id)")
+    @Formula("(select count(*) from comment c where c.post_id = post_Id)")
     private int commentCount;
 
     @Builder

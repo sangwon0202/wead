@@ -5,9 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sangwon.wead.repository.BookRepository;
-import sangwon.wead.repository.entity.Book;
 import sangwon.wead.service.DTO.BookDto;
-import sangwon.wead.service.exception.NonExistentBookException;
+import sangwon.wead.exception.NonExistentBookException;
 
 @Service
 @Transactional

@@ -1,0 +1,59 @@
+<div th:replace="~{fragment/common.html::common(~{::section})}">
+    <section>
+        <div class="my_page">
+
+            <div class="tag">내 정보</div>
+
+            <div class = "box">
+                <div class="nickname_userId">
+                    <sapn th:text="${user.nickname}">닉네임</sapn>(<sapn th:text="${user.userId}">userId</sapn>)
+                </div>
+                <div class="registerDate">가입 날짜: <span th:text="${user.registerDate}">2019년 2월 2일</span></div>
+                <div class="postCount">작성한 게시글 수: <span th:text="${user.postCount}">3</span>개</div>
+                <div class="commentCount">작성한 댓글 수: <span th:text="${user.commentCount}">5</span>개</div>
+            </div>
+
+            <div class = "box">
+                <form class="password_change" th:action="@{/users/{userId}/change-password(userId = ${user.userId})}" method="post">
+                    <div>비밀번호 변경하기</div>
+                    <input type="password" name="password" placeholder="변경할 비밀번호">
+                    <input type="submit" value="변경">
+                </form>
+            </div>
+
+            <div class="tag">내가 작성한 글</div>
+
+            <table>
+                <thead>
+                <tr>
+                    <th class="image">사진</th>
+                    <th class="title">제목</th>
+                    <th class="nickname">작성자</th>
+                    <th class="upload_date">날짜</th>
+                    <th class="views">조회수</th>
+                </tr>
+                </thead>
+
+                <tbody>
+                <tr th:each=" post : ${list}">
+
+                    <td class="image"><img th:src="${post.image}" alt="no image"></td>
+                    <td class="title">
+                        <a th:href="@{/posts/{postId}(postId=${post.postId})}">
+                            <span th:text="${post.title}">게시글 제목</span>
+                        </a>
+                        <span style="color:red" th:text="|[${post.commentCount}]|">[0]</span>
+                    </td>
+                    <td class="user" th:text="${post.nickname}">사용자 이름</td>
+                    <td class="date" th:text="${post.uploadDate}">2000년 2월 2일</td>
+                    <td class="views" th:text="${post.views}">0</td>
+                </tr>
+                </tbody>
+
+            </table>
+
+            <div th:replace="~{fragment/page_bar.html::page_bar(${pageBar})}"></div>
+
+        </div>
+    </section>
+</div>

@@ -3,7 +3,9 @@ package sangwon.wead.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import sangwon.wead.repository.BookRepository;
@@ -13,10 +15,12 @@ import sangwon.wead.repository.UserRepository;
 import sangwon.wead.repository.entity.Post;
 import sangwon.wead.repository.PostRepository;
 import sangwon.wead.repository.entity.User;
-import sangwon.wead.service.exception.NonAuthorException;
-import sangwon.wead.service.exception.NonExistentBookException;
-import sangwon.wead.service.exception.NonExistentPostException;
-import sangwon.wead.service.exception.NonExistentUserException;
+import sangwon.wead.exception.NoPermissionException;
+import sangwon.wead.exception.NonExistentBookException;
+import sangwon.wead.exception.NonExistentPostException;
+import sangwon.wead.exception.NonExistentUserException;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -52,6 +56,13 @@ public class PostService {
                 .map(post -> new PostRowDto(post, post.getCommentCount()));
     }
 
+    public List<PostSimpleRowDto> getPostMostView() {
+        return postRepository.findAll(PageRequest.of(0, 3, Sort.by("views").descending()))
+                .map(PostSimpleRowDto::new)
+                .getContent();
+
+    }
+
     public PostDto getPost(Long postId) {
         return postRepository.findById(postId)
                 .map(PostDto::new)
@@ -85,7 +96,7 @@ public class PostService {
         Post post = postRepository.findById(postId)
                 .orElseThrow(NonExistentPostException::new);
         if(!post.getUser().getUserId().equals(userId))
-            throw new NonAuthorException();
+            throw new NoPermissionException();
     }
 
     public void updatePost(PostUpdateDto postUpdateDto) {

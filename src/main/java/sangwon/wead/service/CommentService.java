@@ -14,10 +14,10 @@ import sangwon.wead.repository.entity.User;
 import sangwon.wead.repository.entity.Comment;
 import sangwon.wead.repository.CommentRepository;
 import sangwon.wead.repository.PostRepository;
-import sangwon.wead.service.exception.NonAuthorException;
-import sangwon.wead.service.exception.NonExistentCommentException;
-import sangwon.wead.service.exception.NonExistentPostException;
-import sangwon.wead.service.exception.NonExistentUserException;
+import sangwon.wead.exception.NoPermissionException;
+import sangwon.wead.exception.NonExistentCommentException;
+import sangwon.wead.exception.NonExistentPostException;
+import sangwon.wead.exception.NonExistentUserException;
 
 
 @Service
@@ -40,7 +40,7 @@ public class CommentService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(NonExistentCommentException::new);
         if(!comment.getUser().getUserId().equals(userId))
-            throw new NonAuthorException();
+            throw new NoPermissionException();
     }
 
     public void uploadComment(CommentUploadDto commentUploadDto) {

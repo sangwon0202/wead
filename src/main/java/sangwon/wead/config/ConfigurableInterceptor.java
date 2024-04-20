@@ -1,4 +1,4 @@
-package sangwon.wead.interceptor;
+package sangwon.wead.config;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;

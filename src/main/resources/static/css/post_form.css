@@ -1,21 +1,21 @@
-.post_form {
+section > .post_form {
     border: 1px solid grey;
     display: flex;
     flex-direction: column;
 }
 
-.post_form  > .book {
+section > .post_form  > .book {
     display: flex;
     flex-direction: row;
     align-items: center;
     border: 1px gray solid;
 }
 
-.post_form  > .book > img {
+section > .post_form  > .book > img {
     width: 10%;
 }
 
-.post_form  > .book > .info {
+section > .post_form  > .book > .info {
     display: flex;
     flex-direction: column;
     width: 90%;
@@ -23,24 +23,24 @@
     gap: 10px;
 }
 
-.post_form  > .book > .title {
+section > .post_form  > .book > .title {
     font-size: 20px;
     font-weight: bold;
 }
 
 
-.post_form > form {
+section > .post_form > form {
     display: flex;
     flex-direction: column;
 }
 
-.post_form > form > input[type="text"] {
+section > .post_form > form > input[type="text"] {
     width: 100%;
     height: 50px;
     font-size: 30px;
 }
 
-.post_form > form > input[type="submit"] {
+section > .post_form > form > input[type="submit"] {
     height: 40px;
     font-size: 20px;
     background-color: green;

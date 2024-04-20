@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sangwon.wead.service.DTO.BookDto;
 import sangwon.wead.service.DTO.BookRowDto;
-import sangwon.wead.service.exception.NonExistentBookException;
+import sangwon.wead.exception.BookSearchFailException;
 
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class MockBookSearchService implements BookSearchService {
 
     @Override
     public BookDto getBook(String isbn) {
-        throw new NonExistentBookException();
+        throw new BookSearchFailException();
     }
 
     @Override

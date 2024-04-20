@@ -1,4 +1,4 @@
-package sangwon.wead.service.exception;
+package sangwon.wead.exception;
 
 public class NonExistentPostException extends RuntimeException {
 }

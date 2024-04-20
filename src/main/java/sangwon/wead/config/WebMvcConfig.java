@@ -7,7 +7,6 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import sangwon.wead.interceptor.ConfigurableInterceptor;
 import sangwon.wead.resolover.RefererResolver;
 import sangwon.wead.resolover.UserIdResolver;
 

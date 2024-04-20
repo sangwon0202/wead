@@ -13,6 +13,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     @Query("select c from Comment c join fetch c.user " +
             "where c.post.postId = :postId")
     Page<Comment> findByPostIdFetchJoin(Pageable pageable, @Param("postId") Long postId);
+    int countByUserUserId(String userId);
 
 }
 

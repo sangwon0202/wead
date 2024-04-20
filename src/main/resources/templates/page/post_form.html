@@ -3,26 +3,26 @@
     <div class="post_form">
 
       <div class="book">
-        <img th:src="${sectionModel.book.image}" alt="no image">
+        <img th:src="${book.image}" alt="no image">
         <div class="info">
-          <div class="title" th:text="${sectionModel.book.title}">책 제목</div>
-          <div class="author" th:text="${sectionModel.book.author}">작가</div>
+          <div class="title" th:text="${book.title}">책 제목</div>
+          <div class="author" th:text="${book.author}">작가</div>
         </div>
       </div>
 
-      <form th:if="${!sectionModel.update}" th:action="@{/books/{isbn}/posts/upload(isbn=${sectionModel.book.isbn})}" method="post">
-        <input type="text" name="title" placeholder="제목" th:value="${sectionModel.title}">
-        <textarea name="content" cols="100" rows="30" th:text="${sectionModel.content}"></textarea>
+      <form th:if="${type == 'upload'}" th:action="@{/books/{isbn}/posts/upload(isbn=${book.isbn})}" method="post">
+        <input type="text" name="title" placeholder="제목" th:value="${title == null ? '' : title}">
+        <textarea name="content" cols="100" rows="30" th:text="${content == null ? '' : content}"></textarea>
         <input type="submit" value="등록">
       </form>
 
-      <form th:if="${sectionModel.update}" th:action="@{/posts/{postId}/update(postId=${sectionModel.postId})}" method="post">
-        <input type="text" name="title" placeholder="제목" th:value="${sectionModel.title}">
-        <textarea name="content" cols="100" rows="30" th:text="${sectionModel.content}"></textarea>
+      <form th:if="${type == 'update'}" th:action="@{/posts/{postId}/update(postId=${postId})}" method="post">
+        <input type="text" name="title" placeholder="제목" th:value="${title == null ? '' : title}">
+        <textarea name="content" cols="100" rows="30" th:text="${content == null ? '' : content}"></textarea>
         <input type="submit" value="등록">
       </form>
 
-      <script type="text/javascript" th:if="${sectionModel.alert}">
+      <script type="text/javascript" th:if="${alert != null && alert}">
         alert("제목과 내용을 모두 기입해주세요.");
       </script>
 

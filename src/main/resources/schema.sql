@@ -4,9 +4,10 @@
 -- 테이블 생성 SQL - user
 CREATE TABLE user
 (
-    `user_id`   VARCHAR(20)    NOT NULL    COMMENT '사용자 아이디',
-    `password`  VARCHAR(20)    NOT NULL    COMMENT '비밀번호',
-    `nickname`  VARCHAR(10)    NOT NULL    COMMENT '별명',
+    `user_id`        VARCHAR(20)    NOT NULL    COMMENT '사용자 아이디',
+    `password`       VARCHAR(20)    NOT NULL    COMMENT '비밀번호',
+    `nickname`       VARCHAR(10)    NOT NULL    COMMENT '별명',
+    `register_date`  DATE           NOT NULL    COMMENT '가입날짜',
     PRIMARY KEY (user_id)
 );
 

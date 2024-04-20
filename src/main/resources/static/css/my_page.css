@@ -1,0 +1,95 @@
+section > .my_page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+section > .my_page > .tag {
+    font-size: 30px;
+    color: green;
+    font-weight: bold;
+}
+
+section > .my_page > .box {
+    display: flex;
+    flex-direction: column;
+    border: gray 1px solid;
+    padding: 20px;
+    gap: 10px;
+}
+
+section > .my_page > .box > .nickname_userId {
+    font-weight: bold;
+    font-size: 20px;
+}
+
+section > .my_page > .box > .withdraw {
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+section > .my_page > .box > .withdraw > input {
+    color: red;
+}
+
+
+
+section > .my_page > .post_title {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+section > .my_page > table {
+    width: 100%;
+    border-collapse : collapse;
+}
+
+section > .my_page > table tr > * {
+    padding: 10px;
+    text-align: center;
+}
+
+section > .my_page > table tr > .image {
+    width: 10%;
+}
+
+section > .my_page > table tr > .title {
+    width: 35%;
+}
+
+section > .my_page > table tr > .nickname {
+    width: 20%;
+}
+
+section > .my_page > table tr > .upload_date {
+    width: 20%;
+}
+
+section > .my_page > table tr > .views {
+    width: 15%;
+}
+
+section > .my_page > table > tbody > tr > .image > img {
+    width: 70%;
+}
+
+section > .my_page > table > tbody > tr > .title {
+    text-align: left;
+}
+
+section > .my_page > table > tbody > tr > .title > a {
+    color: black;
+}
+
+section > .my_page > table > thead > tr > th {
+    height: 50px;
+    border-bottom: 1px solid green;
+    border-top: 3px solid green;
+}
+
+section > .my_page > table > tbody > tr > td {
+    height: 30px;
+    border-bottom: 1px solid grey;
+}
+

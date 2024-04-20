@@ -7,7 +7,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import sangwon.wead.service.DTO.ListDto;
 import sangwon.wead.service.DTO.PageBarDto;
-import sangwon.wead.service.exception.IllegalPageBarException;
+import sangwon.wead.exception.IllegalPageBarException;
 
 import java.util.HashMap;
 import java.util.Map;

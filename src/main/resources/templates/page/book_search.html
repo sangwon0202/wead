@@ -23,8 +23,8 @@
                         <td class="pubdate" th:text="${book.pubdate}">yyyy년 MM월 dd일</td>
                         <td class="upload-button">
                             <form th:action="@{/books/{isbn}/posts/upload(isbn=${book.isbn})}" method="get">
-                                <input th:if="${loginStatus}" type="submit" value="독서록 작성">
-                                <input th:if="${!loginStatus}" type="submit" value="독서록 작성" disabled>
+                                <input th:if="${loginStatus != null}" type="submit" value="독서록 작성">
+                                <input th:if="${loginStatus == null}" type="submit" value="독서록 작성" disabled>
                             </form>
                         </td>
                     </tr>
