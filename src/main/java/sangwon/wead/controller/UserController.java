@@ -109,7 +109,7 @@ public class UserController {
                          Model model) {
         if(!loginUserId.equals(userId)) throw new NoPermissionException();
         if(bindingResult.hasErrors())
-            return redirectAlertPage( "영문자와 숫자를 포함하고 5자 이상 15자 이하여야합니다.", referer, model);
+            return redirectAlertPage( "영문자와 숫자를 포함하고 5자 이상 10자 이하여야합니다.", referer, model);
 
         userService.changePassword(userId, UserPasswordParam.getPassword());
         return redirectAlertPage("비밀번호가 변경되었습니다.", referer, model);
