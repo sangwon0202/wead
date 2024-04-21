@@ -2,6 +2,7 @@ package sangwon.wead.service.DTO;
 
 import lombok.Value;
 import sangwon.wead.API.BookResponse;
+import sangwon.wead.redis.BookCache;
 import sangwon.wead.repository.entity.Book;
 
 import java.time.LocalDate;
@@ -40,6 +41,14 @@ public class BookDto {
         this.image = item.getImage();
         this.author = item.getAuthor().isBlank() ? null : Arrays.stream(item.getAuthor().split("\\^")).toList().get(0);
         this.pubdate = item.getPubdate().isBlank() ? null : LocalDate.parse(item.getPubdate(), DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
+
+    public BookDto(BookCache bookCache) {
+        this.isbn = bookCache.getIsbn();
+        this.title = bookCache.getTitle();
+        this.image = bookCache.getImage();
+        this.author = bookCache.getAuthor();
+        this.pubdate = bookCache.getPubdate();
     }
 
 }

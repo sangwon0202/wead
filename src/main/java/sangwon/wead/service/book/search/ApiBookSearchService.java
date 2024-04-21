@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import sangwon.wead.API.BookClient;
+import sangwon.wead.API.BookResponse;
 import sangwon.wead.service.DTO.BookDto;
 import sangwon.wead.service.DTO.BookRowDto;
 import sangwon.wead.exception.BookSearchFailException;
@@ -14,7 +15,6 @@ import sangwon.wead.exception.BookSearchFailException;
 import java.util.ArrayList;
 import java.util.List;
 
-@Primary
 @Service
 @RequiredArgsConstructor
 public class ApiBookSearchService implements BookSearchService {
@@ -38,20 +38,17 @@ public class ApiBookSearchService implements BookSearchService {
 
         int pageNumber = pageable.getPageNumber();
         int pageSize = pageable.getPageSize();
+        int start = pageNumber*pageSize;
         if(pageSize > 100) throw new IllegalArgumentException("페이지의 크기는 100 이하여야합니다.");
 
-        int total = bookClient.searchBook(query,10, 1, "sim").getTotal();
-        if(total > 1000) total = 1000;
-        int start = pageNumber * pageSize + 1;
-        if(start > total) return new PageImpl<>(new ArrayList<>(), pageable, total);
+        BookResponse bookResponse = bookClient.searchBook(query, pageSize, Math.min(start+1, 1000), "sim");
+        int total = Math.min(bookResponse.getTotal(), 1000);
+        if(start >= total) return new PageImpl<>(new ArrayList<>(), pageable, total);
 
-        int display;
-        int available = total - start + 1;
-        display = Math.min(pageSize, available);
+        int available = 1000-start;
 
-        List<BookRowDto> content = bookClient.searchBook(query, display, start, "sim")
-                .getItems()
-                .stream()
+        List<BookRowDto> content = bookResponse.getItems().stream()
+                .limit(Math.min(pageSize,available))
                 .map(BookRowDto::new)
                 .toList();
 

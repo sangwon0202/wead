@@ -38,6 +38,5 @@ public class BookController {
         model.addAttribute("pageBar", listDto.getPageBar());
         return "page/book_search";
     }
-
 }
 
