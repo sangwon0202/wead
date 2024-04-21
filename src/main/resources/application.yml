@@ -4,6 +4,4 @@ spring:
   jpa:
     open-in-view: false
 
-
-
-
+book-ttl: 15

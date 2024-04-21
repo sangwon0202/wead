@@ -2,6 +2,7 @@ package sangwon.wead.redis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -10,7 +11,7 @@ import sangwon.wead.API.BookResponse;
 import sangwon.wead.exception.BookCacheMissException;
 
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @RequiredArgsConstructor
@@ -18,21 +19,28 @@ import java.util.Map;
 public class BookCacheRepository {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    @Value("${book-ttl}")
+    private int ttl;
 
     public void cache(String query, BookResponse bookResponse) {
-        ValueOperations<String,Object>  valueOperations = redisTemplate.opsForValue();
+        ValueOperations<String,Object> valueOperations = redisTemplate.opsForValue();
         ListOperations<String,Object> listOperations = redisTemplate.opsForList();
 
         Integer total = (Integer)valueOperations.get("total:" + query);
         if(total != null) return;
 
         valueOperations.set("total:" + query, Math.min(bookResponse.getTotal(), 1000));
+
         bookResponse.getItems().stream()
                 .map(BookCache::new)
                 .forEach(bookCache -> {
                             valueOperations.set("isbn:" + bookCache.getIsbn(), bookCache);
+                            redisTemplate.expire("isbn:" + bookCache.getIsbn(), ttl, TimeUnit.DAYS);
                             listOperations.rightPush("query:" + query, bookCache.getIsbn());
         });
+
+        redisTemplate.expire("total:" + query, ttl, TimeUnit.DAYS);
+        redisTemplate.expire("query:" + query, ttl, TimeUnit.DAYS);
     }
 
     public BookCache getByIsbn(String isbn) {
@@ -60,7 +68,7 @@ public class BookCacheRepository {
         if(list == null) throw new BookCacheMissException();
 
         return list.stream()
-                .map(o -> (BookCache)valueOperations.get("isbn:" + (String)o))
+                .map(o -> (BookCache)valueOperations.get("isbn:" + o))
                 .toList();
     }
 
