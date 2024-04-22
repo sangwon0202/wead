@@ -32,7 +32,7 @@ public class BookClient {
                 .queryParam("sort", sort)
                 .build().toUriString();
 
-        return restClient.get()
+        BookResponse bookResponse = restClient.get()
                 .uri(uri)
                 .headers((httpHeaders -> {
                     httpHeaders.add("X-Naver-Client-Id", clientId);
@@ -40,5 +40,8 @@ public class BookClient {
                 }))
                 .retrieve()
                 .body(BookResponse.class);
+
+        log.info("외부 책 API 호출: {}", uri);
+        return bookResponse;
     }
 }
