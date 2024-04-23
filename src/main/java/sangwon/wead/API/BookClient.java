@@ -20,7 +20,7 @@ public class BookClient {
                                    int display,
                                    int start,
                                    String sort) {
-        log.info("외부 API 호출");
+
         RestClient restClient = RestClient.create();
         String uri = ServletUriComponentsBuilder.newInstance()
                 .scheme("https")
