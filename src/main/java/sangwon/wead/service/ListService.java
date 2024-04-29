@@ -36,16 +36,13 @@ public class ListService {
             return this;
         }
 
-        public ListDto<T> build(Pageable pageable) {
-            Page<T> page = getPage(pageable);
+        public ListDto<T> build(int pageNumber, int pageSize, Sort sort) {
+            Page<T> page = getPage(pageNumber, pageSize, sort);
             PageBarDto pageBar = getPageBar(page.getNumber()+1, page.getTotalPages());
             return new ListDto<>(page.getContent(), pageBar);
         }
 
-        private Page<T> getPage(Pageable pageable) {
-            int pageNumber = pageable.getPageNumber();
-            int pageSize = pageable.getPageSize();
-            Sort sort = pageable.getSort();
+        private Page<T> getPage(int pageNumber, int pageSize, Sort sort) {
             if(pageNumber < 1) pageNumber = 1;
             Page<T> page = pageFactory.getPage(PageRequest.of(pageNumber-1, pageSize, sort));
             int totalPages = page.getTotalPages();

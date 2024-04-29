@@ -68,7 +68,7 @@ public class UserController {
         UserDetailDto userDetailDto = userService.getUserDetail(userId);
         ListDto<PostRowDto> listDto = listService.builder(pageable -> postService.getPostByUserId(pageable, userId))
                 .setUrl("/users/" + userId)
-                .build(PageRequest.of(pageNumber, 5, Sort.by("postId").descending()));
+                .build(pageNumber, 5, Sort.by("postId").descending());
 
         model.addAttribute("user", userDetailDto);
         model.addAttribute("list", listDto.getList());

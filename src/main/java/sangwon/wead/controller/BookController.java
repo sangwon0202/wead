@@ -2,6 +2,7 @@ package sangwon.wead.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,7 +33,7 @@ public class BookController {
         ListDto<BookRowDto> listDto = listService.builder((pageable -> bookSearchService.getBookByQuery(pageable, query)))
                 .setUrl("/books")
                 .setQuery("query", query)
-                .build(PageRequest.of(pageNumber, 10));
+                .build(pageNumber, 10, Sort.unsorted());
 
         model.addAttribute("list", listDto.getList());
         model.addAttribute("pageBar", listDto.getPageBar());

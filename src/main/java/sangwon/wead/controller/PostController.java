@@ -59,7 +59,7 @@ public class PostController {
                 .setUrl("/posts")
                 .setQuery("search", search)
                 .setQuery("query", query)
-                .build(PageRequest.of(pageNumber, 10, Sort.by("postId").descending()));
+                .build(pageNumber, 10, Sort.by("postId").descending());
 
         model.addAttribute("list", listDto.getList());
         model.addAttribute("pageBar",listDto.getPageBar());
@@ -77,7 +77,7 @@ public class PostController {
 
         ListDto<CommentRowDto> listDto = listService.builder(pageable -> commentService.getCommentByPostId(pageable, postId))
                 .setUrl("/posts/" + postId)
-                .build(PageRequest.of(pageNumber, 10, Sort.by("commentId")));
+                .build(pageNumber, 10, Sort.by("commentId").descending());
 
         model.addAttribute("post", postDto);
         model.addAttribute("user", userDto);
